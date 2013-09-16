@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file alias="check">resurs/checkset.png</file>
+        <file alias="op_file">resurs/file.png</file>
+        <file alias="1c">resurs/list1c_sm.png</file>
+        <file alias="1t">resurs/list1t_sm.png</file>
+        <file alias="1x2">resurs/list1x2_sm.png</file>
+        <file alias="1x3">resurs/list1x3_sm.png</file>
+        <file alias="2x2">resurs/list2x2_sm.png</file>
+        <file alias="2x3">resurs/list2x3_sm.png</file>
+        <file alias="2x4">resurs/list2x4_sm.png</file>
+        <file alias="3x3">resurs/list3x3_sm.png</file>
+        <file alias="3x5">resurs/list3x5_sm.png</file>
+        <file alias="4x5">resurs/list4x5_sm.png</file>
+        <file alias="op_folder">resurs/folder.png</file>
+        <file alias="sheet">resurs/sheet.png</file>
+        <file alias="up">resurs/up.png</file>
+        <file alias="down">resurs/down.png</file>
+        <file alias="vap">resurs/vap.png</file>
+        <file alias="print_sel">resurs/pr_sel.png</file>
+        <file alias="sheet2">resurs/sheet2.png</file>
+        <file alias="all">resurs/list_all.png</file>
+        <file alias="my">resurs/list_my.png</file>
+        <file alias="sett">resurs/hammer-wrench.png</file>
+        <file alias="indicator">resurs/indic.gif</file>
+    </qresource>
+</RCC>
