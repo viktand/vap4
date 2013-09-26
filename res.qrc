@@ -23,5 +23,9 @@
         <file alias="my">resurs/list_my.png</file>
         <file alias="sett">resurs/hammer-wrench.png</file>
         <file alias="indicator">resurs/indic.gif</file>
+        <file alias="rotation">resurs/agt_reload.png</file>
+        <file alias="resize">resurs/resize.png</file>
+        <file alias="nina">resurs/smile.png</file>
+        <file alias="marg">resurs/marg.png</file>
     </qresource>
 </RCC>

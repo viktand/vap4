@@ -3,7 +3,9 @@
 #include "pagesetup.h"
 #include "setting.h"
 #include "avLabel.h"
+#include "userlayout.h"
 #include <math.h>
+#include <qmath.h>
 
 #include <QDesktopWidget>
 #include <QPrinter>
@@ -13,6 +15,9 @@
 #include <QPicture>
 #include <QFileDialog>
 #include <QPrintDialog>
+#include <QTimer>
+#include <QMatrix>
+#include <QPointF>
 
 
 
@@ -25,6 +30,7 @@ QPrinter *printer;       // принтер, в него рисовать и на
 QPainter *pntr;          // устройство рисования (с него печатать)
 PageSetup *ps;
 setting *st;
+userlayout *uslay;
 QMovie *animGif;
 QTimer *timer;
 //QThread *thread;
@@ -32,7 +38,7 @@ loadpicture *ldp;
 QString str_time;
 bool flag2;
 int  count = 0;
-int	 img_count = -1;	// количество превьюшек
+int	 img_count = -1; 	// количество превьюшек
 int	 comp = 0;			// текущая компоновка
 int  getx = 0;			// максимальный размер х для картинки  в этой компоновке
 int  gety = 0;			// максимальный размер y для картинки  в этой компоновке
@@ -50,11 +56,17 @@ int  buf=-1; 		    // количество загруженных картино
 int  ttx, tty;			// временные значения для отработки перемещения объектов
 int  imgpress=-1;		// № нажатой превьюшки
 int  bufpress=-1;		// № картинки в общем списке, превью которой нажато
+int  imgpress2=0;		// № нажатой превьюшки
+int  bufpress2=0;		// № картинки в общем списке, превью которой нажато
 int  curz=0;            // z порядок для текущей страницы, используется для расчета наложений
 int  lists=0, curlist=0;// всего листов и текущий лист
 int  img_on_list;       // кол-во картинок на листе в текущей компоновке
 int  ppx, ppy;          // точек на мм по Х и У для текущего принтера
-int  x_prw=180, y_prw=70; // координаты листа предпросмотра
+int  x_prw=190, y_prw=70; // координаты листа предпросмотра
+bool rott_press=false;   // флаг нажатия на ручку вращения
+bool prop=true;         // флаг пропорциональности при изменении размера
+int  w_cou=1, h_cou=1;  // компоновка w_cou x h_cou
+int  w_fon, h_fon;      // текущие размеры фона
 // поля бумаги
 int left_m;
 int right_m;
@@ -67,6 +79,10 @@ int paper_w;
 int paper_h;
 bool rap;
 bool all_rot;
+// пользовательская компоновка
+int ul_hor;
+int ul_ver;
+
 
 
 
@@ -100,6 +116,10 @@ struct prew {
     int          buf;         //абсолютный номер
 };
 
+QavLabel *rott;              // "ручка" вращения
+QavLabel *resiz;             // "ручка" изменения размера
+
+
 std::vector<pict> toprint;      //массив загруженных картинок
 std::vector<prew> toshow;       //массив превьющек
 std::vector<bool> list_orn;     // массив ориентаций листов true - портретная ориентация
@@ -116,28 +136,50 @@ MainWindow::MainWindow(QWidget *parent) :
     right_m=5;
     bottom_m=5;
     all_rot=true;
+    ul_hor=3;
+    ul_ver=3;
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
     printer = new QPrinter(QPrinter::HighResolution);
     list_orn.push_back(true);
-    make_list();
     pntr = new QPainter();
     if (printer->orientation() == QPrinter::Portrait) ornl=1; else ornl=0;
     printer->setPageSize(QPrinter::A4);
     rap=true;
     animGif = new QMovie(":/new/prefix1/indicator");
     ui->label->setMovie(animGif);
-
     set_indic_pos();
-}
+    rott = new QavLabel(ui->fon);
+    QImage im(":/new/prefix1/rotation");
+    rott->setPixmap(QPixmap::fromImage(im));
+    rott->setScaledContents(true);
+    rott->setGeometry(0,0,16,16);
+    rott->setCursor(Qt::PointingHandCursor);
+    rott->hide();
+    QObject::connect(rott, SIGNAL(mouse_press(int, int, int)), this, SLOT(pct_press_rott()));
+    resiz = new QavLabel(ui->fon);
+    QImage im2(":/new/prefix1/resize");
+    resiz->setPixmap(QPixmap::fromImage(im2));
+    resiz->setScaledContents(true);
+    resiz->setGeometry(0,0,16,16);
+    resiz->setCursor(Qt::PointingHandCursor);
+    resiz->hide();
+    QObject::connect(resiz, SIGNAL(mouse_press(int, int, int)), this, SLOT(resiz_press(int, int)));
+    QObject::connect(resiz, SIGNAL(mouse_move(int, int, int)),  this, SLOT(resiz_move(int, int)));
+    QObject::connect(resiz, SIGNAL(mouse_up(int, int, int)), this, SLOT(resiz_up()));
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(istimer()));
+    ui->checkBox_3->hide();
+    make_list();
+ }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindow::on_show()
+void MainWindow::if_show()
 {
     ind_start();
     load_param();
@@ -252,9 +294,18 @@ void MainWindow::on_pushButton_clicked() // all in oun
 void MainWindow::on_pushButton_8_clicked() // my layout
 {
     btn_comp_press(11);
-    img_on_list=0;
-    recomp();
+    if(uslay == 0)
+    {
+        uslay=new userlayout();
+        connect(uslay, SIGNAL(is_ok()), this, SLOT(set_user_layout()));
+        uslay->make_preview();
+    }
+    uslay->show();
+    //img_on_list=0;
+    //recomp();
 }
+
+
 
 void MainWindow::on_pushButton_4_clicked() // вперед
 {
@@ -422,8 +473,6 @@ void MainWindow::end_rotation()
 
 void MainWindow::end_load_picture(QImage image)
 {
-
-        //QImage image(filename);
         if (image.isNull()) { } // неудачная загрузка
         double d;
         toprint[buf].pct = image;
@@ -434,6 +483,7 @@ void MainWindow::end_load_picture(QImage image)
         lists=0;
         for(int i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
         if (rap) cout << "picture was loaded" << endl;
+        img_size_cur_comp();
         show_pict();
         flag2=false;
 }
@@ -451,12 +501,31 @@ void MainWindow::pct_press(int x, int y, int i) // нажатие на прев�
     ttx=x;
     tty=y;
     imgpress=i;
+    imgpress2=i;
     bufpress=toshow[i].buf;
+    if (!ui->checkBox_2->isChecked()) return;
+    bufpress2=bufpress;
+    int rx, ry;
+    rx=toprint[bufpress].left-8;
+    if (rx<0) rx=0;
+    ry=toprint[bufpress].top-8;
+    if (ry<0) ry=0;
+    rott->show();
+    rott->move(rx,ry);
+    rott->raise();
+    rx=toprint[bufpress].left-8+toprint[bufpress].width;
+    if (rx>ui->fon->width()) rx=ui->fon->width()-16;
+    ry=toprint[bufpress].top-8+toprint[bufpress].heigth;
+    if (ry>ui->fon->height()) ry=ui->fon->height()-16;
+    resiz->show();
+    resiz->move(rx,ry);
+    resiz->raise();
+    ui->checkBox_3->setChecked(prop);
+    ui->checkBox_3->show();
 }
 
 void MainWindow::pct_move(int x, int y, int i)
 {
-    if (i==imgpress)
     {
         int x1=0, y1=0;
         x1=ttx;
@@ -468,6 +537,10 @@ void MainWindow::pct_move(int x, int y, int i)
         toshow[i].pct->move(x1,y1);
         toprint[bufpress].left=x1;
         toprint[bufpress].top=y1;
+        rott->move(x1-8, y1-8);
+        x1=x1+toprint[bufpress].width-8;
+        y1=y1+toprint[bufpress].heigth-8;
+        resiz->move(x1,y1);
     }
 }
 
@@ -478,7 +551,16 @@ void MainWindow::pct_up(int x, int y, int i)
         imgpress=-1;
         bufpress=-1;
         toshow[i].pct->setCursor(Qt::OpenHandCursor);
+        timer->start(3000);
     }
+}
+
+void MainWindow::istimer()
+{
+    timer->stop();
+    rott->hide();
+    resiz->hide();
+    ui->checkBox_3->hide();
 }
 
 void MainWindow::recomp_curlist()
@@ -544,163 +626,29 @@ void MainWindow::ind_stop()
 }
 
 
-// расчет начальных координат для картинок
-void list1()
-{
-  crd[0][0] = 0;
-  crd[0][1] = 0;
-}
-
-void list2()
-{
-  int  i;
-  for (i=0; i<2; i++)
-    {
-      crd[i][1] = i * (gety + pol);
-      crd[i][0] = 0;
-    }
-}
-void list3()
-{
-  int i;
-   for (i=0; i<3; i++)
-    {
-      crd[i][1] = i * (gety + pol);
-      crd[i][0] = 0;
-    }
-}
-
-void list4()
-{
-  int i, j;
-  for (i=0; i<4; i++)
-    {
-      if (i < 2)  j = 0; else j = 1;
-      crd[i][1] = j * (gety + pol);
-      if (i % 2 == 0) j = 0; else j = 1;
-      crd[i][0] = j * (getx + pol);
-    }
-}
-
-void list6()
-{
-  int i, j;
-  for(i=0; i<6; i++)
-    {
-      j = i/2;
-      crd[i][1] = j * (gety + pol);
-      if (i % 2 == 0) j = 0; else j = 1;
-      crd[i][0] = j * (getx + pol);
-    }
-}
-
-void list8()
-{
-  int i, j;
-  for(i=0; i<8; i++)
-    {
-      j = i/2;
-      crd[i][1] = j * (gety + pol);
-      if (i % 2 == 0)  j = 0; else j = 1;
-      crd[i][0] = j * (getx + pol);
-    }
-}
-
-void list9()
-{
-  int i, j;
-  for(i=0; i<9; i++)
-    {
-       if (i>=0 && i<=2) j = 0;
-       if (i>=3 && i<=5) j = 1;
-       if (i>=6 && i<=8) j = 2;
-       crd[i][1] = j * (gety + pol);
-       if (i==0 || i==3 || i==6) j = 0;
-       if (i==1 || i==4 || i==7) j = 1;
-       if (i==2 || i==5 || i==8) j = 2;
-       crd[i][0] = j * (getx + pol);
-    }
-}
-
-void list15()
-{
-  int i, j;
-  for (i=0; i<15; i++)
-    {
-       if (i>=0 && i<=2) j = 0;
-       if (i>=3 && i<=5) j = 1;
-       if (i>=6 && i<=8) j = 2;
-       if (i>=9 && i<=11) j = 3;
-       if (i>=12 && i<=14) j = 4;
-       crd[i][1] = j * (gety + pol);
-       if (i==0 || i==3 || i==6 || i==9 || i==12) j = 0;
-       if (i==1 || i==4 || i==7 || i==10 || i==13) j = 1;
-       if (i==2 || i==5 || i==8 || i==11 || i==14) j = 2;
-       crd[i][0] = j * (getx + pol);
-    }
-}
-
-void list20()
-{
-  int i, j;
-  for (i=0; i<20; i++)
-    {
-       if (i>=0 && i<=3) j = 0;
-       if (i>=4 && i<=7) j = 1;
-       if (i>=8 && i<=11) j = 2;
-       if (i>=12 && i<=15) j = 3;
-       if (i>=16 && i<=19) j = 4;
-       crd[i][1] = j * (gety + pol);
-       if (i==0 || i==4 || i==8 || i==12 || i==16) j = 0;
-       if (i==1 || i==5 || i==9 || i==13 || i==17) j = 1;
-       if (i==2 || i==6 || i==10 || i==14 || i==18) j = 2;
-       if (i==3 || i==7 || i==11 || i==15 || i==19) j = 3;
-       crd[i][0] = j * (getx + pol);
-    }
-}
-
 int getmx()
 // получить макимальный размер Х для текущей компоновки
 {
   int i=0;
-  if (comp>=0 && comp<=3) i = gor - pol * 2;
-  if (comp>=4 && comp<=6) i = (gor - pol * 3) / 2;
-  if (comp==7 || comp==8) i = (gor - pol * 4) / 3;
-  if (comp==9) i= (gor - pol * 5) / 4;
+  i=w_fon/w_cou-pol*(w_cou-1);
   return i;
 }
 
 int getmy()
 // получить макимальный размер Y для текущей компоновки
 {
- int i=0;
- if (comp==0) i = ver - pol * 2;
- if (comp==1 || comp==2 || comp==4) i = (ver - pol * 3) / 2;
- if (comp==3 || comp==5 || comp==7) i = (ver - pol * 4) / 3;
- if (comp==6) i = (ver - pol * 5) / 4;
- if (comp==8 || comp==9) i = (ver - pol * 6) / 5;
+ int i=0, n=1;
+ if(comp==1) n=2;
+ i=h_fon/h_cou/n-pol*(h_cou*n-1);
  return i;
 }
 
 // размеры для текущей компоновки
-void img_size_cur_comp()
+void MainWindow::img_size_cur_comp()
 {
     getx=getmx();
     gety=getmy();
- switch (comp)
-    {
-    case 0: list1(); break;
-    case 1: list1(); break;
-    case 2: list2(); break;
-    case 3: list3(); break;
-    case 4: list4(); break;
-    case 5: list6(); break;
-    case 6: list8(); break;
-    case 7: list9(); break;
-    case 8: list15(); break;
-    case 9: list20(); break;
-    }
-}
+ }
 
 void MainWindow::btn_comp_press(int i)
 {
@@ -712,6 +660,15 @@ void MainWindow::btn_comp_press(int i)
     y = 70+85*(i/2);
     // ставим метку на кнопку
     ui->checkset->setGeometry(x,y,32,32);
+}
+
+void MainWindow::set_user_layout()
+{
+    img_on_list=ul_hor*ul_ver;
+    w_cou=ul_hor;
+    h_cou=ul_ver;
+    btn_comp_press(11);
+    recomp();
 }
 
 void MainWindow::get_pp()
@@ -739,6 +696,8 @@ void MainWindow::make_list() // создать лист предпросмотр
     h=y_pg*scl_pg-top_m*ppy-bottom_m*ppy;
     ui->sheet->setGeometry(x, y, w, h);
     ui->fon->setGeometry(0, 0, w, h);
+    w_fon=w;
+    h_fon=h;
 }
 
 
@@ -753,17 +712,17 @@ int max_z(int l) // максимальное значение z-порядка �
 
 QSize setsize(QSize sz) // Точная подгонка размера image под место
 {
-  float x=0, y=0;
-  float e=0;
+  float x=0, y=0, e=0;
   x=sz.height();
   y=sz.width();
   if (x * y == 0) return sz;
-  e= x/y ;
+  e=x/y ;
   y=gety;
   x=y/e;
   if(x>getx)
     {
-        x=getx; y=x*e;
+        x=getx;
+        y=x*e;
     }
   sz.setHeight(y);
   sz.setWidth(x);
@@ -778,11 +737,27 @@ void MainWindow::kill_pict()
     curz=0;
 }
 
+void MainWindow::on_dial_valueChanged(int value)
+{
+    if (pol==value) return;
+    pol=value;
+    img_size_cur_comp ();
+    ui->label_5->setText(QString::number(value));
+    for(int i=0; i<=buf; i++) toprint[i].show=0;
+    show_pict();
+}
+
 void MainWindow::show_pict() // показать картинки текущего листа
 {
     kill_pict(); // очистить лист предпросмотра
+    if (buf>-1)
+    {
+        rott->hide();
+        resiz->hide();
+    }
     QSize sz;
-    int x, y;
+    int x, y, n=1;
+    if(comp==1) n=2;
     curz=max_z(curlist);
     for (int i=0; i<buf+1; i++)
     {
@@ -812,8 +787,8 @@ void MainWindow::show_pict() // показать картинки текущег
           if (toprint[i].show==0)
             {   // картинка рисуется первый раз
                 sz=setsize(toshow[img_count].pct->pixmap()->size());
-                x=crd[img_count][0]+(getx-sz.width())/2;
-                y=crd[img_count][1]+(gety-sz.height())/2;
+                x=(img_count%w_cou)*(w_fon/w_cou)+(getx-sz.width())/2;
+                y=ceil(img_count/w_cou)*(h_fon/(h_cou*n))+(gety-sz.height())/2;
                 toshow[img_count].pct->setGeometry(x, y, sz.width(), sz.height());
                 toprint[i].left=x;
                 toprint[i].top=y;
@@ -872,21 +847,27 @@ void MainWindow::recomp()
 
 void MainWindow::on_l1_clicked()
 {
-    btn_comp_press(0);
     img_on_list=1;
+    w_cou=1;
+    h_cou=1;
+    btn_comp_press(0);
     recomp();
 }
 
 
 void MainWindow::on_l2_clicked()
 {
-    btn_comp_press(1);
     img_on_list=1;
+    w_cou=1;
+    h_cou=1;
+    btn_comp_press(1);
     recomp();
 }
 
 void MainWindow::on_l3_clicked()
 {
+    w_cou=1;
+    h_cou=2;
     btn_comp_press(2);
     img_on_list=2;
     recomp();
@@ -894,49 +875,189 @@ void MainWindow::on_l3_clicked()
 
 void MainWindow::on_l4_clicked()
 {
-    btn_comp_press(3);
     img_on_list=3;
+    w_cou=1;
+    h_cou=3;
+    btn_comp_press(3);
     recomp();
 }
 
 void MainWindow::on_l5_clicked()
 {
-    btn_comp_press(4);
     img_on_list=4;
+    w_cou=2;
+    h_cou=2;
+    btn_comp_press(4);
     recomp();
 }
 
 void MainWindow::on_l6_clicked()
 {
-    btn_comp_press(5);
     img_on_list=6;
+    w_cou=2;
+    h_cou=3;
+    btn_comp_press(5);
     recomp();
 }
 
 void MainWindow::on_l7_clicked()
 {
-    btn_comp_press(6);
     img_on_list=8;
+    w_cou=2;
+    h_cou=4;
+    btn_comp_press(6);
     recomp();
 }
 
 void MainWindow::on_l8_clicked()
 {
-    btn_comp_press(7);
     img_on_list=9;
+    w_cou=3;
+    h_cou=3;
+    btn_comp_press(7);
     recomp();
 }
 
 void MainWindow::on_l9_clicked()
 {
-    btn_comp_press(8);
     img_on_list=15;
+    w_cou=3;
+    h_cou=5;
+    btn_comp_press(8);
     recomp();
 }
 
 void MainWindow::on_l10_clicked()
 {
-    btn_comp_press(9);
     img_on_list=20;
+    w_cou=4;
+    h_cou=5;
+    btn_comp_press(9);
     recomp();
 }
+
+
+void MainWindow::pct_press_rott() // нажатие на ручку вращения
+{
+    rott->raise(); // поднять выше всех
+    rotated();
+    timer->stop();
+    timer->start(3000);
+}
+
+
+void MainWindow::rotated()
+{
+    int w, h, x, y;
+    QPixmap shipPixels(*toshow[imgpress2].pct->pixmap());
+    QSize size;
+    QRect rc;
+    x=shipPixels.width();
+    y=shipPixels.height();
+    size=shipPixels.size();
+    rc=toshow[imgpress2].pct->geometry();
+    w=rc.width();
+    h=rc.height();
+    rc.setWidth(h);
+    rc.setHeight(w);
+    QPixmap rotatePixmap(size*2);
+    rotatePixmap.fill(Qt::transparent);
+    QPainter p(&rotatePixmap);
+    p.translate(rotatePixmap.size().width()/2, rotatePixmap.size().height()/2);
+
+    p.rotate(90); // градус
+    p.translate(-rotatePixmap.size().width()/2, -rotatePixmap.size().height()/2);
+    p.drawPixmap(y,x, shipPixels);
+    p.end();
+    shipPixels = rotatePixmap.copy(0,2*y-x, y,x) ;
+
+    toprint[bufpress2].pct=shipPixels.toImage();
+    x=toprint[bufpress2].width;
+    y=toprint[bufpress2].heigth;
+    toprint[bufpress2].heigth=x;
+    toprint[bufpress2].width=y;
+    reShow(imgpress2);
+    int rx, ry;
+    rx=toprint[bufpress2].left-8+toprint[bufpress2].width;
+    if (rx>ui->fon->width()) rx=ui->fon->width()-16;
+    ry=toprint[bufpress2].top-8+toprint[bufpress2].heigth;
+    if (ry>ui->fon->height()) ry=ui->fon->height()-16;
+    resiz->move(rx,ry);
+    resiz->raise();
+    if (rap) cout << "picture turned successfully" << endl;
+}
+
+void MainWindow::reShow(int index)
+{
+    QSize sz;
+    int x, y, i;
+    i=toshow[index].buf;
+    if (toprint[i].list==curlist)
+      {   // обновить превью для картинки index (№ превью)
+          toshow[index].pct->setPixmap(QPixmap::fromImage(toprint[i].pct));
+          sz=setsize(toshow[img_count].pct->pixmap()->size());
+          x=toprint[i].left;
+          y=toprint[i].top;
+          toshow[index].pct->setGeometry(x, y,toprint[i].width, toprint[i].heigth);
+      }
+}
+
+void MainWindow::resiz_press(int x, int y) // нажатие на ручку изменения размера
+{
+    resiz->setCursor(Qt::ClosedHandCursor); // поменять курсор
+    resiz->raise(); // поднять выше всех
+    ttx=x;
+    tty=y;
+    timer->stop();
+}
+
+void MainWindow::resiz_move(int x, int y)
+{
+    {
+        int x1, y1;
+        int x2, y2;
+        float k, k1;
+        QRect rc;
+        x1=ttx;
+        y1=tty;
+        x2=x1;
+        y2=y1;
+        ttx = x;
+        tty = y;
+        rc=resiz->geometry();
+        x1=rc.left()+ttx-x1;
+        y1=rc.top()+tty-y1;
+        resiz->move(x1,y1);
+        rc=toshow[imgpress2].pct->geometry();
+        k=toshow[imgpress2].pct->pixmap()->height();
+        k1=toshow[imgpress2].pct->pixmap()->width();
+        k=k/k1;
+        rc.setWidth(rc.width()+(ttx-x2));
+        if (prop) rc.setHeight(rc.width()*k);
+        else      rc.setHeight(rc.height()+(tty-y2));
+        toshow[imgpress2].pct->setGeometry(rc);
+    }
+}
+
+void MainWindow::resiz_up()
+{
+    QSize sz;
+    timer->start(3000);
+    resiz->setCursor(Qt::PointingHandCursor);
+    sz=toshow[imgpress2].pct->size();
+    toprint[bufpress2].width=sz.width();
+    toprint[bufpress2].heigth=sz.height();
+    int rx, ry;
+    rx=toprint[bufpress2].left-8+toprint[bufpress2].width;
+    if (rx>ui->fon->width()) rx=ui->fon->width()-16;
+    ry=toprint[bufpress2].top-8+toprint[bufpress2].heigth;
+    if (ry>ui->fon->height()) ry=ui->fon->height()-16;
+    resiz->move(rx,ry);
+}
+
+void MainWindow::on_checkBox_3_clicked(bool checked)
+{
+    prop=checked;
+}
+
+

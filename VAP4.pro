@@ -16,16 +16,19 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     pagesetup.cpp \
     setting.cpp \
-    avLabel.cpp
+    avLabel.cpp \
+    userlayout.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
     setting.h \
-    avLabel.h
+    avLabel.h \
+    userlayout.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
-    setting.ui
+    setting.ui \
+    userlayout.ui
 
 RESOURCES += \
     res.qrc

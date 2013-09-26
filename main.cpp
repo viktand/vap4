@@ -1,13 +1,23 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTextCodec>
 
-#include <iostream> // временно !!!
-using namespace std; // временно !!!
+#include <iostream>
+using namespace std;
 
 
 int main(int argc, char *argv[])
 {
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); //изменения
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); //изменения
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8")); //изменения
+
+    cout << "Hello, World!" << endl;
+    cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
+
+
     QApplication a(argc, argv);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf-8"));
     MainWindow w;
     w.cou_prm=argc;
     if (argc>1)
@@ -17,7 +27,14 @@ int main(int argc, char *argv[])
             w.prm<<argv[i];
         }
     w.show();
-    w.on_show();
+    w.if_show();
     return a.exec();
 
 }
+
+// 1. все строки пишем по английски, и заключаем их в tr()
+// 2. в *.pro файле пишем TRANSLATIONS = прога_ru.ts
+// 3. запускаем lupdate
+// 4. переводим в Qt Translator'е
+// 5. запускаем lrelease
+// 6. копируем из документации кусок кода (4 строки) подключения файла с переводами.
