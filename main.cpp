@@ -8,16 +8,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); //изменения
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); //изменения
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8")); //изменения
 
     cout << "Hello, World!" << endl;
     cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
 
 
     QApplication a(argc, argv);
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("utf-8"));
     MainWindow w;
     w.cou_prm=argc;
     if (argc>1)

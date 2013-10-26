@@ -11,7 +11,7 @@ class QavLabel : public QLabel
     Q_PROPERTY(int Imnum READ getImnum WRITE setImnum) // свойство - номер объекта (чтобы не вычислять)
 
     private:
-        int Imnum;
+        int    Imnum;       // номер объекта к которому привязан лабел
     public:
         QavLabel(QWidget *parent = 0);
         ~QavLabel();
@@ -29,7 +29,6 @@ class QavLabel : public QLabel
         void rclicked();
         void mouse_press(int x, int y, int i);
         void mouse_move(int x, int y, int i);
-
 
     protected:
         void mouseReleaseEvent(QMouseEvent *e);

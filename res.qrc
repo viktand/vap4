@@ -27,5 +27,17 @@
         <file alias="resize">resurs/resize.png</file>
         <file alias="nina">resurs/smile.png</file>
         <file alias="marg">resurs/marg.png</file>
+        <file alias="delete">resurs/delete.png</file>
+        <file alias="rotor">resurs/rotor.png</file>
+        <file alias="fill">resurs/fill.png</file>
+        <file alias="file_manager">resurs/nautilus.png</file>
+        <file alias="dolphin">resurs/dolphin.png</file>
+        <file alias="marlin">resurs/marlin.png</file>
+        <file alias="nemo">resurs/nemo.png</file>
+        <file alias="gn_com">resurs/gnome-commander.png</file>
+        <file alias="Caja">resurs/file-manager.png</file>
+        <file alias="nautiliss">resurs/Nautilus_icon.png</file>
+        <file alias="rez">resurs/rez.png</file>
+        <file alias="clip">resurs/big_clip.png</file>
     </qresource>
 </RCC>

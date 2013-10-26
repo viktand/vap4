@@ -19,7 +19,6 @@ private slots:
     void on_buttonBox_accepted();
     void kill_prv();                // удалить все картинки в окошке предпросмотра компоновки
 
-    void on_pushButton_clicked();
 
     void on_spinBox_valueChanged(int arg1);
 

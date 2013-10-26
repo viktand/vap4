@@ -30,6 +30,7 @@ void userlayout::on_buttonBox_accepted() // Ok
 {
     ul_hor=ui->spinBox->value();
     ul_ver=ui->spinBox_2->value();
+    set_orn=!(ui->checkBox->isChecked());
     emit is_ok();
 }
 
@@ -91,10 +92,6 @@ QSize userlayout::set_size()    // расчет размеров превьюш�
    return z;
 }
 
-void userlayout::on_pushButton_clicked()
-{
-    make_preview();
-}
 
 void userlayout::on_spinBox_valueChanged(int arg1)
 {
@@ -113,16 +110,16 @@ void userlayout::on_checkBox_clicked(bool checked)
     QRect r;
     if (checked)
     {
-        r.setLeft(50);
-        r.setTop(70);
+        r.setLeft(30);
+        r.setTop(30);
         r.setWidth(150);
         r.setHeight(105);
         ui->label->setGeometry(r);
     }
     else
     {
-        r.setLeft(70);
-        r.setTop(50);
+        r.setLeft(60);
+        r.setTop(10);
         r.setWidth(105);
         r.setHeight(150);
         ui->label->setGeometry(r);

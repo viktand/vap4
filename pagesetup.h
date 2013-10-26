@@ -18,12 +18,47 @@ public:
 
 
 private slots:
+    QString get_run(QString s);     // получить вывод от команды s
     void on_radioButton_2_clicked();
     void on_radioButton_clicked();
+    void load_combobox();           // загрузить спиок форматов бумаг
+
+    void on_checkBox_clicked(bool checked);
+
+    void on_comboBox_2_currentIndexChanged(const QString &arg1);
+
+    void on_pushButton_clicked();   // Ok
+
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_3_clicked();
+
+    void on_checkBox_3_clicked(bool checked);
+
+    void on_checkBox_4_clicked(bool checked);
+
+    void on_checkBox_5_clicked(bool checked);
+
+    void on_checkBox_6_clicked(bool checked);
+
+    void on_checkBox_7_clicked(bool checked);
+
+    void on_checkBox_8_clicked(bool checked);
 
     void on_pushButton_2_clicked();
 
-    void on_checkBox_clicked(bool checked);
+    void on_comboBox_currentIndexChanged(int index);
+
+    void on_spinBox_5_valueChanged(int arg1);
+
+    void on_spinBox_6_valueChanged(int arg1);
+
+    void on_comboBox_3_currentIndexChanged(int index);
+
+    void on_doubleSpinBox_valueChanged(double arg1);
+
+    void on_checkBox_9_clicked(bool checked);
 
 public slots:
     void load_data(); // загрузить данные в форму

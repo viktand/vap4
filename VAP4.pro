@@ -6,29 +6,37 @@
 
 QT       += core gui
 
+#ifdef HAVE_QT5
+    qtHaveModule(printsupport): QT += printsupport
+#endif
+
+
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = VAP4
+TARGET = vap
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     pagesetup.cpp \
-    setting.cpp \
     avLabel.cpp \
-    userlayout.cpp
+    userlayout.cpp \
+    integro.cpp \
+    dialog_paper.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
-    setting.h \
     avLabel.h \
-    userlayout.h
+    userlayout.h \
+    integro.h \
+    dialog_paper.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
-    setting.ui \
-    userlayout.ui
+    userlayout.ui \
+    dialog_paper.ui
 
 RESOURCES += \
     res.qrc
