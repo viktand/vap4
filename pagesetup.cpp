@@ -10,6 +10,9 @@
 #include <QSettings>
 #include <vector>
 
+#include <iostream>
+using namespace std;
+
 bool clse=true;
 bool flag_ret=false;
 QSize mysz;
@@ -21,30 +24,30 @@ QString nms[8];             // список имен бумаг
 std::vector<int> p_w;  // список размеров
 std::vector<int> p_h;
 
-void set_paper(int p)
-{
-    switch (p)
-    {
-    case 0:
-        paper_h=297; paper_w=210; break;
-    case 1:
-        paper_h=210; paper_w=148; break;
-    case 2:
-        paper_h=148; paper_w=105; break;
-    case 3:
-        paper_h=127; paper_w=90; break;
-    case 4:
-        paper_h=152; paper_w=102; break;
-    case 5:
-        paper_h=178; paper_w=127; break;
-    case 6:
-        paper_h=203; paper_w=152; break;
-    case 7:
-        paper_h=420; paper_w=297; break;
-    case 8:
-        paper_h=mysz.height(); paper_w=mysz.width();
-    }
-}
+//void set_paper(int p)
+//{
+//    switch (p)
+//    {
+//    case 0:
+//        ph=297; pw=210; break;
+//    case 1:
+//        ph=210; pw=148; break;
+//    case 2:
+//        ph=148; pw=105; break;
+//    case 3:
+//        ph=127; pw=90; break;
+//    case 4:
+//        ph=152; pw=102; break;
+//    case 5:
+//        ph=178; pw=127; break;
+//    case 6:
+//        ph=203; pw=152; break;
+//    case 7:
+//        ph=420; pw=297; break;
+//    case 8:
+//        ph=mysz.height(); pw=mysz.width();
+//    }
+//}
 
 void PageSetup::load_combobox()
 {
@@ -245,7 +248,7 @@ void PageSetup::on_pushButton_4_clicked() // apply
     bottom_m=spinBox_4->value();
     if(radioButton->isChecked()) ornl=1; else ornl=0;
     print_color=checkBox_2->isChecked();
-    set_paper(comboBox->currentIndex());
+    //set_paper(comboBox->currentIndex());
     paper_h=ph;
     paper_w=pw;
     list_n.clear();
@@ -260,7 +263,7 @@ void PageSetup::on_pushButton_4_clicked() // apply
         }
     prn_size_x=210;
     prn_size_y=297;
-    if (checkBox_9->isChecked())
+    if (checkBox_9->isChecked()) // to A3 printer format
     {
         prn_size_x=297;
         prn_size_y=420;
@@ -324,6 +327,8 @@ void PageSetup::on_pushButton_2_clicked()
 void PageSetup::on_comboBox_currentIndexChanged(int index)
 {
     if (clse) return;
+    radioButton->setChecked(true);
+    label_4->setGeometry(110,200, 50, 75);
     spinBox_5->setValue(p_w[index]);
     spinBox_6->setValue(p_h[index]);
     pw=p_w[index];
@@ -338,7 +343,7 @@ void PageSetup::on_spinBox_5_valueChanged(int arg1)
 
 void PageSetup::on_spinBox_6_valueChanged(int arg1)
 {
-    pw=arg1;
+    ph=arg1;
 }
 
 void PageSetup::on_comboBox_3_currentIndexChanged(int index)
@@ -357,4 +362,9 @@ void PageSetup::on_checkBox_9_clicked(bool checked)
 {
     if (clse) return;
     printer_a3=checked;
+}
+
+void PageSetup::on_radioButton_toggled()
+{
+     swap(pw, ph);
 }

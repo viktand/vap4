@@ -60,6 +60,8 @@ private slots:
 
     void on_checkBox_9_clicked(bool checked);
 
+    void on_radioButton_toggled();
+
 public slots:
     void load_data(); // загрузить данные в форму
     void set_all();   // уточнить состояние флага "ориентация для всех"

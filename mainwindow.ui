@@ -37,7 +37,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>327</width>
+      <width>281</width>
       <height>41</height>
      </rect>
     </property>
@@ -141,23 +141,6 @@
        <property name="icon">
         <iconset resource="res.qrc">
          <normaloff>:/new/prefix1/sett</normaloff>:/new/prefix1/sett</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_6">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="res.qrc">
-         <normaloff>:/new/prefix1/clip</normaloff>:/new/prefix1/clip</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -275,7 +258,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -995,12 +978,42 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>0</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/new/prefix1/clip</normaloff>:/new/prefix1/clip</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <zorder>list</zorder>
    <zorder>horizontalLayoutWidget</zorder>
    <zorder>sheet</zorder>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>horizontalLayoutWidget_2</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

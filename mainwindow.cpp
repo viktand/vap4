@@ -56,7 +56,7 @@ int  ver = 594;			// h листа предпросмотра
 int  pg_mar = 10;		// поля листа бумаги
 int  pol = 10;			// поля между картинок
 int  crd[20][2];		// список стандартных координат для текущей компоновки
-bool orn=true;          // ориентация листа true - портретная
+//bool orn=true;          // ориентация листа true - портретная
 int  buf=-1; 		    // количество загруженных картинок, отсчет с нуля
 int  ttx, tty;			// временные значения для отработки перемещения объектов
 int  imgpress=-1;		// № нажатой превьюшки
@@ -254,13 +254,13 @@ void MainWindow::redraw()
     // изменение размера окна программы
     // расчет окна предпросмотра
     double x, y, w, h;           //будущий рект окна
-    x=paper_h;
-    y=paper_w;
+    y=paper_h;
+    x=paper_w;
     paper_ratio=x/y;
     w=x=wind_sz.width()-155;       //допустимая область для размещения
     h=y=wind_sz.height()-75;       // --
-    if (w*paper_ratio>h) w=h/paper_ratio;
-    else h=w*paper_ratio;
+    if (w*paper_ratio>h) w=h*paper_ratio;
+    else h=w/paper_ratio;
     x=(x-w)/2.0;
     y=(y-h)/2.0;
     x_prw=x+150;
@@ -304,7 +304,7 @@ void MainWindow::get_pp()
 void MainWindow::set_wind_size()
 {
     int w,h;
-    if (orn) h=h_min_p;
+    if (paper_h>paper_w) h=h_min_p;
     else h=h_min_l;
     w=x_prw+ui->list->geometry().width()+10;
     this->resize(w,h);
@@ -401,26 +401,18 @@ void loadpicture::start_load(QString filename) // start load
 
 void MainWindow::make_var_to_list()
 {
-    bool orn_t=list_orn[curlist-1];
-    if (orn_t)
+    if (list_orn[curlist-1])
     {
-        if (orn != orn_t)
-        {
-            ui->pushButton_10->setIcon(ui->pushButton_11->icon());
-            ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-            fn_1();
-        }
+        if(paper_h<paper_w) swap(paper_h, paper_w);
+        ui->pushButton_10->setIcon(ui->pushButton_11->icon());
+        ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     }
     else
     {
-        if (orn != orn_t)
-        {
-            ui->pushButton_11->setIcon(ui->pushButton_10->icon());
-            ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-            fn_1();
-        }
+        if(paper_h>paper_w) swap(paper_h, paper_w);
+        ui->pushButton_11->setIcon(ui->pushButton_10->icon());
+        ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     }
-    orn=orn_t;
 }
 
 void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
@@ -515,8 +507,7 @@ void MainWindow::on_pushButton_7_clicked() // настройка бумаги
 
 void MainWindow::on_pushButton_11_clicked() // ландшафтная ориентация
 {
-    if(!orn) return;
-    orn=false;
+    if(paper_w<paper_h) swap(paper_h, paper_w);
     ui->pushButton_11->setIcon(ui->pushButton_10->icon());
     ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     end_rotation();
@@ -524,8 +515,7 @@ void MainWindow::on_pushButton_11_clicked() // ландшафтная ориен
 
 void MainWindow::on_pushButton_10_clicked() // портретная ориентация
 {
-    if(orn) return;
-    orn=true;
+    if(paper_w>paper_h) swap(paper_h, paper_w);
     ui->pushButton_10->setIcon(ui->pushButton_11->icon());
     ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     end_rotation();
@@ -537,8 +527,8 @@ void MainWindow::on_checkBox_clicked(bool checked)
     if(ps!=0) ps->set_all();
     if (checked)
     {
-        for(int i=0; i<=buf; i++)  if (list_orn[toprint[i].list] != orn) toprint[i].show=0;
-        for(int i=0; i<lists; i++) list_orn[i]=orn;
+        for(int i=0; i<=buf; i++)  if (list_orn[toprint[i].list] != (paper_w<paper_h)) toprint[i].show=0;
+        for(int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
     }
 }
 
@@ -578,7 +568,7 @@ void MainWindow::set_printer() // настройка принтера
         else printer->setPaperSize(QPrinter::A3);
      int dx;
      QRect rc=printer->paperRect();
-     if (orn)
+     if (paper_w<paper_h)
      {
         prx=rc.width()/prn_size_x;
         pry=rc.height()/prn_size_y;
@@ -635,37 +625,24 @@ void MainWindow::on_pushButton_5_clicked() //печать
    cout << "sclX= "<< sclX << " sclY= "<< sclY << endl;
 }
 
-void MainWindow::fn_1()
-{
-    swap(paper_h, paper_w);
-    //swap(gor, ver);
-    double d1, d2;
-    d1=paper_h;
-    d2=paper_w;
-    paper_ratio=d1/d2;
-    make_list();
-    //set_wind_size();
-}
 
 void MainWindow::end_rotation()
 {
-    fn_1();
-    if (ui->checkBox->checkState()) for (int i=0; i<lists; i++) list_orn[i]=orn;
+    make_list();
+    if (ui->checkBox->checkState()) for (int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
     btn_comp_press(comp);
     if (all_rot)
     {
-        for(int i=0; i<lists; i++) list_orn[i]=orn;
+        for(int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
         recomp();
     }
         else
     {
-        list_orn[curlist-1]=orn;
+        list_orn[curlist-1]=(paper_w<paper_h);
         recomp_curlist();
     }
     set_indic_pos();
-    x_pg+=y_pg;
-    y_pg=x_pg-y_pg;
-    x_pg-=y_pg;
+    swap(x_pg, y_pg);
 }
 
 
@@ -780,7 +757,7 @@ void MainWindow::set_setting()
 
 void MainWindow::new_margins()
 {
-    make_list();
+    end_rotation();
     //show_pict();
     save_printer_sett();
 }
@@ -1328,7 +1305,7 @@ void MainWindow::fill_all()
      double d1=rc.width();
      double d2=rc.height();
      e=d1/d2; // соотношение сторон картинки
-     if (orn)
+     if ((paper_w<paper_h))
      {
         if (rc.width() >= rc.height())
         {
@@ -1577,6 +1554,7 @@ void MainWindow::show_paper_size()
         quick_buttons_off();
         if (rez!=0)rez->hide();
     }
+    ui->pushButton_6->hide();
 }
 
 void MainWindow::show_pict_size()
