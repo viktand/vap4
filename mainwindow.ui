@@ -1028,6 +1028,26 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="pushButton_13">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>550</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="res.qrc">
+      <normaloff>:/new/prefix1/check</normaloff>:/new/prefix1/check</iconset>
+    </property>
+   </widget>
    <zorder>list</zorder>
    <zorder>horizontalLayoutWidget</zorder>
    <zorder>sheet</zorder>
@@ -1035,6 +1055,7 @@
    <zorder>label_3</zorder>
    <zorder>tabWidget</zorder>
    <zorder>horizontalLayoutWidget_2</zorder>
+   <zorder>pushButton_13</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

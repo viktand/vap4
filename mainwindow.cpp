@@ -177,6 +177,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ul_ver=3;
     h_ofsett=0;
     pap_sor=0;
+    ui->pushButton_13->hide();
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
@@ -251,6 +252,11 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     save_wind_size();
 }
 
+void MainWindow::closeEvent(QCloseEvent *cl)
+{
+    if(cl->Quit)qApp->closeAllWindows();
+}
+
 void MainWindow::redraw()
 {
     // изменение размера окна программы
@@ -261,7 +267,7 @@ void MainWindow::redraw()
     paper_ratio=x/y;
     w=x=wind_sz.width()-155;       //допустимая область для размещения
     h=y=wind_sz.height()-75;       // --
-    if (w*paper_ratio>h) w=h*paper_ratio;
+    if (w/paper_ratio>h) w=h*paper_ratio;
     else h=w/paper_ratio;
     x=(x-w)/2.0;
     y=(y-h)/2.0;
@@ -269,7 +275,7 @@ void MainWindow::redraw()
     y_prw=70;
     gor=w;
     ver=h;
-    scl_pg=w/210.0;
+    scl_pg=w/297.0;
     layout_scale();
     ui->label_3->setText(list_n);
 }
@@ -279,6 +285,16 @@ void MainWindow::make_list() // создать лист предпросмотр
     redraw();
     int x, y, w, h;
     ui->list->setGeometry(x_prw, y_prw, gor, ver);
+    if(gor<ver)
+    {
+        ui->pushButton_10->setIcon(ui->pushButton_13->icon());
+        ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
+    }
+    else
+    {
+        ui->pushButton_11->setIcon(ui->pushButton_13->icon());
+        ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
+    }
     get_pp();
     x=x_prw+left_m*ppx;
     y=y_prw+top_m*ppy;
@@ -375,6 +391,7 @@ void MainWindow::end_load_picture(QImage image)
         d=buf+1;
         d=ceil(d/img_on_list);
         toprint[buf].list=d;
+        if (comp==10)toprint[buf].list=1;
         lists=0;
         for(int i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
         if (rap) cout << "picture was loaded" << endl;
@@ -406,13 +423,13 @@ void MainWindow::make_var_to_list()
     if (list_orn[curlist-1])
     {
         if(paper_h<paper_w) swap(paper_h, paper_w);
-        ui->pushButton_10->setIcon(ui->pushButton_11->icon());
+        ui->pushButton_10->setIcon(ui->pushButton_13->icon());
         ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     }
     else
     {
         if(paper_h>paper_w) swap(paper_h, paper_w);
-        ui->pushButton_11->setIcon(ui->pushButton_10->icon());
+        ui->pushButton_11->setIcon(ui->pushButton_13->icon());
         ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     }
 }
@@ -456,6 +473,7 @@ void MainWindow::on_pushButton_clicked() // all in oun
    for (int i=0; i<=buf; i++) toprint[i].list=1;
    btn_comp_press(10);
    img_on_list=buf+1;
+   w_cou=h_cou=2;
    recomp();
    ui->label_10->setText("All in oun");
 }
@@ -510,7 +528,7 @@ void MainWindow::on_pushButton_7_clicked() // настройка бумаги
 void MainWindow::on_pushButton_11_clicked() // ландшафтная ориентация
 {
     if(paper_w<paper_h) swap(paper_h, paper_w);
-    ui->pushButton_11->setIcon(ui->pushButton_10->icon());
+    ui->pushButton_11->setIcon(ui->pushButton_13->icon());
     ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     end_rotation();
 }
@@ -518,7 +536,7 @@ void MainWindow::on_pushButton_11_clicked() // ландшафтная ориен
 void MainWindow::on_pushButton_10_clicked() // портретная ориентация
 {
     if(paper_w>paper_h) swap(paper_h, paper_w);
-    ui->pushButton_10->setIcon(ui->pushButton_11->icon());
+    ui->pushButton_10->setIcon(ui->pushButton_13->icon());
     ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
     end_rotation();
 }
@@ -915,11 +933,10 @@ void MainWindow::show_pict() // показать картинки текущег
                        this, SLOT(pct_move(int, int, int)));
           QObject::connect(toshow[img_count].pct, SIGNAL(mouse_up(int, int, int)),
                        this, SLOT(pct_up(int, int, int)));
-
           if (toprint[i].show==0)
             {   // картинка рисуется первый раз
                 sz=setsize(toshow[img_count].pct->pixmap()->size());
-                if (img_count<(w_cou*h_cou))
+                if (img_count<(w_cou*h_cou) and comp!=10)
                 {
                     x=(img_count%w_cou)*(w_fon/w_cou)+(getx-sz.width())/2;
                     y=ceil(img_count/w_cou)*(h_fon/(h_cou*n))+(gety-sz.height())/2;
@@ -927,9 +944,9 @@ void MainWindow::show_pict() // показать картинки текущег
                 else //подбор координат для "лишних" картинок
                 {
                     x=w_fon;
-                    while (x>w_fon-sz.width()) x=rand()%(w_fon-sz.width());
+                    while (x>=sz.width()) x=rand()%(sz.width()/2);
                     y=h_fon;
-                    while (y>h_fon-sz.height()) y=rand()%(h_fon-sz.height());
+                    while (y>=sz.height()) y=rand()%(sz.height()/2);
                 }
                 if (comp==0 && fillsize) // заполнение при необходимости
                 {
@@ -989,7 +1006,7 @@ void MainWindow::recomp()
     {
         toprint[i].show=0;
         d=i+1;
-        d=ceil(d/img_on_list);
+        d=ceil(d/double(img_on_list));
         toprint[i].list=d;
     }
     lists=0;

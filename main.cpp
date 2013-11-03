@@ -6,6 +6,7 @@
 using namespace std;
 
 
+
 int main(int argc, char *argv[])
 {
 
@@ -24,8 +25,8 @@ int main(int argc, char *argv[])
         }
     w.show();
     w.if_show();
-    return a.exec();
 
+    return a.exec();
 }
 
 // 1. все строки пишем по английски, и заключаем их в tr()

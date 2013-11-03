@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtGui/QResizeEvent>
+#include <QtGui/QCloseEvent>
 
 // "сверхглобальные" переменные
 extern int  ornl;       // ориентация листа
@@ -149,6 +150,7 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *e);   // событие изменение размера окна
+    void closeEvent(QCloseEvent *cl);    // событие закрытия окна
 };
 
 // Класс, загружающий картинку. Выносится в отдельный поток, чтобы не подвешивать основное окно
