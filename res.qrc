@@ -39,5 +39,7 @@
         <file alias="nautiliss">resurs/Nautilus_icon.png</file>
         <file alias="rez">resurs/rez.png</file>
         <file alias="clip">resurs/big_clip.png</file>
+        <file alias="icon">resurs/vap.ico</file>
+        <file alias="about">resurs/about.png</file>
     </qresource>
 </RCC>

@@ -34,7 +34,7 @@ bool nautilus_check()   // Nautilus
     home=getenv("HOME");
     QString ver = GetNautilusVer();
     fold.append(home);
-    if (ver.contains("nautilus 3", Qt::CaseInsensitive))
+    if (!ver.contains("nautilus 3.4", Qt::CaseInsensitive))
             fold.append("/.local/share/nautilus/scripts");
     else
             fold.append("/.gnome2/nautilus-scripts");
@@ -51,11 +51,13 @@ void nautilus_set(bool ch) // to Nautilus
     home=getenv("HOME");
     QString ver = GetNautilusVer();
     fold.append(home);
-    if (ver.contains("nautilus 3", Qt::CaseInsensitive))
+    cout << "Info for Nautilus: "<< ver.toStdString() << endl;
+    if (!ver.contains("nautilus 3.4", Qt::CaseInsensitive))
             fold.append("/.local/share/nautilus/scripts");
     else
             fold.append("/.gnome2/nautilus-scripts");
     DIR *dr = opendir(fold.toUtf8());
+    cout << "Folder for Nautilus: "<< fold.toStdString() << endl;
     if (!dr) // папки нет, надо создать
         {
             com.clear();

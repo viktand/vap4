@@ -24,30 +24,6 @@ QString nms[8];             // список имен бумаг
 std::vector<int> p_w;  // список размеров
 std::vector<int> p_h;
 
-//void set_paper(int p)
-//{
-//    switch (p)
-//    {
-//    case 0:
-//        ph=297; pw=210; break;
-//    case 1:
-//        ph=210; pw=148; break;
-//    case 2:
-//        ph=148; pw=105; break;
-//    case 3:
-//        ph=127; pw=90; break;
-//    case 4:
-//        ph=152; pw=102; break;
-//    case 5:
-//        ph=178; pw=127; break;
-//    case 6:
-//        ph=203; pw=152; break;
-//    case 7:
-//        ph=420; pw=297; break;
-//    case 8:
-//        ph=mysz.height(); pw=mysz.width();
-//    }
-//}
 
 void PageSetup::load_combobox()
 {
@@ -248,7 +224,6 @@ void PageSetup::on_pushButton_4_clicked() // apply
     bottom_m=spinBox_4->value();
     if(radioButton->isChecked()) ornl=1; else ornl=0;
     print_color=checkBox_2->isChecked();
-    //set_paper(comboBox->currentIndex());
     paper_h=ph;
     paper_w=pw;
     list_n.clear();

@@ -133,6 +133,8 @@ private slots:
     void on_checkBox_5_clicked(bool checked);
     void on_pushButton_6_clicked();
 
+    void on_pushButton_9_clicked();
+
 private:
     Ui::MainWindow *ui;                 // Рождение
 

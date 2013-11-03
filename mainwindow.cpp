@@ -3,6 +3,7 @@
 #include "pagesetup.h"
 #include "avLabel.h"
 #include "userlayout.h"
+#include "about.h"
 #include <math.h>
 #include <qmath.h>
 
@@ -30,6 +31,7 @@ using namespace std;
 QPrinter *printer;       // принтер, в него рисовать и настраивать
 QPainter *pntr;          // устройство рисования (с него печатать)
 PageSetup *ps;
+about *ab;
 userlayout *uslay;
 QMovie *animGif;
 QTimer *timer;
@@ -1720,4 +1722,13 @@ void MainWindow::on_pushButton_6_clicked() // обрезка
     toshow[imgpress2].pct->setPixmap(p);
     toshow[imgpress2].pct->setGeometry(rc);
     cout << "clipped successfully!" << endl;
+}
+
+void MainWindow::on_pushButton_9_clicked()
+{
+    if(ab==0)
+    {
+        ab=new about();
+    }
+    ab->show();
 }

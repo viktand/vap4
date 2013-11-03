@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Fast print</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/new/prefix1/icon</normaloff>:/new/prefix1/icon</iconset>
+  </property>
   <property name="iconSize">
    <size>
     <width>32</width>
@@ -37,7 +41,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>281</width>
+      <width>331</width>
       <height>41</height>
      </rect>
     </property>
@@ -141,6 +145,23 @@
        <property name="icon">
         <iconset resource="res.qrc">
          <normaloff>:/new/prefix1/sett</normaloff>:/new/prefix1/sett</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_9">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/new/prefix1/about</normaloff>:/new/prefix1/about</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -981,9 +1002,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>340</x>
       <y>0</y>
-      <width>41</width>
+      <width>46</width>
       <height>41</height>
      </rect>
     </property>
