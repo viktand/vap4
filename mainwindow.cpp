@@ -19,6 +19,9 @@
 #include <QMatrix>
 #include <QPointF>
 #include <QSettings>
+#include <QDrag>
+#include <QMimeData>
+#include <QFileInfo>
 
 #define PI 3.14159265
 
@@ -162,6 +165,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)  // конструктор
 {
     ui->setupUi(this);
+    this->setAcceptDrops(true);
     fon=new QavLabel(ui->sheet);
     connect(fon, SIGNAL(mouse_press(int,int,int)), this, SLOT(show_paper_size()));
     list_n.append("A4 210x297 mm");
@@ -257,6 +261,40 @@ void MainWindow::closeEvent(QCloseEvent *cl)
     if(cl->Quit)qApp->closeAllWindows();
 }
 
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept();
+}
+
+void MainWindow::dropEvent(QDropEvent *event) // сброс картинок мышью на программу
+{
+    cout << "was drag and drop..."<< endl;
+    if (event->mimeData()->hasText())
+    {
+        QString dropFiles;
+        dropFiles.append(event->mimeData()->text());
+        prm.clear();
+        prm.append("drops");
+        cou_prm=1;
+        QString s="";
+        for(int i=0; i<dropFiles.length(); i++)
+        {
+            if(dropFiles.mid(i,1)!="\n")
+            {
+                s.append(dropFiles.mid(i,1));
+            }
+            else
+            {
+                prm.append(s);
+                cout << "file: "<< s.toStdString() << endl;
+                s.clear();
+                cou_prm++;
+            }
+        }
+        if_show();
+    }
+
+}
 void MainWindow::redraw()
 {
     // изменение размера окна программы
@@ -346,21 +384,49 @@ void MainWindow::if_show()
 void MainWindow::load_param() // обработка параметров командной строки
 {
     if (cou_prm<2) return;
-    ind_start();
     for(int i=1;i<cou_prm; i++)
      {
 
         flag2=true;
-         //if (rap) cout << "File " << i << " : " << prm[i] << endl;
-        open_pct(prm[i]);
+        if (rap) cout << "File to load " << i << " : " << prm[i].toStdString() << endl;
+        QString fn;
+        fn=prm[i].trimmed();
+        if (fn.contains("file:///")) fn=esc_to_utf(fn);
+        QFileInfo fi(fn);
+        cout << "fn: " << fn.toStdString() << endl;
+        if(fi.isFile())
+        {
+            open_pct(fn);
+        }
+        else //папка
+        {
+            load_folder(fn);
+        }
         while (flag2) { QApplication::processEvents(); }
      }
     show_pict();
 }
 
+
+void MainWindow::load_folder(QString fn)
+{
+    QDir dir(fn);
+    QStringList nameFilter; // имя фильтра
+    nameFilter << "*.png" << "*.xpm" << "*.jpg" << "*.jpeg" << "*.bmp" << "*.gif" << "*.ico";
+    QFileInfoList list = dir.entryInfoList( nameFilter, QDir::Files );// только файлы
+    QFileInfo fileinfo; // список
+    foreach (fileinfo, list)
+    {
+        flag2=true;
+        open_pct(fileinfo.absoluteFilePath());
+        while (flag2) { QApplication::processEvents(); }
+    }
+}
+
 void MainWindow::open_pct(QString filename) // добавить картинку в список
 {
     if (filename.contains("file:///")) filename=esc_to_utf(filename);
+    if (rap) cout << "File to open: " <<  filename.toStdString() << endl;
         buf++;
         if(lists==0)
         {
@@ -383,9 +449,8 @@ void MainWindow::open_pct(QString filename) // добавить картинку
 
 void MainWindow::end_load_picture(QImage image)
 {
-        if (image.isNull()) { } // неудачная загрузка
+    if (image.isNull()) { cout << ":( <- loading" << endl;} // неудачная загрузка
         double d;
-        //toprint[buf].pct = image;
         toprint[buf].pix0 = toprint[buf].pix = QPixmap::fromImage(image);
         toprint[buf].show= 0;
         d=buf+1;
@@ -409,6 +474,7 @@ loadpicture::loadpicture(QObject *parent) :  QObject(parent)
 
 void loadpicture::start_load(QString filename) // start load
 {
+    filename=filename.trimmed();
     QImage image(filename);
     emit sendImage(image);
 }
@@ -450,20 +516,10 @@ void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
 
 void MainWindow::on_pushButton_12_clicked() // открыть папку
 {
-    ind_start();
-    QString dirf = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+   ind_start();
+   QString dirf = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                                                     "/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-   QDir dir(dirf);
-   QStringList nameFilter; // имя фильтра
-   nameFilter << "*.png" << "*.xpm" << "*.jpg" << "*.jpeg" << "*.bmp" << "*.gif" << "*.ico";
-   QFileInfoList list = dir.entryInfoList( nameFilter, QDir::Files );// только файлы
-   QFileInfo fileinfo; // список
-   foreach (fileinfo, list)
-   {
-       flag2=true;
-       open_pct(fileinfo.absoluteFilePath());
-       while (flag2) { QApplication::processEvents(); }
-   }
+   load_folder(dirf);
    show_pict();
    ind_stop();
 }

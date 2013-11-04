@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QCloseEvent>
+#include <QTextEdit>
 
 // "сверхглобальные" переменные
 extern int  ornl;       // ориентация листа
@@ -104,6 +105,7 @@ private slots:
     void rez_press(int x, int y);           // нажатие на рамку обрезки
     void rez_move(int x, int y);            // движение по рамке обрезки
     void rez_up();                          // отпускание рамки
+    void load_folder(QString fn);           // загрузить содержимое папки fn
 
     void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
     void on_l2_clicked();
@@ -151,6 +153,8 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *e);   // событие изменение размера окна
     void closeEvent(QCloseEvent *cl);    // событие закрытия окна
+    void dragEnterEvent(QDragEnterEvent *event);  //
+    void dropEvent(QDropEvent *event);
 };
 
 // Класс, загружающий картинку. Выносится в отдельный поток, чтобы не подвешивать основное окно
@@ -169,6 +173,7 @@ signals:
 public slots:
     void start_load(QString filename);  // загрузка
 };
+
 
 
 #endif // MAINWINDOW_H
