@@ -168,6 +168,7 @@ void PageSetup::load_data()
    spinBox_2->setValue(left_m);
    spinBox_3->setValue(right_m);
    spinBox_4->setValue(bottom_m);
+   doubleSpinBox_2->setValue(font_scl);
    if (ornl==0)
    {
        on_radioButton_2_clicked();
@@ -342,4 +343,9 @@ void PageSetup::on_checkBox_9_clicked(bool checked)
 void PageSetup::on_radioButton_toggled()
 {
      swap(pw, ph);
+}
+
+void PageSetup::on_doubleSpinBox_2_valueChanged(double arg1)
+{
+    font_scl=arg1;
 }

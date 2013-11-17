@@ -4,6 +4,7 @@
 //using namespace std;
 
 QPixmap *mem_pix;
+int bt=0;
 
 QavLabel::QavLabel(QWidget *parent) : QLabel(parent)
 {
@@ -24,8 +25,11 @@ void QavLabel::mouseReleaseEvent(QMouseEvent *e)
             emit mouse_up(e->globalX(), e->globalY(), this->getImnum());             // левый клик
         }
 
-        if(e->button() == Qt::RightButton) emit rclicked();                          // правый клик
-
+        if(e->button() == Qt::RightButton)
+        {
+            emit rclicked(e->globalX(), e->globalY(), this->getImnum());             // правый клик
+        }
+    bt=0;
 }
 
 void QavLabel::mousePressEvent(QMouseEvent *e)
@@ -33,12 +37,16 @@ void QavLabel::mousePressEvent(QMouseEvent *e)
     if(e->button() == Qt::LeftButton)
     {
         emit mouse_press(e->globalX(), e->globalY(), this->getImnum());               // нажатие
+        bt=1;
     }
 }
 
 void QavLabel::mouseMoveEvent(QMouseEvent *e)
 {
-    emit mouse_move(e->globalX(), e->globalY(), this->getImnum());                    // движение
+    if(bt==1)
+    {
+        emit mouse_move(e->globalX(), e->globalY(), this->getImnum());                    // движение
+    }
 }
 
 

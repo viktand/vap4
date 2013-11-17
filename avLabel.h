@@ -26,7 +26,7 @@ class QavLabel : public QLabel
 
     signals:
         void mouse_up(int x, int y, int i);
-        void rclicked();
+        void rclicked(int x, int y, int i);
         void mouse_press(int x, int y, int i);
         void mouse_move(int x, int y, int i);
 

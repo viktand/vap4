@@ -673,8 +673,8 @@
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>20</y>
+        <x>20</x>
+        <y>10</y>
         <width>24</width>
         <height>24</height>
        </rect>
@@ -693,7 +693,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>10</y>
+        <y>0</y>
         <width>50</width>
         <height>50</height>
        </rect>
@@ -711,9 +711,9 @@
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>31</width>
+        <x>20</x>
+        <y>30</y>
+        <width>21</width>
         <height>20</height>
        </rect>
       </property>
@@ -727,8 +727,8 @@
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>80</y>
+        <x>17</x>
+        <y>60</y>
         <width>32</width>
         <height>32</height>
        </rect>
@@ -747,7 +747,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>70</y>
+        <y>40</y>
         <width>50</width>
         <height>64</height>
        </rect>
@@ -765,9 +765,9 @@
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>110</y>
-        <width>31</width>
+        <x>20</x>
+        <y>90</y>
+        <width>21</width>
         <height>16</height>
        </rect>
       </property>
@@ -778,33 +778,17 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLabel" name="label_8">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>140</y>
-        <width>32</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="res.qrc">:/new/prefix1/fill</pixmap>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="checkBox_4">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>150</y>
-        <width>21</width>
-        <height>21</height>
+        <x>10</x>
+        <y>136</y>
+        <width>91</width>
+        <height>16</height>
        </rect>
       </property>
       <property name="text">
-       <string/>
+       <string>Fill</string>
       </property>
       <property name="tristate">
        <bool>false</bool>
@@ -814,7 +798,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>190</y>
+        <y>154</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -917,7 +901,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>208</y>
+        <y>172</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -985,7 +969,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>226</y>
+        <y>190</y>
         <width>111</width>
         <height>21</height>
        </rect>
@@ -995,6 +979,19 @@
       </property>
       <property name="checked">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Capctions</string>
       </property>
      </widget>
     </widget>

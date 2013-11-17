@@ -41,5 +41,6 @@
         <file alias="clip">resurs/big_clip.png</file>
         <file alias="icon">resurs/vap.ico</file>
         <file alias="about">resurs/about.png</file>
+        <file alias="pencil">resurs/pencil.png</file>
     </qresource>
 </RCC>

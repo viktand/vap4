@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     userlayout.cpp \
     integro.cpp \
     dialog_paper.cpp \
-    about.cpp
+    about.cpp \
+    captioneditor.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -33,13 +34,15 @@ HEADERS  += mainwindow.h \
     userlayout.h \
     integro.h \
     dialog_paper.h \
-    about.h
+    about.h \
+    captioneditor.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
     userlayout.ui \
     dialog_paper.ui \
-    about.ui
+    about.ui \
+    captioneditor.ui
 
 RESOURCES += \
     res.qrc

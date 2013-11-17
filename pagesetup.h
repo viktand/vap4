@@ -62,6 +62,8 @@ private slots:
 
     void on_radioButton_toggled();
 
+    void on_doubleSpinBox_2_valueChanged(double arg1);
+
 public slots:
     void load_data(); // загрузить данные в форму
     void set_all();   // уточнить состояние флага "ориентация для всех"
