@@ -6,6 +6,15 @@
 
 QT       += core gui
 
+greaterThan(QT_MAJOR_VERSION, 4) {
+  QT += widgets
+  DEFINES += HAVE_QT5
+}
+
+greaterThan(QT_MAJOR_VERSION, 5) {
+  DEFINES += HAVE_QT4
+}
+
 #ifdef HAVE_QT5
     qtHaveModule(printsupport): QT += printsupport
 #endif

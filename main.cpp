@@ -11,6 +11,13 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+#ifdef HAVE_QT4
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+#endif
+
+
     cout << "Hello, World!" << endl;
     cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
 
