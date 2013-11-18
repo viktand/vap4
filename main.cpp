@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QTextCodec>
+#include <QWidget>
 
 #include <iostream>
 using namespace std;
