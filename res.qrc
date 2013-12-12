@@ -42,5 +42,6 @@
         <file alias="icon">resurs/vap.ico</file>
         <file alias="about">resurs/about.png</file>
         <file alias="pencil">resurs/pencil.png</file>
+        <file alias="text">resurs/text.png</file>
     </qresource>
 </RCC>

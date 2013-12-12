@@ -131,6 +131,13 @@ private slots:
     void cp_setPixmap(int index);           // создать картинку подписи
     void turn_caption();                    // переключить состояние подписи (вкл/выкл) для bufpress2
     void reScl();                           // пересчет масштаба и позиций подписей
+    void setTextBlock(QString text,
+         QColor BackColor, QColor LitColor,
+         QFont TextFont, bool trans);       // создать (изменить) текстовый блок
+    void addTextPictute(QPixmap pixmap,
+         QString text, QColor BackColor,
+         QColor LitColor, QFont TextFont,
+                        bool trans);        // добавить картинку из текстового блока
 
     void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
     void on_l2_clicked();
@@ -160,10 +167,9 @@ private slots:
     void on_verticalScrollBar_valueChanged(int value);
     void on_checkBox_5_clicked(bool checked);
     void on_pushButton_6_clicked();
-
     void on_pushButton_9_clicked();
-
     void on_checkBox_6_clicked();
+    void on_pushButton_14_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение

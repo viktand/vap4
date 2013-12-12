@@ -41,14 +41,11 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>331</width>
-      <height>41</height>
+      <width>401</width>
+      <height>40</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>2</number>
-     </property>
      <property name="leftMargin">
       <number>6</number>
      </property>
@@ -111,6 +108,23 @@
        <property name="icon">
         <iconset resource="res.qrc">
          <normaloff>:/new/prefix1/up</normaloff>:/new/prefix1/up</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_14">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/new/prefix1/text</normaloff>:/new/prefix1/text</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -999,7 +1013,7 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>410</x>
       <y>0</y>
       <width>46</width>
       <height>41</height>

@@ -5,6 +5,7 @@
 #include "userlayout.h"
 #include "about.h"
 #include "captioneditor.h"
+#include "texteditor.h"
 #include <math.h>
 #include <qmath.h>
 
@@ -39,6 +40,7 @@ using namespace std;
 QPrinter *printer;       // принтер, в него рисовать и настраивать
 QPainter *pntr;          // устройство рисования (с него печатать)
 PageSetup *ps;
+TextEditor *txed;
 about *ab;
 userlayout *uslay;
 QMenu *rmenu;
@@ -171,6 +173,7 @@ struct pict {                // загруженная картинка и вс�
     int       cp_num;        // номер avLabel - подписи на экране
     int       cp_z;          // z-орядок для подписи
     QPixmap   cp_pixmap;     // pixmap подписи
+    bool      isTextBlock;   // true - это текстовый блок
 };
 
 struct prew {
@@ -187,6 +190,7 @@ QavLabel *clip;              // кнопка ножницы
 std::vector<pict> toprint;      //массив загруженных картинок
 std::vector<prew> toshow;       //массив превьющек
 std::vector<prew> tocaption;    //массив подписей
+std::vector<prew> totext;       //массив надписей (блоков текста)
 std::vector<bool> list_orn;     // массив ориентаций листов true - портретная ориентация
 
 
@@ -511,6 +515,7 @@ void MainWindow::open_pct(QString filename) // добавить картинку
         toprint[buf].back_color=Qt::white;    // цвет фона
         toprint[buf].font_color=Qt::black;    // цвет шрифта
         toprint[buf].trans=true;
+        toprint[buf].isTextBlock=false;
         QFont fn;
         fn.setPointSize(10);
         fn.setFamily("Sans");
@@ -1349,21 +1354,25 @@ void MainWindow::rotated(int g)
     pn.setY(toprint[bufpress2].top+toprint[bufpress2].heigth/2);
     pix=toprint[bufpress2].pix0;
     QSize sz=pix.size();
-    QPixmap canv_pix(sz*2);
-    canv_pix.fill(Qt::transparent); // залить пустотой
-    // центр холста
     int x=sz.width();
     int y=sz.height();
+    int z=sqrt(x*x+y*y);
+    QSize sz2;
+    sz2.setHeight(z);
+    sz2.setWidth(z);
+    QPixmap canv_pix(sz2);
+    canv_pix.fill(Qt::transparent); // залить пустотой
     QPainter p(&canv_pix);
-    p.translate(x,y);
+    // центр холста
+    p.translate(z/2,z/2); //(x,y);
     p.rotate(g);
-    p.translate(-x,-y);
-    p.drawPixmap(x/2,y/2, pix);
+    p.translate(-z/2,-z/2); //(-x,-y);
+    p.drawPixmap((z-x)/2,(z-y)/2, pix); //(x/2,y/2, pix);
     p.end();
-    int h=x*fabs(sin(r))+ y*fabs(cos(r));
-    int w=x*fabs(cos(r))+ y*fabs(sin(r));
-    x=x-w/2;
-    y=y-h/2;
+    int h=x*fabs(sin(r))+y*fabs(cos(r));
+    int w=x*fabs(cos(r))+y*fabs(sin(r));
+    x=(z-w)/2;
+    y=(z-h)/2;
     pix=canv_pix.copy(x, y, w, h);
     toprint[bufpress2].pix=pix;
     d=pix.width();
@@ -2181,7 +2190,7 @@ void MainWindow::show_caption(int index, bool sh) // показать подпи
           tocaption[count].pct->show();
           tocaption[count].pct->raise();
           toprint[index].cp_z=++curz;
-          cout << "caption size:  " << rc.width()<< ", "<< rc.height()<< endl;
+          //cout << "caption size:  " << rc.width()<< ", "<< rc.height()<< endl;
       }
     else{ // убрать подпись
         if(toprint[index].cp_num>-1){
@@ -2241,4 +2250,106 @@ void MainWindow::cp_up(int x, int y, int i)
 void MainWindow::on_checkBox_6_clicked()
 {
     if(buf>-1) show_pict();
+}
+
+// Текстовые блоки
+//**************************************************************
+
+void MainWindow::on_pushButton_14_clicked()
+// вставить текст
+{
+    if (txed==0)
+    {
+        txed=new TextEditor;
+        connect(txed, SIGNAL(settext(QString,QColor,QColor,QFont,bool)),
+                this, SLOT(setTextBlock(QString,QColor,QColor,QFont,bool)));
+    }
+    txed->show();
+}
+
+void MainWindow::setTextBlock(QString text, QColor BackColor, QColor LitColor, QFont TextFont, bool trans)
+{
+    int lin=0;
+    QString st="";
+    QString strk="";
+    QFontMetrics m(TextFont);
+    for(int i=0; i<text.length(); i++)
+    {
+        st=st.append(text[i]);
+        if (text[i]=='\n')
+        {
+            lin++;
+            if(m.width(st.trimmed())>m.width(strk.trimmed()))
+            {
+                strk.clear();
+                strk.append(st);
+                st.clear();
+            }
+        }
+    }
+    if(st!="")
+    {
+        lin++;
+        if(m.width(st.trimmed())>m.width(strk.trimmed()))
+        {
+            strk.clear();
+            strk.append(st);
+            st.clear();
+        }
+    }
+    int h=m.height()*lin;               // высота картинки
+    int w=m.width(strk.trimmed());      // ширина картинки
+    QRect rc;
+    rc.setTop(0);
+    rc.setLeft(0);
+    rc.setWidth(w);
+    rc.setHeight(h);
+    if (rap) cout << "h= "<< h << " w= "<< w << endl;
+    QPixmap px(w,h);
+    if (trans) px.fill(Qt::transparent);
+    else       px.fill(BackColor);
+    pntr->begin(&px);
+    pntr->setPen(LitColor);
+    pntr->setFont(TextFont);
+    pntr->drawText(rc, Qt::AlignLeft, text);
+    pntr->end();
+    addTextPictute(px,text,BackColor,LitColor,TextFont,trans);
+    show_pict();
+}
+
+
+void MainWindow::addTextPictute(QPixmap pixmap, QString text,
+                     QColor BackColor, QColor LitColor, QFont TextFont, bool trans)
+// добавить картинку-textblock в список
+{
+        buf++;
+        if(lists==0)
+        {
+            lists=1;
+            curlist=1;
+        }
+        toprint.push_back(pict());
+        toprint[buf].pict="";
+        toprint[buf].caption=text;
+        toprint[buf].show_caption=false;
+        toprint[buf].back_color=BackColor;    // цвет фона
+        toprint[buf].font_color=LitColor;     // цвет шрифта
+        toprint[buf].trans=trans;             // прозрачный фон
+        toprint[buf].isTextBlock=true;
+        toprint[buf].font=TextFont;           // шрифт
+        toprint[buf].cp_num=-1;               // нет привязанного avLabel
+        QRect rc;
+        rc.setRect(0,0,0,0);
+        toprint[buf].rect=rc;                 // начальная геометрия подписи
+        double d;
+        toprint[buf].pix0=toprint[buf].pix = pixmap;
+        toprint[buf].show=0;
+        d=buf+1;
+        d=ceil(d/img_on_list);
+        toprint[buf].list=d;
+        if (comp==10)toprint[buf].list=1;
+        lists=0;
+        for(int i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
+        if (rap) cout << "textblock was set" << endl;
+        img_size_cur_comp();
 }

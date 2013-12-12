@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     integro.cpp \
     dialog_paper.cpp \
     about.cpp \
-    captioneditor.cpp
+    captioneditor.cpp \
+    texteditor.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -43,14 +44,16 @@ HEADERS  += mainwindow.h \
     integro.h \
     dialog_paper.h \
     about.h \
-    captioneditor.h
+    captioneditor.h \
+    texteditor.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
     userlayout.ui \
     dialog_paper.ui \
     about.ui \
-    captioneditor.ui
+    captioneditor.ui \
+    texteditor.ui
 
 RESOURCES += \
     res.qrc
