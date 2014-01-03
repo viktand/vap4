@@ -28,6 +28,7 @@
 #include <QAction>
 #include <QPixmap>
 #include <QBitmap>
+#include <QTextStream>
 
 #define PI 3.14159265
 
@@ -71,7 +72,7 @@ int  ver = 594;			// h листа предпросмотра
 int  pg_mar = 10;		// поля листа бумаги
 int  pol = 10;			// поля между картинок
 int  crd[20][2];		// список стандартных координат для текущей компоновки
-//bool orn=true;          // ориентация листа true - портретная
+bool orn=true;          // ориентация листа true - портретная
 int  buf=-1; 		    // количество загруженных картинок, отсчет с нуля
 int  ttx, tty;			// временные значения для отработки перемещения объектов
 int  imgpress=-1;		// № нажатой превьюшки
@@ -131,8 +132,8 @@ bool show_cap;
 QColor font_cl;  // цвет шрифта подписи
 QColor back_cl;  // цвет шрифта фона
 QFont  font_cpt; // шрифт подписи
-bool frm_cpt;    // показывать рамку подписи
 bool trans;      // прозрачный фон надписи
+bool runShow=false; // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
 double font_scl;
 
 struct pict {                // загруженная картинка и все ее свойства
@@ -148,8 +149,6 @@ struct pict {                // загруженная картинка и вс�
     int       list;          // номер страницы этой картинки
     int       load;          // флаг того, картинка уже загружена в память
     int       z;             // z-порядок
-    char      comm[100];     // комментарий (подпись) к картинке
-    int       showcomm;      // показывать подпись или нет
     int       xl;            // Х подписи
     int       yl;            // Y подписи
     char      fnt_Name[31];  // имя фонта подписи
@@ -174,6 +173,7 @@ struct pict {                // загруженная картинка и вс�
     int       cp_z;          // z-орядок для подписи
     QPixmap   cp_pixmap;     // pixmap подписи
     bool      isTextBlock;   // true - это текстовый блок
+    int       alig;          // выравнивание в текстовом болоке 0-1-2 -> слева-по центру-справа
 };
 
 struct prew {
@@ -206,10 +206,6 @@ MainWindow::MainWindow(QWidget *parent) :
     fon->show();
     print_color=true;
     set_orn = true;
-    top_m=5;
-    left_m=5;
-    right_m=5;
-    bottom_m=5;
     all_rot=true;
     ul_hor=3;
     ul_ver=3;
@@ -222,7 +218,7 @@ MainWindow::MainWindow(QWidget *parent) :
     move(rect.topLeft());
     printer = new QPrinter(QPrinter::HighResolution);
     list_orn.push_back(true);
-    pntr = new QPainter();
+    pntr = new QPainter(printer);
     if (printer->orientation() == QPrinter::Portrait) ornl=1; else ornl=0;
     printer->setPageSize(QPrinter::A4);
     rap=true;
@@ -268,6 +264,7 @@ MainWindow::MainWindow(QWidget *parent) :
     set_btn_pos(0);
     rest_sind_size();
     rest_printer_sett();
+    get_marg();
     rest_view_sett();
     ui->pushButton_6->hide();
     double d1, d2;
@@ -281,6 +278,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     make_list();
     show_paper_size();
+    gor_old=gor;
  }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -289,6 +287,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     gor_old=gor;
     wind_sz=e->size();
     make_list();
+    show_pict();
     save_wind_size();
 }
 
@@ -338,6 +337,14 @@ void MainWindow::dropEvent(QDropEvent *event) // сброс картинок м�
 
 }
 
+void MainWindow::get_marg()
+{
+    QRect pap=printer->paperRect();
+    QRect pag=printer->pageRect();
+    left_m=right_m=double((pap.width()-pag.width())/2)/(double(printer->resolution())/25.4);
+    top_m=bottom_m=double((pap.height()-pag.height())/2)/(double(printer->resolution())/25.4);
+}
+
 void MainWindow::reScl()
 {
     double scl=double(ui->list->widthMM())/double(paper_w)/list_scl;
@@ -354,6 +361,61 @@ void MainWindow::reScl()
         toprint[i].rect.setHeight(h);
     }
     list_scl=double(ui->list->widthMM())/double(paper_w);
+}
+
+
+void MainWindow::on_pushButton_11_clicked() // ландшафтная ориентация
+{
+    orn=false;
+    if(paper_w<paper_h) swap(paper_h, paper_w);
+    ui->pushButton_11->setIcon(ui->pushButton_13->icon());
+    ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
+    end_rotation();
+}
+
+void MainWindow::on_pushButton_10_clicked() // портретная ориентация
+{
+    orn=true;
+    if(paper_w>paper_h) swap(paper_h, paper_w);
+    ui->pushButton_10->setIcon(ui->pushButton_13->icon());
+    ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
+    end_rotation();
+}
+
+void MainWindow::end_rotation()
+{
+    make_list();
+    if (ui->checkBox->checkState()) for (int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
+    btn_comp_press(comp);
+    if (all_rot)
+    {
+        for(int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
+        if(!runShow)recomp();
+    }
+        else
+    {
+        list_orn[curlist-1]=(paper_w<paper_h);
+        if(!runShow)recomp_curlist();
+    }
+    swap(x_pg, y_pg);
+}
+
+void MainWindow::make_list() // создать лист предпросмотра
+{
+    redraw();
+    int x, y, w, h;
+    ui->list->setGeometry(x_prw, y_prw, gor, ver);
+    get_pp();
+    x=x_prw+left_m*ppx;
+    y=y_prw+top_m*ppy;
+    w=gor-left_m*ppx-right_m*ppx;
+    h=ver-top_m*ppy-bottom_m*ppy;
+    ui->sheet->setGeometry(x, y, w, h);
+    fon->setGeometry(0, 0, w, h);
+    w_fon=w;
+    h_fon=h;
+    set_indic_pos();
+    reScl();
 }
 
 void MainWindow::redraw()
@@ -379,33 +441,21 @@ void MainWindow::redraw()
     ui->label_3->setText(list_n);
 }
 
-void MainWindow::make_list() // создать лист предпросмотра
+void MainWindow::layout_scale()
 {
-    redraw();
-    int x, y, w, h;
-    ui->list->setGeometry(x_prw, y_prw, gor, ver);
-    if(gor<ver)
+    if(gor_old==gor) return;
+    double k=double(gor)/double(gor_old);
+    for(int i=0; i<=buf; i++)
     {
-        ui->pushButton_10->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
+        if(toprint[i].show==1)
+        {
+            toprint[i].left=k*double(toprint[i].left);
+            toprint[i].top=k*double(toprint[i].top);
+            toprint[i].heigth=k*double(toprint[i].heigth);
+            toprint[i].width=k*double(toprint[i].width);
+        }
     }
-    else
-    {
-        ui->pushButton_11->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    }
-    get_pp();
-    x=x_prw+left_m*ppx;
-    y=y_prw+top_m*ppy;
-    w=gor-left_m*ppx-right_m*ppx;
-    h=ver-top_m*ppy-bottom_m*ppy;
-    ui->sheet->setGeometry(x, y, w, h);
-    fon->setGeometry(0, 0, w, h);
-    w_fon=w;
-    h_fon=h;
-    set_indic_pos();
-    reScl();
-    if (buf>-1) show_pict();
+    gor_old=gor;
 }
 
 void MainWindow::get_pp()
@@ -446,25 +496,41 @@ void MainWindow::if_show()
 void MainWindow::load_param() // обработка параметров командной строки
 {
     if (cou_prm<2) return;
+    QString fn;
+    QFileInfo fi;
+    bool fl_no;
     for(int i=1;i<cou_prm; i++)
      {
 
         flag2=true;
+        fl_no=true;
         if (rap) cout << "File to load " << i << " : " << prm[i].toStdString() << endl;
-        QString fn;
-        fn=prm[i].trimmed();
+        fn=fn.append(prm[i].trimmed());
         if (fn.contains("file:///")) fn=esc_to_utf(fn);
-        QFileInfo fi(fn);
-        cout << "fn: " << fn.toStdString() << endl;
-        if(fi.isFile())
+        if(i+1<cou_prm)
         {
-            open_pct(fn);
+            if(prm[i+1].mid(0,1)!="/")
+            {
+                fl_no=false;
+                fn.append(" ");
+            }
         }
-        else //папка
+        if (fl_no)
         {
-            load_folder(fn);
+            fi.setFile(fn);
+            cout << "fn: " << fn.toStdString() << endl;
+            ui->label_8->setText(fn);
+            if(fi.isFile())
+            {
+                open_pct(fn);
+            }
+            else //папка
+            {
+                load_folder(fn);
+            }
+            while (flag2) { QApplication::processEvents(); }
+            fn.clear();
         }
-        while (flag2) { QApplication::processEvents(); }
      }
     show_pict();
 }
@@ -569,24 +635,6 @@ void loadpicture::start_load(QString filename) // start load
 
 // end
 
-
-
-void MainWindow::make_var_to_list()
-{
-    if (list_orn[curlist-1])
-    {
-        if(paper_h<paper_w) swap(paper_h, paper_w);
-        ui->pushButton_10->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    }
-    else
-    {
-        if(paper_h>paper_w) swap(paper_h, paper_w);
-        ui->pushButton_11->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    }
-}
-
 void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
 {
     QString fileName = get_file();
@@ -641,7 +689,6 @@ void MainWindow::on_pushButton_4_clicked() // вперед
         for(int i=0; i<=buf; i++) toprint[i].cp_num=-1;
         curlist++;
         if (int(list_orn.size())<lists) list_orn.push_back(list_orn.back());
-        make_var_to_list();
         show_pict();
     }
 }
@@ -652,7 +699,6 @@ void MainWindow::on_pushButton_3_clicked() // назад
     {
         for(int i=0; i<=buf; i++) toprint[i].cp_num=-1;
         curlist--;
-        make_var_to_list();
         show_pict();
     }
 }
@@ -668,22 +714,6 @@ void MainWindow::on_pushButton_7_clicked() // настройка бумаги
     ps->show();
     connect(ps, SIGNAL(set_all_em(bool)), this, SLOT(set_all_rot(bool)));
 
-}
-
-void MainWindow::on_pushButton_11_clicked() // ландшафтная ориентация
-{
-    if(paper_w<paper_h) swap(paper_h, paper_w);
-    ui->pushButton_11->setIcon(ui->pushButton_13->icon());
-    ui->pushButton_10->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    end_rotation();
-}
-
-void MainWindow::on_pushButton_10_clicked() // портретная ориентация
-{
-    if(paper_w>paper_h) swap(paper_h, paper_w);
-    ui->pushButton_10->setIcon(ui->pushButton_13->icon());
-    ui->pushButton_11->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    end_rotation();
 }
 
 void MainWindow::on_checkBox_clicked(bool checked)
@@ -732,22 +762,26 @@ void MainWindow::set_printer() // настройка принтера
      if (prn_size_x+prn_size_y!=717) printer->setPaperSize(QPrinter::A4);
         else printer->setPaperSize(QPrinter::A3);
      int dx;
-     QRect rc=printer->paperRect();
      if (paper_w<paper_h)
      {
-        prx=rc.width()/prn_size_x;
-        pry=rc.height()/prn_size_y;
-        dx=(prn_size_x-x_pg)/2;
-        printer->setOrientation(QPrinter::Portrait);
+         printer->setOrientation(QPrinter::Portrait);
+         QRect rc=printer->paperRect();
+         prx=rc.width()/prn_size_x;
+         pry=rc.height()/prn_size_y;
+         dx=(prn_size_x-x_pg)/2;
+
      }
      else
      {
+         printer->setOrientation(QPrinter::Landscape);
+         QRect rc=printer->paperRect();
          prx=rc.width()/prn_size_y;
          pry=rc.height()/prn_size_x;
          dx=(prn_size_y-x_pg)/2;
-         printer->setOrientation(QPrinter::Landscape);
+
      }
-     printer->setPageMargins(dx+left_m, top_m, right_m, bottom_m, QPrinter::Millimeter);
+     //printer->setPageMargins(dx+left_m, top_m, right_m, bottom_m, QPrinter::Millimeter);
+     printer->setPageMargins(dx, 0, 0, 0, QPrinter::Millimeter);
 }
 
 void MainWindow::on_pushButton_5_clicked() //печать
@@ -815,27 +849,6 @@ void MainWindow::on_pushButton_5_clicked() //печать
    cout << "Parer: rect size: heigth = "<< rc.height() << "; width = " << rc.width() << endl;
    cout << "sclX= "<< sclX << " sclY= "<< sclY << endl;
 }
-
-
-void MainWindow::end_rotation()
-{
-    make_list();
-    if (ui->checkBox->checkState()) for (int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
-    btn_comp_press(comp);
-    if (all_rot)
-    {
-        for(int i=0; i<lists; i++) list_orn[i]=(paper_w<paper_h);
-        recomp();
-    }
-        else
-    {
-        list_orn[curlist-1]=(paper_w<paper_h);
-        recomp_curlist();
-    }
-    set_indic_pos();
-    swap(x_pg, y_pg);
-}
-
 
 void MainWindow::start_load_picture()
 {
@@ -907,7 +920,7 @@ void MainWindow::pct_move(int x, int y, int i)
         rc.setWidth(w);
         rc.setHeight(h);
         toprint[bufpress].rect=rc;
-        if(toprint[i].show_caption || ui->checkBox_6->isChecked())
+        if(toprint[bufpress].show_caption || ui->checkBox_6->isChecked())
         {
             tocaption[toprint[bufpress].cp_num].pct->move(x2,y2);
         }
@@ -984,6 +997,7 @@ QString MainWindow::get_file()
 void MainWindow::ind_start()
 {
     ui->label->show();
+    ui->label->raise();
     animGif->start();
 }
 
@@ -1102,9 +1116,25 @@ void MainWindow::on_dial_valueChanged(int value)
     show_pict();
 }
 
+void MainWindow::set_ornt_list()
+// повернуть лист (при пролистывании)
+{
+    if (gor!=gor_old)
+    {
+        make_list();
+        gor_old=gor;
+    }
+    if(orn==list_orn[curlist-1])return;
+    if(list_orn[curlist-1]) on_pushButton_10_clicked();
+       else on_pushButton_11_clicked();
+}
+
 void MainWindow::show_pict() // показать картинки текущего листа
 {
+    if((buf<0)||runShow) return;
     kill_pict(); // очистить лист предпросмотра
+    runShow=true;
+    set_ornt_list();
     if (buf>-1) quick_buttons_off();
     QSize sz;
     double d1, d2;
@@ -1191,6 +1221,7 @@ void MainWindow::show_pict() // показать картинки текущег
     s.append(c);
     ui->label_2->setText(s);
     if (rap) cout << "pictures was shown" << endl;
+    runShow=false;
 }
 
 void MainWindow::set_z()
@@ -1364,10 +1395,10 @@ void MainWindow::rotated(int g)
     canv_pix.fill(Qt::transparent); // залить пустотой
     QPainter p(&canv_pix);
     // центр холста
-    p.translate(z/2,z/2); //(x,y);
+    p.translate(z/2,z/2);
     p.rotate(g);
-    p.translate(-z/2,-z/2); //(-x,-y);
-    p.drawPixmap((z-x)/2,(z-y)/2, pix); //(x/2,y/2, pix);
+    p.translate(-z/2,-z/2);
+    p.drawPixmap((z-x)/2,(z-y)/2, pix);
     p.end();
     int h=x*fabs(sin(r))+y*fabs(cos(r));
     int w=x*fabs(cos(r))+y*fabs(sin(r));
@@ -1402,7 +1433,6 @@ void MainWindow::rotated(int g)
     out_rot=true;
     ui->dial_2->setValue(toprint[bufpress2].rot);
     out_rot=false;
-    if (rap) cout << "picture turned successfully" << endl;
 }
 
 void MainWindow::reShow(int index)  // обновить превью для картинки index (№ превью)
@@ -1515,7 +1545,6 @@ void MainWindow::pct_press_delete()
     toprint.erase(toprint.begin()+bufpress2);
     buf--;
     quick_buttons_off();
-    make_var_to_list();
     show_pict();
 }
 
@@ -1637,24 +1666,6 @@ void MainWindow::fill_all()
     }
 }
 
-void MainWindow::layout_scale()
-{
-    double d1, d2, k;
-    d1=gor_old;
-    d2=gor;
-    k=d2/d1;
-    for(int i=0; i<=buf; i++)
-    {
-        if(toprint[i].show==1)
-        {
-            d1=toprint[i].left;   d1=d1*k; toprint[i].left=d1;
-            d1=toprint[i].top;    d1=d1*k; toprint[i].top=d1;
-            d1=toprint[i].heigth; d1=d1*k; toprint[i].heigth=d1;
-            d1=toprint[i].width;  d1=d1*k; toprint[i].width=d1;
-        }
-    }
-}
-
 void MainWindow::save_wind_size()
 {
      setty.beginGroup("MainWindow");
@@ -1708,10 +1719,10 @@ void MainWindow::rest_printer_sett()
     setty.beginGroup("Printer");
         p_name.clear();
         p_name.append(setty.value("printer_name", "").toString());
-        left_m=setty.value("left_m", 10).toInt() ;
-        right_m=setty.value("right_m", 10).toInt();
-        top_m=setty.value("top_m", 10).toInt();
-        bottom_m=setty.value("bottom_m", 10).toInt();
+        //left_m=setty.value("left_m", 10).toInt() ;
+        //right_m=setty.value("right_m", 10).toInt();
+        //top_m=setty.value("top_m", 10).toInt();
+        //bottom_m=setty.value("bottom_m", 10).toInt();
         print_color=setty.value("color", true).toBool();
         pap_name=setty.value("paper_name", 0).toInt();
         pap_sor=setty.value("sourse", 0).toInt();
@@ -1783,14 +1794,22 @@ QString MainWindow::esc_to_utf(QString st)
     int i=7;
     while (i<st.length())
     {
-        if (st.mid(i, 4)=="%D0%" || st.mid(i, 4)=="%D1%")
+        if (st.mid(i, 4)=="%D0%" || st.mid(i, 4)=="%D1%" || st.mid(i,3)=="%20")
            {
-             h=1024 + HexToInt(ba[i+2]) * 64 + 16 * (HexToInt(ba[i+4])-8) + HexToInt(ba[i+5]);
-             if (h==1025)res.append("Ё");
-             if (h==1105)res.append("ё");
-             h=h-1040;
-             if (h>-1 && h<64)  res.append(alp.mid(h,1));
-             i=i+5;
+            if(st.mid(i,3)=="%20")
+            {
+                res.append(" ");
+                i=i+2;
+            }
+            else
+            {
+                h=1024 + HexToInt(ba[i+2]) * 64 + 16 * (HexToInt(ba[i+4])-8) + HexToInt(ba[i+5]);
+                if (h==1025)res.append("Ё");
+                if (h==1105)res.append("ё");
+                h=h-1040;
+                if (h>-1 && h<64)  res.append(alp.mid(h,1));
+                i=i+5;
+            }
            }
         else res.append(st.mid(i,1));
         i++;
@@ -2027,7 +2046,8 @@ void MainWindow::show_r_menu(int x, int y, int i)
     rmenu->setGeometry(rc);
     imgpress2=i;
     bufpress2=toshow[i].buf;
-    set_rmenu(1);
+    if(toprint[bufpress2].isTextBlock) set_rmenu(2);
+    else set_rmenu(1);
 }
 
 void MainWindow::rot()
@@ -2043,6 +2063,9 @@ void MainWindow::set_rmenu(int index) // отобразить контекстн
     {
         case 1:
             make_menu_1();
+            break;
+        case 2:
+            make_menu_2();
             break;
     }
     rmenu->show();
@@ -2062,13 +2085,74 @@ void MainWindow::make_menu_1()
     QAction *ac3 = rmenu->addAction(tr("&Cut out a fragment image"), this, SLOT(show_clip()));
     ac3->setIcon(QPixmap(":/new/prefix1/rez"));
     ac3->setIconVisibleInMenu(true);
-    QAction *ac4 = rmenu->addAction(tr("&Caption editor"), this, SLOT(show_cap_editor()));
+    QAction *ac4 = rmenu->addAction(tr("Caption &editor"), this, SLOT(show_cap_editor()));
     ac4->setIcon(QPixmap(":/new/prefix1/pencil"));
     ac4->setIconVisibleInMenu(true);
     QAction *ac5 = rmenu->addAction(tr("&Simply turn on/off caption"), this, SLOT(turn_caption()));
     ac5->setIcon(QPixmap(":/new/prefix1/pencil"));
     ac5->setIconVisibleInMenu(true);
+    QAction *ac6 = rmenu->addAction(tr("Move to the &previous sheet"), this, SLOT(move_prev()));
+    ac6->setIcon(QPixmap(":/new/prefix1/down"));
+    QAction *ac7 = rmenu->addAction(tr("Move to the &next sheet"), this, SLOT(move_next()));
+    ac7->setIcon(QPixmap(":/new/prefix1/up"));
+}
 
+void MainWindow::make_menu_2()
+// правый клик по text_block
+{
+    QAction *ac1 = rmenu->addAction(tr("&Rotated clockwise by 90 degrees"), this, SLOT(rot()));
+    ac1->setIcon(QPixmap(":/new/prefix1/rotation"));
+    ac1->setIconVisibleInMenu(true);
+    QAction *ac2 = rmenu->addAction(tr("&Delete this image"), this, SLOT(pct_press_delete()));
+    ac2->setIcon(QPixmap(":/new/prefix1/delete"));
+    ac2->setIconVisibleInMenu(true);
+//    QAction *ac3 = rmenu->addAction(tr("&Cut out a fragment image"), this, SLOT(show_clip()));
+//    ac3->setIcon(QPixmap(":/new/prefix1/rez"));
+//    ac3->setIconVisibleInMenu(true);
+//    QAction *ac4 = rmenu->addAction(tr("Caption &editor"), this, SLOT(show_cap_editor()));
+//    ac4->setIcon(QPixmap(":/new/prefix1/pencil"));
+//    ac4->setIconVisibleInMenu(true);
+    QAction *ac5 = rmenu->addAction(tr("&Edit this text block"), this, SLOT(edit_textBlock()));
+    ac5->setIcon(QPixmap(":/new/prefix1/pencil"));
+    ac5->setIconVisibleInMenu(true);
+    QAction *ac6 = rmenu->addAction(tr("Move to the &previous sheet"), this, SLOT(move_prev()));
+    ac6->setIcon(QPixmap(":/new/prefix1/down"));
+    QAction *ac7 = rmenu->addAction(tr("Move to the &next sheet"), this, SLOT(move_next()));
+    ac7->setIcon(QPixmap(":/new/prefix1/up"));
+
+}
+
+void MainWindow::edit_textBlock()
+// редактировать текстовый блок
+{
+    open_textblockEd();
+    txed->loadtext(toprint[bufpress2].caption,
+                   toprint[bufpress2].back_color,
+                   toprint[bufpress2].font_color,
+                   toprint[bufpress2].font,
+                   toprint[bufpress2].trans,
+                   toprint[bufpress2].alig);
+}
+
+void MainWindow::move_prev()
+// переместить картинку на предыдущий лист
+{
+    toprint[bufpress2].list--;
+    if(toprint[bufpress2].list==0)
+    {
+        for(int i=0; i<=buf; i++) toprint[i].list++;
+        lists++;
+        curlist++;
+    }
+    show_pict();
+}
+
+void MainWindow::move_next()
+// переместить картинку на следующий лист
+{
+    toprint[bufpress2].list++;
+    if(toprint[bufpress2].list>lists)lists++;
+    show_pict();
 }
 
 void MainWindow::turn_caption() //переключить состояние видимости подписи
@@ -2144,11 +2228,12 @@ void MainWindow::cp_setPixmap(int index)
     QPixmap pm(w, h);
     if(toprint[index].trans) pm.fill(Qt::transparent);
     else pm.fill(toprint[index].back_color);
-    pntr->begin(&pm); // начать рисование
-    pntr->setFont(toprint[index].font);
-    pntr->setPen(toprint[index].font_color);
-    pntr->drawText(rc, Qt::AlignLeft, toprint[index].caption);
-    pntr->end(); // закончить рисование
+    QPainter pn;
+    pn.begin(&pm); // начать рисование
+    pn.setFont(toprint[index].font);
+    pn.setPen(toprint[index].font_color);
+    pn.drawText(rc, Qt::AlignLeft, toprint[index].caption);
+    pn.end(); // закончить рисование
     toprint[index].cp_pixmap=pm;
 }
 
@@ -2255,19 +2340,26 @@ void MainWindow::on_checkBox_6_clicked()
 // Текстовые блоки
 //**************************************************************
 
-void MainWindow::on_pushButton_14_clicked()
-// вставить текст
+void MainWindow::open_textblockEd()
 {
     if (txed==0)
     {
         txed=new TextEditor;
-        connect(txed, SIGNAL(settext(QString,QColor,QColor,QFont,bool)),
-                this, SLOT(setTextBlock(QString,QColor,QColor,QFont,bool)));
+        connect(txed, SIGNAL(settext(QString,QColor,QColor,QFont,bool,int)),
+                this, SLOT(setTextBlock(QString,QColor,QColor,QFont,bool,int)));
     }
     txed->show();
 }
 
-void MainWindow::setTextBlock(QString text, QColor BackColor, QColor LitColor, QFont TextFont, bool trans)
+void MainWindow::on_pushButton_14_clicked()
+// вставить текст
+{
+    bufpress2=-1;
+    open_textblockEd();
+}
+
+void MainWindow::setTextBlock(QString text, QColor BackColor, QColor LitColor,
+                              QFont TextFont, bool trans, int alig)
 {
     int lin=0;
     QString st="";
@@ -2311,17 +2403,31 @@ void MainWindow::setTextBlock(QString text, QColor BackColor, QColor LitColor, Q
     pntr->begin(&px);
     pntr->setPen(LitColor);
     pntr->setFont(TextFont);
-    pntr->drawText(rc, Qt::AlignLeft, text);
+    switch (alig)
+    {
+        case 0:
+            pntr->drawText(rc, Qt::AlignLeft, text);
+            break;
+        case 1:
+            pntr->drawText(rc, Qt::AlignCenter, text);
+            break;
+        case 2:
+            pntr->drawText(rc, Qt::AlignRight, text);
+            break;
+    }
     pntr->end();
-    addTextPictute(px,text,BackColor,LitColor,TextFont,trans);
+    addTextPictute(px,text,BackColor,LitColor,TextFont,trans,alig);
     show_pict();
 }
 
 
 void MainWindow::addTextPictute(QPixmap pixmap, QString text,
-                     QColor BackColor, QColor LitColor, QFont TextFont, bool trans)
-// добавить картинку-textblock в список
+                     QColor BackColor, QColor LitColor, QFont TextFont, bool trans, int alig)
+// добавить (обновить) картинку-textblock в список
 {
+    int i=bufpress2;
+    if (bufpress2==-1) // new text block
+    {
         buf++;
         if(lists==0)
         {
@@ -2329,27 +2435,222 @@ void MainWindow::addTextPictute(QPixmap pixmap, QString text,
             curlist=1;
         }
         toprint.push_back(pict());
-        toprint[buf].pict="";
-        toprint[buf].caption=text;
-        toprint[buf].show_caption=false;
-        toprint[buf].back_color=BackColor;    // цвет фона
-        toprint[buf].font_color=LitColor;     // цвет шрифта
-        toprint[buf].trans=trans;             // прозрачный фон
-        toprint[buf].isTextBlock=true;
-        toprint[buf].font=TextFont;           // шрифт
-        toprint[buf].cp_num=-1;               // нет привязанного avLabel
+        i=buf;
+        toprint[i].show=0;
+    }
+    else               // edit text block
+    {
+        toprint[i].show=1;
+    }
+        toprint[i].pict="";
+        toprint[i].caption=text;
+        toprint[i].show_caption=false;
+        toprint[i].back_color=BackColor;    // цвет фона
+        toprint[i].font_color=LitColor;     // цвет шрифта
+        toprint[i].trans=trans;             // прозрачный фон
+        toprint[i].isTextBlock=true;
+        toprint[i].font=TextFont;           // шрифт
+        toprint[i].cp_num=-1;               // нет привязанного avLabel
         QRect rc;
         rc.setRect(0,0,0,0);
-        toprint[buf].rect=rc;                 // начальная геометрия подписи
-        double d;
-        toprint[buf].pix0=toprint[buf].pix = pixmap;
-        toprint[buf].show=0;
-        d=buf+1;
-        d=ceil(d/img_on_list);
-        toprint[buf].list=d;
-        if (comp==10)toprint[buf].list=1;
+        toprint[i].rect=rc;                 // начальная геометрия подписи
+        toprint[i].pix0=toprint[buf].pix = pixmap;
+        toprint[i].list=curlist;
+        toprint[i].alig=alig;
+        if (toprint[i].rot!=0)
+        {
+            rotated(toprint[i].rot);
+        }
+        if (comp==10)toprint[i].list=1;
         lists=0;
-        for(int i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
+        for(i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
         if (rap) cout << "textblock was set" << endl;
         img_size_cur_comp();
+        show_pict();
 }
+
+// сеансы
+// **********************************************************************************
+
+void MainWindow::on_pushButton_15_clicked()
+// сохранить сеанс
+{
+    QString user=getenv("HOME");
+    QString fileName = QFileDialog::getSaveFileName
+            (this, tr("Save in file..."), user, tr("vap_sessions (*.vap)"));
+    if (!(isvap(fileName))) fileName.append(".vap");
+    if (saveSassion(fileName))
+         {if (rap) cout << "Save session in file: "<< fileName.toStdString() << endl;}
+    else {if (rap) cout << "Save session failed "<< endl;}
+}
+
+bool MainWindow::saveSassion(QString fileName)
+// процесс сохранения сеанса
+{
+    bool r=false;
+    if (!fileName.isEmpty())
+    {
+        ind_start();
+        QFile file(fileName);
+        r=file.open(QIODevice::WriteOnly ); //| QIODevice::Text);
+        //QTextStream out(&file);
+        QDataStream out(&file);
+        out << comp;
+        out << buf;
+        out << all_rot;
+        out << gor;
+        for(int i=0; i<=buf; i++)
+            {
+            out<<toprint[i].pict;          // путь к файлу
+            out<<toprint[i].rot;           // 0 - нормально, угол поворота
+            out<<toprint[i].pix0;          // исходный pixmap
+            QApplication::processEvents();
+            out<<toprint[i].pix;           // текущий pixmap
+            out<<toprint[i].left;          // координата Х
+            out<<toprint[i].top;           // координата Y
+            out<<toprint[i].heigth;        // высота
+            out<<toprint[i].width;         // ширина
+            out<<toprint[i].show;          // флаг того, что картинка уже была расчитана для данной компоновки, ее надо просто показать
+            out<<toprint[i].list;          // номер страницы этой картинки
+            out<<toprint[i].load;          // флаг того, картинка уже загружена в память
+            out<<toprint[i].z;             // z-порядок
+            out<<toprint[i].xl;            // Х подписи
+            out<<toprint[i].yl;            // Y подписи
+            out<<toprint[i].dxl;           // относительное смещение положения подписи от картинки (по Х)
+            out<<toprint[i].dyl;           // относительное смещение положения подписи от картинки (по Y)
+            out<<toprint[i].prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
+            out<<toprint[i].compress;      // кэф. компрессии для уже показанной картинки
+            out<<toprint[i].caption;       // подпись к картинке
+            out<<toprint[i].show_caption;  // показывать подпись
+            out<<toprint[i].back_color;    // цвет фона
+            out<<toprint[i].trans;         // прозрачный фон
+            out<<toprint[i].font_color;    // цвет шрифта
+            out<<toprint[i].font;          // шрифт
+            out<<toprint[i].rect;          // геометрия подписи
+            out<<toprint[i].cpt;           // номер подписи на экране к этой картинке
+            out<<toprint[i].cp_num;        // номер avLabel - подписи на экране
+            out<<toprint[i].cp_z;          // z-орядок для подписи
+            out<<toprint[i].cp_pixmap;     // pixmap подписи
+            out<<toprint[i].isTextBlock;   // true - это текстовый блок
+            out<<toprint[i].alig;
+            QApplication::processEvents();
+            }
+        out << lists;
+        if (int(list_orn.size())<lists)
+            for(int i=list_orn.size(); i<lists; i++)
+                list_orn.push_back(orn);
+        for (int i=0; i<=lists-1; i++)
+        {
+            out << list_orn[i];
+        }
+        file.close();
+        ind_stop();
+    }
+    return r;
+}
+
+bool MainWindow::isvap(QString s)
+{
+    s=s.mid(s.length()-4, 4).toUpper();
+    return (s==".VAP");
+}
+
+
+void MainWindow::on_pushButton_16_clicked()
+// открыть сохраненный сеанс
+{
+    QString user=getenv("HOME");
+    QString fileName = QFileDialog::getOpenFileName
+            (this, tr("Open file..."), user, tr("vap_sessions (*.vap)"));
+    if (!(isvap(fileName))) fileName.append(".vap");
+    if (openSassion(fileName))
+          {if (rap) cout << "Open session from file: "<< fileName.toStdString() << endl;}
+    else  {if (rap) cout << "Open session failed "<< endl;}
+}
+
+bool MainWindow::openSassion(QString fileName)
+// процесс восстановления сеанса
+{
+    bool r=false;
+    if(fileName.trimmed()==".vap") return r;
+    if (!fileName.isEmpty())
+    {
+        buf=0;
+        toprint.clear();
+        ind_start();
+        toprint.clear();
+        buf=-1;
+        QFile file(fileName);
+        r=file.open(QIODevice::ReadOnly);
+        QDataStream in(&file);
+        in >> comp;
+        set_layout(comp);
+        in >> buf;
+        in >> all_rot;
+        ui->checkBox->setChecked(all_rot);
+        in >> gor_old;
+        double d=1;
+        if (gor!=gor_old) d=double(gor)/double(gor_old);
+        for(int i=0; i<=buf; i++)
+            {
+            toprint.push_back(pict());
+            in>>toprint[i].pict;          // путь к файлу
+            in>>toprint[i].rot;           // 0 - нормально, угол поворота
+            in>>toprint[i].pix0;          // исходный pixmap
+            QApplication::processEvents();
+            in>>toprint[i].pix;           // текущий pixmap
+            in>>toprint[i].left;          // координата Х
+            in>>toprint[i].top;           // координата Y
+            in>>toprint[i].heigth;        // высота
+            in>>toprint[i].width;         // ширина
+            in>>toprint[i].show;          // флаг того, что картинка уже была расчитана для данной компоновки, ее надо просто показать
+            in>>toprint[i].list;          // номер страницы этой картинки
+            in>>toprint[i].load;          // флаг того, картинка уже загружена в память
+            in>>toprint[i].z;             // z-порядок
+            in>>toprint[i].xl;            // Х подписи
+            in>>toprint[i].yl;            // Y подписи
+            in>>toprint[i].dxl;           // относительное смещение положения подписи от картинки (по Х)
+            in>>toprint[i].dyl;           // относительное смещение положения подписи от картинки (по Y)
+            in>>toprint[i].prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
+            in>>toprint[i].compress;      // кэф. компрессии для уже показанной картинки
+            in>>toprint[i].caption;       // подпись к картинке
+            in>>toprint[i].show_caption;  // показывать подпись
+            in>>toprint[i].back_color;    // цвет фона
+            in>>toprint[i].trans;         // прозрачный фон
+            in>>toprint[i].font_color;    // цвет шрифта
+            in>>toprint[i].font;          // шрифт
+            in>>toprint[i].rect;          // геометрия подписи
+            in>>toprint[i].cpt;           // номер подписи на экране к этой картинке
+            in>>toprint[i].cp_num;        // номер avLabel - подписи на экране
+            in>>toprint[i].cp_z;          // z-орядок для подписи
+            in>>toprint[i].cp_pixmap;     // pixmap подписи
+            in>>toprint[i].isTextBlock;   // true - это текстовый блок
+            in>>toprint[i].alig;
+            QApplication::processEvents();
+            if (d!=1)
+            {   // уточнение координат, если новое окно отличается от старого
+                toprint[i].left=double(toprint[i].left)*d;
+                toprint[i].top=double(toprint[i].top)*d;
+                toprint[i].heigth=double(toprint[i].heigth)*d;
+                toprint[i].width=double(toprint[i].width)*d;
+            }
+        }
+        in>>lists;
+        list_orn.clear();
+        bool b;
+        for(int i=0;i<lists;i++)
+        {
+            in>>b;
+            list_orn.push_back(true);
+            list_orn[i]=b;
+        }
+        file.close();
+        ind_stop();
+        curlist=1;
+        show_pict();
+    }
+    return r;
+}
+
+
+

@@ -82,7 +82,6 @@ private slots:
     void end_rotation();                    // завершение поворота листа
     void set_wind_size();                   // подогнать размер окна программы
     void set_indic_pos();                   // позиционирование индикатора загрузки
-    void make_var_to_list();                // подготовить переменные для функции make_list
     void pct_press_rott();                  // нажатие на иконку поворота картинки (превьюшки)
     void istimer();                         // сработка таймера - погасить иконки бысторого редактирования по угла превьюшки
     void rotated(int g);                    // вращение на угол g грд по часовой стрелке
@@ -118,6 +117,7 @@ private slots:
     void set_rmenu(int index);              // собрать меню типа index
     void rot();                             // повернуть картинку на 90 грд;
     void make_menu_1();                     // сделать меню 1
+    void make_menu_2();                     // сделать меню 2
     void paint_frame();                     // нарисовать рамку обрезки (саму рамку)
     void show_cap_editor();                 // открыть окно редактора подписи
     void set_caption(QString text,
@@ -133,11 +133,21 @@ private slots:
     void reScl();                           // пересчет масштаба и позиций подписей
     void setTextBlock(QString text,
          QColor BackColor, QColor LitColor,
-         QFont TextFont, bool trans);       // создать (изменить) текстовый блок
+         QFont TextFont, bool trans,
+                      int alig);            // создать (изменить) текстовый блок
     void addTextPictute(QPixmap pixmap,
          QString text, QColor BackColor,
          QColor LitColor, QFont TextFont,
-                        bool trans);        // добавить картинку из текстового блока
+              bool trans, int alig);        // добавить картинку из текстового блока
+    bool  isvap(QString s);                 // true. если s заканчивается на ".vap"
+    bool  saveSassion(QString fileName);    // сохранить текущую сессию
+    bool  openSassion(QString fileName);    // открыть сессию
+    void  set_ornt_list();                  // установить ориентацию листа (не менять, а установить как уже было)
+    void  move_prev();                      // переместить картинку на предыдущий лист
+    void  move_next();                      // переместить картинку на следующий лист
+    void  edit_textBlock();                 // редактировать текстовый блок
+    void  open_textblockEd();               // открыть редактор текстовых блоков
+    void  get_marg();                       // расчет области непечати
 
     void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
     void on_l2_clicked();
@@ -170,6 +180,10 @@ private slots:
     void on_pushButton_9_clicked();
     void on_checkBox_6_clicked();
     void on_pushButton_14_clicked();
+
+    void on_pushButton_15_clicked();
+
+    void on_pushButton_16_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение

@@ -9,6 +9,7 @@ QColor  BcColor;
 QColor  LtColor;
 QFont   txfnt;
 bool    trBack=true;
+int     alg=0;
 
 TextEditor::TextEditor(QWidget *parent) :
     QDialog(parent),
@@ -25,23 +26,45 @@ TextEditor::~TextEditor()
     delete ui;
 }
 
-void TextEditor::loadtext(QString text, QColor Backcolor, QColor Literscolor, QFont font, bool trans)
+void TextEditor::set_alig(int a)
+{
+    alg=a;
+    switch (a)
+    {
+        case 0:
+            ui->textEdit->setAlignment(Qt::AlignLeft);
+            break;
+        case 1:
+            ui->textEdit->setAlignment(Qt::AlignCenter);
+            break;
+        case 2:
+            ui->textEdit->setAlignment(Qt::AlignRight);
+            break;
+        default:
+            ui->textEdit->setAlignment(Qt::AlignLeft);
+    }
+}
+
+void TextEditor::loadtext(QString text, QColor Backcolor, QColor Literscolor, QFont font, bool trans, int alg)
 // загрузить текст в редактор
 {
-    ui->textEdit->setText(text);
-    ui->textEdit->setTextBackgroundColor(Backcolor);
+    if(!trans)ui->textEdit->setTextBackgroundColor(Backcolor);
+    else ui->textEdit->setTextBackgroundColor(Qt::white);
     BcColor=Backcolor;
     ui->textEdit->setTextColor(Literscolor);
-    LtColor=LtColor;
+    LtColor=Literscolor;
     ui->textEdit->setFont(font);
     txfnt=font;
     ui->checkBox->setChecked(trans);
+    ui->textEdit->clear();
+    set_alig(alg);
+    ui->textEdit->append(text);
 }
 
 void TextEditor::on_pushButton_4_clicked()
 // Ok
 {
-    emit settext(ui->textEdit->toPlainText(), BcColor, LtColor, txfnt, trBack);
+    emit settext(ui->textEdit->toPlainText(), BcColor, LtColor, txfnt, trBack, alg);
     this->close();
 }
 
@@ -52,6 +75,14 @@ void TextEditor::on_checkBox_clicked(bool checked)
     ui->pushButton_2->setEnabled(!(checked));
 }
 
+void TextEditor::refresh()
+{
+    QString s=ui->textEdit->toPlainText();
+    ui->textEdit->clear();
+    set_alig(alg);
+    ui->textEdit->append(s);
+}
+
 void TextEditor::on_pushButton_3_clicked()
 // liters color
 {
@@ -60,6 +91,7 @@ void TextEditor::on_pushButton_3_clicked()
     {
         LtColor=color;
         ui->textEdit->setTextColor(color);
+        refresh();
     }
 }
 
@@ -71,6 +103,7 @@ void TextEditor::on_pushButton_2_clicked()
     {
         BcColor=color;
         ui->textEdit->setTextBackgroundColor(color);
+        refresh();
     }
 }
 
@@ -85,7 +118,27 @@ void TextEditor::on_pushButton_clicked()
     }
 }
 
-void TextEditor::on_pushButton_5_clicked()
+void TextEditor::on_pushButton_5_clicked() // exit without Ok
 {
     this->close();
+}
+
+
+
+void TextEditor::on_pushButton_6_clicked()
+{
+    set_alig(0);
+    refresh();
+}
+
+void TextEditor::on_pushButton_7_clicked()
+{
+    set_alig(1);
+    refresh();
+}
+
+void TextEditor::on_pushButton_8_clicked()
+{
+    set_alig(2);
+    refresh();
 }

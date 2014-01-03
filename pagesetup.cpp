@@ -129,6 +129,10 @@ PageSetup::PageSetup(QWidget *parent) :
     checkBox_7->setChecked(gnome_check());
     checkBox_8->setChecked(caja_check());
     flag_ret=false;
+    spinBox->setEnabled(false);
+    spinBox_2->setEnabled(false);
+    spinBox_3->setEnabled(false);
+    spinBox_4->setEnabled(false);
  }
 
 

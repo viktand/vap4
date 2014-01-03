@@ -43,5 +43,14 @@
         <file alias="about">resurs/about.png</file>
         <file alias="pencil">resurs/pencil.png</file>
         <file alias="text">resurs/text.png</file>
+        <file alias="save">resurs/save.png</file>
+        <file alias="auto">resurs/auto.png</file>
+        <file alias="load">resurs/load.png</file>
+        <file alias="left">resurs/left.png</file>
+        <file alias="center">resurs/center.png</file>
+        <file alias="right">resurs/right.png</file>
+        <file alias="font">resurs/font.png</file>
+        <file alias="backColor">resurs/backcolor.png</file>
+        <file alias="fontColor">resurs/fontcolor.png</file>
     </qresource>
 </RCC>

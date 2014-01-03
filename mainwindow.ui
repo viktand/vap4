@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>642</height>
+    <width>640</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -41,16 +41,28 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>401</width>
+      <width>354</width>
       <height>40</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
      <property name="leftMargin">
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -63,6 +75,9 @@
          <width>32</width>
          <height>32</height>
         </size>
+       </property>
+       <property name="shortcut">
+        <string/>
        </property>
       </widget>
      </item>
@@ -84,13 +99,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="pushButton_15">
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset resource="res.qrc">
-         <normaloff>:/new/prefix1/down</normaloff>:/new/prefix1/down</iconset>
+         <normaloff>:/new/prefix1/save</normaloff>:/new/prefix1/save</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -101,13 +116,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="pushButton_16">
        <property name="text">
         <string/>
        </property>
        <property name="icon">
         <iconset resource="res.qrc">
-         <normaloff>:/new/prefix1/up</normaloff>:/new/prefix1/up</iconset>
+         <normaloff>:/new/prefix1/load</normaloff>:/new/prefix1/load</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -227,7 +242,7 @@
      <rect>
       <x>170</x>
       <y>50</y>
-      <width>141</width>
+      <width>211</width>
       <height>16</height>
      </rect>
     </property>
@@ -264,8 +279,8 @@
    <widget class="QLabel" name="list">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>530</y>
+      <x>560</x>
+      <y>10</y>
       <width>57</width>
       <height>15</height>
      </rect>
@@ -323,10 +338,10 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
-        <weight>75</weight>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
-        <bold>true</bold>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -1010,16 +1025,39 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QPushButton" name="pushButton_13">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>30</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="res.qrc">
+      <normaloff>:/new/prefix1/check</normaloff>:/new/prefix1/check</iconset>
+    </property>
+   </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>420</x>
       <y>0</y>
       <width>46</width>
       <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QPushButton" name="pushButton_6">
        <property name="text">
@@ -1039,24 +1077,66 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton_13">
-    <property name="enabled">
-     <bool>true</bool>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>530</y>
+      <width>90</width>
+      <height>41</height>
+     </rect>
     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/new/prefix1/down</normaloff>:/new/prefix1/down</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="res.qrc">
+         <normaloff>:/new/prefix1/up</normaloff>:/new/prefix1/up</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>550</y>
-      <width>31</width>
-      <height>31</height>
+      <y>590</y>
+      <width>611</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="res.qrc">
-      <normaloff>:/new/prefix1/check</normaloff>:/new/prefix1/check</iconset>
+     <string>TextLabel</string>
     </property>
    </widget>
    <zorder>list</zorder>
@@ -1065,8 +1145,10 @@
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
    <zorder>tabWidget</zorder>
-   <zorder>horizontalLayoutWidget_2</zorder>
    <zorder>pushButton_13</zorder>
+   <zorder>horizontalLayoutWidget_2</zorder>
+   <zorder>horizontalLayoutWidget_3</zorder>
+   <zorder>label_8</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

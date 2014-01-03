@@ -2,6 +2,7 @@
 #define ABOUT_H
 
 #include <QDialog>
+#include <QTranslator>
 
 namespace Ui {
 class about;
