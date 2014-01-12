@@ -135,6 +135,7 @@ QFont  font_cpt; // шрифт подписи
 bool trans;      // прозрачный фон надписи
 bool runShow=false; // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
 double font_scl;
+bool testPrint;  // печать тестового креста (для проверки позиционирования)
 
 struct pict {                // загруженная картинка и все ее свойства
     QString   pict;          // путь к файлу
@@ -211,6 +212,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ul_ver=3;
     h_ofsett=0;
     pap_sor=0;
+    testPrint=false;
     font_scl=1;
     ui->pushButton_13->hide();
     QRect rect = frameGeometry();
@@ -218,7 +220,7 @@ MainWindow::MainWindow(QWidget *parent) :
     move(rect.topLeft());
     printer = new QPrinter(QPrinter::HighResolution);
     list_orn.push_back(true);
-    pntr = new QPainter(printer);
+    pntr = new QPainter();
     if (printer->orientation() == QPrinter::Portrait) ornl=1; else ornl=0;
     printer->setPageSize(QPrinter::A4);
     rap=true;
@@ -232,6 +234,7 @@ MainWindow::MainWindow(QWidget *parent) :
     rott->setGeometry(0,0,16,16);
     rott->setCursor(Qt::PointingHandCursor);
     rott->hide();
+    rott->setToolTip("Rotate");
     QObject::connect(rott, SIGNAL(mouse_press(int, int, int)), this, SLOT(pct_press_rott()));
     delt = new QavLabel(fon);
     QImage im1(":/new/prefix1/delete");
@@ -240,6 +243,7 @@ MainWindow::MainWindow(QWidget *parent) :
     delt->setGeometry(0,0,16,16);
     delt->setCursor(Qt::PointingHandCursor);
     delt->hide();
+    delt->setToolTip(tr("Delete"));
     QObject::connect(delt, SIGNAL(mouse_press(int, int, int)), this, SLOT(pct_press_delete()));
     resiz = new QavLabel(fon);
     QImage im2(":/new/prefix1/resize");
@@ -248,6 +252,7 @@ MainWindow::MainWindow(QWidget *parent) :
     resiz->setGeometry(0,0,16,16);
     resiz->setCursor(Qt::PointingHandCursor);
     resiz->hide();
+    resiz->setToolTip("Resize");
     QObject::connect(resiz, SIGNAL(mouse_press(int, int, int)), this, SLOT(resiz_press(int, int)));
     QObject::connect(resiz, SIGNAL(mouse_move(int, int, int)),  this, SLOT(resiz_move(int, int)));
     QObject::connect(resiz, SIGNAL(mouse_up(int, int, int)), this, SLOT(resiz_up()));
@@ -258,6 +263,7 @@ MainWindow::MainWindow(QWidget *parent) :
     clip->setGeometry(0,0,16,16);
     clip->setCursor(Qt::PointingHandCursor);
     clip->hide();
+    clip->setToolTip("Clip");
     connect(clip, SIGNAL(mouse_press(int,int,int)), this, SLOT(show_clip()));
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(istimer()));
@@ -519,7 +525,6 @@ void MainWindow::load_param() // обработка параметров ком�
         {
             fi.setFile(fn);
             cout << "fn: " << fn.toStdString() << endl;
-            ui->label_8->setText(fn);
             if(fi.isFile())
             {
                 open_pct(fn);
@@ -577,7 +582,7 @@ void MainWindow::open_pct(QString filename) // добавить картинку
         toprint.push_back(pict());
         toprint[buf].pict= filename;
         toprint[buf].caption=get_name(filename);
-        toprint[buf].show_caption=false;
+        toprint[buf].show_caption=ui->checkBox_6->isChecked();
         toprint[buf].back_color=Qt::white;    // цвет фона
         toprint[buf].font_color=Qt::black;    // цвет шрифта
         toprint[buf].trans=true;
@@ -761,32 +766,35 @@ void MainWindow::set_printer() // настройка принтера
      printer->setOutputFormat(QPrinter::NativeFormat);
      if (prn_size_x+prn_size_y!=717) printer->setPaperSize(QPrinter::A4);
         else printer->setPaperSize(QPrinter::A3);
-     int dx;
-     if (paper_w<paper_h)
+     int dx=0, dy=0;
+     if (paper_w<paper_h) //портретно
      {
          printer->setOrientation(QPrinter::Portrait);
          QRect rc=printer->paperRect();
          prx=rc.width()/prn_size_x;
          pry=rc.height()/prn_size_y;
          dx=(prn_size_x-x_pg)/2;
-
      }
-     else
+     else // ландшафтно
      {
          printer->setOrientation(QPrinter::Landscape);
          QRect rc=printer->paperRect();
          prx=rc.width()/prn_size_y;
          pry=rc.height()/prn_size_x;
-         dx=(prn_size_y-x_pg)/2;
-
+         dy=(prn_size_y-y_pg)/2;
      }
      //printer->setPageMargins(dx+left_m, top_m, right_m, bottom_m, QPrinter::Millimeter);
-     printer->setPageMargins(dx, 0, 0, 0, QPrinter::Millimeter);
+     printer->setPageMargins(dx, dy, 0, 0, QPrinter::Millimeter);
 }
 
 void MainWindow::on_pushButton_5_clicked() //печать
 {
     set_printer(); // настроить принтер
+    if(testPrint)
+    {
+        tstPrin();
+        return;
+    }
     QRect rc;   // шаблон для печати
     QBrush br;  // кисть
     double sclX, sclY; // коэф. масштабирования при пересчете размеров и координат
@@ -848,6 +856,19 @@ void MainWindow::on_pushButton_5_clicked() //печать
    rc=printer->paperRect();
    cout << "Parer: rect size: heigth = "<< rc.height() << "; width = " << rc.width() << endl;
    cout << "sclX= "<< sclX << " sclY= "<< sclY << endl;
+}
+
+void MainWindow::tstPrin() // test print
+{
+    pntr->begin(printer); // начать рисование
+    double sclX=get_scaleX();
+    int w=ui->sheet->rect().width()*sclX;
+    double sclY=get_scaleY();
+    int h=ui->sheet->rect().height()*sclY;
+    QRect rc(0,0,w,h);
+    pntr->drawRect(rc);
+    pntr->end();
+    cout << "Test printing is end" << endl;
 }
 
 void MainWindow::start_load_picture()
@@ -1207,7 +1228,7 @@ void MainWindow::show_pict() // показать картинки текущег
               y=toprint[i].top;
               toshow[img_count].pct->setGeometry(x, y,toprint[i].width, toprint[i].heigth);
           }
-          show_caption(i,(toprint[i].show_caption || ui->checkBox_6->isChecked()));
+          show_caption(i,(toprint[i].show_caption));
       }
     }
 
@@ -1542,6 +1563,14 @@ void MainWindow::on_checkBox_3_clicked(bool checked)
 
 void MainWindow::pct_press_delete()
 {
+    if (buf==0)
+    {
+        toprint.clear();
+        buf=-1;
+        kill_pict();
+        quick_buttons_off();
+        return;
+    }
     toprint.erase(toprint.begin()+bufpress2);
     buf--;
     quick_buttons_off();
@@ -2332,9 +2361,11 @@ void MainWindow::cp_up(int x, int y, int i)
     }
 }
 
-void MainWindow::on_checkBox_6_clicked()
+void MainWindow::on_checkBox_6_clicked(bool checked)
 {
-    if(buf>-1) show_pict();
+    if(buf<0) return;
+    for(int i=0; i<=buf; i++) toprint[i].show_caption=checked;
+    show_pict();
 }
 
 // Текстовые блоки
@@ -2627,6 +2658,7 @@ bool MainWindow::openSassion(QString fileName)
             in>>toprint[i].isTextBlock;   // true - это текстовый блок
             in>>toprint[i].alig;
             QApplication::processEvents();
+            toprint[i].cp_num=-1;
             if (d!=1)
             {   // уточнение координат, если новое окно отличается от старого
                 toprint[i].left=double(toprint[i].left)*d;
@@ -2651,6 +2683,8 @@ bool MainWindow::openSassion(QString fileName)
     }
     return r;
 }
+
+
 
 
 

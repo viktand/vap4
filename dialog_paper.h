@@ -17,7 +17,10 @@ public:
     void load_data(QString paper_name, int w, int h, int index);
 
 private slots:
-    void on_buttonBox_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::Dialog_paper *ui;

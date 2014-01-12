@@ -24,7 +24,7 @@ void Dialog_paper::load_data(QString paper_name, int w, int h, int index)
     ind=index;
 }
 
-void Dialog_paper::on_buttonBox_clicked() // Ok
+void Dialog_paper::on_pushButton_clicked() // Ok
 {
     QSettings sett("vap", "vap");
     if (ui->radioButton->isChecked())
@@ -44,4 +44,10 @@ void Dialog_paper::on_buttonBox_clicked() // Ok
         sett.endGroup();
     }
     emit close_form();
+    this->close();
+}
+
+void Dialog_paper::on_pushButton_2_clicked() // Cancel
+{
+    this->close();
 }

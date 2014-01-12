@@ -64,6 +64,10 @@ private slots:
 
     void on_doubleSpinBox_2_valueChanged(double arg1);
 
+    void on_checkBox_10_clicked(bool checked);
+
+    void on_checkBox_12_clicked(bool checked);
+
 public slots:
     void load_data(); // загрузить данные в форму
     void set_all();   // уточнить состояние флага "ориентация для всех"

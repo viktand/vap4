@@ -567,7 +567,7 @@
        <rect>
         <x>50</x>
         <y>70</y>
-        <width>81</width>
+        <width>91</width>
         <height>21</height>
        </rect>
       </property>
@@ -578,8 +578,8 @@
      <widget class="QCheckBox" name="checkBox_4">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>111</y>
+        <x>180</x>
+        <y>70</y>
         <width>85</width>
         <height>21</height>
        </rect>
@@ -591,10 +591,10 @@
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>6</x>
+        <x>10</x>
         <y>60</y>
-        <width>40</width>
-        <height>40</height>
+        <width>32</width>
+        <height>32</height>
        </rect>
       </property>
       <property name="text">
@@ -610,10 +610,10 @@
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>7</x>
-        <y>99</y>
-        <width>38</width>
-        <height>38</height>
+        <x>140</x>
+        <y>60</y>
+        <width>32</width>
+        <height>32</height>
        </rect>
       </property>
       <property name="text">
@@ -630,7 +630,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>100</y>
         <width>32</width>
         <height>32</height>
        </rect>
@@ -649,7 +649,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>150</y>
+        <y>110</y>
         <width>85</width>
         <height>21</height>
        </rect>
@@ -661,8 +661,8 @@
      <widget class="QLabel" name="label_12">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>178</y>
+        <x>140</x>
+        <y>100</y>
         <width>32</width>
         <height>32</height>
        </rect>
@@ -680,8 +680,8 @@
      <widget class="QCheckBox" name="checkBox_6">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>188</y>
+        <x>180</x>
+        <y>110</y>
         <width>85</width>
         <height>21</height>
        </rect>
@@ -694,7 +694,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>217</y>
+        <y>185</y>
         <width>32</width>
         <height>32</height>
        </rect>
@@ -713,20 +713,20 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>228</y>
-        <width>151</width>
+        <y>190</y>
+        <width>221</width>
         <height>21</height>
        </rect>
       </property>
       <property name="text">
-       <string>Gnome Commander</string>
+       <string>Gnome Commander and etc.</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_14">
       <property name="geometry">
        <rect>
         <x>3</x>
-        <y>253</y>
+        <y>135</y>
         <width>45</width>
         <height>45</height>
        </rect>
@@ -745,7 +745,7 @@
       <property name="geometry">
        <rect>
         <x>50</x>
-        <y>270</y>
+        <y>150</y>
         <width>85</width>
         <height>21</height>
        </rect>
@@ -771,6 +771,70 @@
       </property>
       <property name="scaledContents">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_23">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>150</y>
+        <width>32</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="res.qrc">:/new/prefix1/thunar</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_10">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>150</y>
+        <width>85</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Thunar</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_24">
+      <property name="geometry">
+       <rect>
+        <x>6</x>
+        <y>220</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="res.qrc">:/new/prefix1/file_manager</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_11">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>230</y>
+        <width>85</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>PCManFM</string>
       </property>
      </widget>
     </widget>
@@ -808,6 +872,19 @@
       </property>
       <property name="text">
        <string>Font scale on paper</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Test print rect</string>
       </property>
      </widget>
     </widget>

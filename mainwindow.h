@@ -36,6 +36,7 @@ extern QFont  font_cpt; // шрифт подписи
 extern bool frm_cpt;    // показывать рамку подписи
 extern bool trans;      // прозрачный фон надписи
 extern double font_scl; // масштаб шрифта в предпросмотре
+extern bool testPrint;  // печать тестового креста (для проверки позиционирования)
 
 
 namespace Ui {
@@ -148,6 +149,7 @@ private slots:
     void  edit_textBlock();                 // редактировать текстовый блок
     void  open_textblockEd();               // открыть редактор текстовых блоков
     void  get_marg();                       // расчет области непечати
+    void  tstPrin();                        // печать тестового квадрата по размеру листа
 
     void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
     void on_l2_clicked();
@@ -178,12 +180,10 @@ private slots:
     void on_checkBox_5_clicked(bool checked);
     void on_pushButton_6_clicked();
     void on_pushButton_9_clicked();
-    void on_checkBox_6_clicked();
     void on_pushButton_14_clicked();
-
     void on_pushButton_15_clicked();
-
     void on_pushButton_16_clicked();
+    void on_checkBox_6_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;                 // Рождение

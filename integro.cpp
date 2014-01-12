@@ -435,3 +435,127 @@ void caja_set(bool ch) // to Caja
     run(com);
     cout << "integration into Caja enabled" << endl;
 }
+
+bool thunar_check() // проверка интеграции с Thunar
+{
+    char *home;
+    QString fold;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.config/Thunar");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr) // папки нет, интеграции тоже нет
+    {
+        return false;
+    }
+    fold.append("/uca.xml");
+    QFile file(fold);
+    if(!file.exists()) // файла нет, интеграции тоже нет
+    {
+        return false;
+    }
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString line;
+    QByteArray lin;
+    while(!file.atEnd())
+    {
+        lin=file.readLine();
+        line=QString(lin);
+        if(line.contains("vap %F"))
+        {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void thunar_set(bool ch) // to Thunar
+{
+    char *home;
+    QString fold;
+    QString com;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.config/Thunar");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr && ch) // папки нет, надо создать
+        {
+            com.clear();
+            com.append("mkdir ");
+            com.append(fold);
+            run(com);
+        }
+    fold.append("/uca.xml");
+    QFile file(fold);
+    // Загрузить файл для анализа и коррекции
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QByteArray lin;
+    QStringList fl;
+    while(!file.atEnd())
+    {
+        lin=file.readLine();
+        fl.append(QString(lin));
+    }
+    file.close();
+    int start_line=-1;
+    if (!ch) // удалить интеграцию
+        {
+            for(int i=0; i<fl.count(); i++)
+            {
+                if(fl[i].contains("<icon>vap</icon>"))
+                {
+                    start_line=i-1;
+                    break;
+                }
+            }
+            if(start_line>-1) // секция найдена
+            {
+                for(int i=start_line; i<start_line+8;i++)
+                {
+                    fl[i]="#";
+                }
+            }
+            cout << "integration into the Thunar is disabled" << endl;
+        }
+    else // установить интеграцию
+        {
+            if (fl.count()==0) // вообще ничего не было
+            {
+                fl.append("<?xml encoding=\"UTF-8\" version=\"1.0\"?>\n");
+                fl.append("<actions>\n");
+             }
+            else //добавить к тому, что было
+            {
+                fl.removeLast();
+            }
+            fl.append("<action>\n");
+            fl.append("	<icon>vap</icon>\n");
+            fl.append("	<name>Print(vap)</name>\n");
+            fl.append("	<command>vap %F</command>\n");
+            fl.append("	<description>Print yours images</description>\n");
+            fl.append("	<patterns>*</patterns>\n");
+            fl.append("	<image-files/>\n");
+            fl.append("</action>\n");
+            fl.append("</actions>\n");
+            cout << "integration into Thunar enabled" << endl;
+        }
+
+    // сохранить модефицированный файл
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    if(!file.isOpen())
+        {
+            cout << "error open file for Thunar" << endl;
+            cout << fold.toStdString() << endl;
+            cout << "Probably you are not the owner of the destination folder. Try sudo vap" << endl;
+            return;
+        }
+    QTextStream out(&file);
+    for(int i=0; i<fl.count();i++) if(fl[i]!="#") out << fl[i];
+    file.close();
+    com.clear();
+    com.append("chmod 600 ");
+    com.append(fold);
+    run(com);
+}

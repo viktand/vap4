@@ -9,6 +9,7 @@
 #include "dialog_paper.h"
 #include <QSettings>
 #include <vector>
+#include <QMessageBox>
 
 #include <iostream>
 using namespace std;
@@ -128,11 +129,15 @@ PageSetup::PageSetup(QWidget *parent) :
     checkBox_6->setChecked(nemo_check());
     checkBox_7->setChecked(gnome_check());
     checkBox_8->setChecked(caja_check());
+    checkBox_10->setChecked(thunar_check());
     flag_ret=false;
     spinBox->setEnabled(false);
     spinBox_2->setEnabled(false);
     spinBox_3->setEnabled(false);
     spinBox_4->setEnabled(false);
+    label_24->setVisible(false);
+    checkBox_11->setVisible(false);
+    checkBox_12->setChecked(testPrint);
  }
 
 
@@ -295,6 +300,16 @@ void PageSetup::on_checkBox_8_clicked(bool checked)
 
 void PageSetup::on_pushButton_2_clicked()
 {
+    if(comboBox->currentIndex()<8)
+    {
+        QMessageBox msgBox;
+        QString ms;
+        ms.append("You are going to change one of the standard paper sizes! \n");
+        ms.append("Use this option only if you have problems with standart size. \n");
+        ms.append("It would be better if you simply create your custom list.\n");
+        msgBox.setText(ms);
+        msgBox.exec();
+    }
     if (dp==0)
     {
         dp=new Dialog_paper(this);
@@ -352,4 +367,16 @@ void PageSetup::on_radioButton_toggled()
 void PageSetup::on_doubleSpinBox_2_valueChanged(double arg1)
 {
     font_scl=arg1;
+}
+
+void PageSetup::on_checkBox_10_clicked(bool checked)
+{
+    if (flag_ret) return;
+    thunar_set(checked);
+}
+
+void PageSetup::on_checkBox_12_clicked(bool checked)
+{
+    if(flag_ret)return;
+    testPrint=checked;
 }

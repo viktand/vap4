@@ -20,4 +20,7 @@ bool gnome_check();
 void caja_set(bool ch);
 bool caja_check();
 
+void thunar_set(bool ch);
+bool thunar_check();
+
 #endif // INTEGRO_H

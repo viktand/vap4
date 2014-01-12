@@ -58,7 +58,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="toolTip">
-        <string/>
+        <string>Open file</string>
        </property>
        <property name="whatsThis">
         <string/>
@@ -83,6 +83,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_12">
+       <property name="toolTip">
+        <string>Open folder</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -100,6 +103,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_15">
+       <property name="toolTip">
+        <string>Save current session</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -117,6 +123,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_16">
+       <property name="toolTip">
+        <string>Open saved session</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -134,6 +143,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_14">
+       <property name="toolTip">
+        <string>Insert text block</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -151,6 +163,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_5">
+       <property name="toolTip">
+        <string>Print</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -168,6 +183,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_7">
+       <property name="toolTip">
+        <string>Settings</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -185,6 +203,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_9">
+       <property name="toolTip">
+        <string>About</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -403,6 +424,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>1 in center</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -425,6 +449,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>1 top</string>
         </property>
         <property name="text">
          <string/>
@@ -449,6 +476,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>1x2</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -471,6 +501,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>1x3</string>
         </property>
         <property name="text">
          <string/>
@@ -495,6 +528,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>2x2</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -517,6 +553,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>2x3</string>
         </property>
         <property name="text">
          <string/>
@@ -541,6 +580,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>2x4</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -563,6 +605,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>3x3</string>
         </property>
         <property name="text">
          <string/>
@@ -587,6 +632,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>3x4</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -609,6 +657,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>4x5</string>
         </property>
         <property name="text">
          <string/>
@@ -633,6 +684,9 @@
           <height>79</height>
          </rect>
         </property>
+        <property name="toolTip">
+         <string>All in oun</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -655,6 +709,9 @@
           <width>61</width>
           <height>79</height>
          </rect>
+        </property>
+        <property name="toolTip">
+         <string>Users layout</string>
         </property>
         <property name="text">
          <string/>
@@ -727,6 +784,9 @@
         <height>50</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Interval between pictures</string>
+      </property>
       <property name="maximum">
        <number>100</number>
       </property>
@@ -780,6 +840,9 @@
         <width>50</width>
         <height>64</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>Rotate a picture</string>
       </property>
       <property name="minimum">
        <number>-180</number>
@@ -1020,7 +1083,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Capctions</string>
+       <string>With captions</string>
       </property>
      </widget>
     </widget>
@@ -1060,6 +1123,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="pushButton_6">
+       <property name="toolTip">
+        <string>Clip</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1092,6 +1158,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="pushButton_3">
+       <property name="toolTip">
+        <string>Previous sheet</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1109,6 +1178,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_4">
+       <property name="toolTip">
+        <string>Next sheet</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1126,19 +1198,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_8">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>590</y>
-      <width>611</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <zorder>list</zorder>
    <zorder>horizontalLayoutWidget</zorder>
    <zorder>sheet</zorder>
@@ -1148,7 +1207,6 @@
    <zorder>pushButton_13</zorder>
    <zorder>horizontalLayoutWidget_2</zorder>
    <zorder>horizontalLayoutWidget_3</zorder>
-   <zorder>label_8</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
