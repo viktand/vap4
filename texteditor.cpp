@@ -7,7 +7,7 @@
 
 QColor  BcColor;
 QColor  LtColor;
-QFont   txfnt;
+QFont   txfnt("Ubuntu");
 bool    trBack=true;
 int     alg=0;
 

@@ -9,7 +9,7 @@
 
 QColor  b_cl;       // цвет фона
 QColor  f_cl;       // цвет букв
-QFont   fnt;        // caption font
+QFont   fnt("Ubuntu");        // caption font
 
 void captioneditor::on_buttonBox_accepted() // сигнaл завершения настроек
 {
@@ -120,4 +120,20 @@ void captioneditor::on_checkBox_3_clicked(bool checked)
         else p.setColor(QPalette::Base, b_cl);
     ui->lineEdit->setPalette(p);
     ui->lineEdit->setFrame(false);
+}
+
+void captioneditor::on_pushButton_4_clicked() // вставить имя файла как подпись
+{
+    QString st;
+    for(int i=fullFileName.length()-1;
+        fullFileName[i]!='/'; --i)
+    {
+        st=fullFileName.mid(i,(fullFileName.length()-i));
+    }
+    ui->lineEdit->setText(st);
+}
+
+void captioneditor::on_pushButton_5_clicked()
+{
+    ui->lineEdit->setText(fullFileName);
 }

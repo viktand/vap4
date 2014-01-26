@@ -53,5 +53,6 @@
         <file alias="backColor">resurs/backcolor.png</file>
         <file alias="fontColor">resurs/fontcolor.png</file>
         <file alias="thunar">resurs/thunar.png</file>
+        <file alias="vap_ru">vap_ru.qm</file>
     </qresource>
 </RCC>

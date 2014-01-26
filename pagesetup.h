@@ -68,9 +68,12 @@ private slots:
 
     void on_checkBox_12_clicked(bool checked);
 
+    void on_checkBox_13_clicked(bool checked);
+
 public slots:
     void load_data(); // загрузить данные в форму
     void set_all();   // уточнить состояние флага "ориентация для всех"
+    void set_path(bool ch); // установить состояние флага сохранения пути
 
 private:
     Ui::PageSetup *ui2;

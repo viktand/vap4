@@ -1,34 +1,44 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QTextCodec>
-#include <QWidget>
+//#include <QTextCodec>
+//#include <QWidget>
+#include <QLocale>
+#include <QSettings>
 
 #include <iostream>
 using namespace std;
 
-
-
 int main(int argc, char *argv[])
 {
-
-#ifdef HAVE_QT4
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-#endif
-
 
     cout << "Hello, World!" << endl;
     cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
 
-
     QApplication a(argc, argv);
+    QLocale lc;
+    QTranslator translator;
+    cout << "Locale " << QLocale::countryToString(lc.country()).toStdString() << endl;
+    if(lc.country()==QLocale::Russia  ||
+       lc.country()==QLocale::RussianFederation)
+        {
+            if(translator.load(":/new/prefix1/vap_ru"))
+              if(a.installTranslator(&translator))
+                cout << "Russian interface selected and connected" << endl;
+        }
     MainWindow w;
+    QFont font;
+    int fSize;   // font size
+    QSettings settu("vap", "vap");
+    settu.beginGroup("Settings");
+    fSize=settu.value("font",7).toInt();
+    settu.endGroup();
+    font.setPointSize(fSize);
+    w.setFont(font);
     w.cou_prm=argc;
+    w.fn_size=fSize;
     if (argc>1)
     for (int i = 0; i < argc; i++) {
-            // Выводим список аргументов в цикле
-            cout << "Argument " << i << " : " << argv[i] << endl;
+            // Сохраняем список аргументов
             w.prm<<argv[i];
         }
     w.show();
@@ -37,9 +47,3 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-// 1. все строки пишем по английски, и заключаем их в tr()
-// 2. в *.pro файле пишем TRANSLATIONS = прога_ru.ts
-// 3. запускаем lupdate
-// 4. переводим в Qt Translator'е
-// 5. запускаем lrelease
-// 6. копируем из документации кусок кода (4 строки) подключения файла с переводами.

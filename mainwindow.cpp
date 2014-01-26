@@ -16,9 +16,9 @@
 #include <QThread>
 #include <QPicture>
 #include <QFileDialog>
-#include <QPrintDialog>
+//#include <QPrintDialog>
 #include <QTimer>
-#include <QMatrix>
+//#include <QMatrix>
 #include <QPointF>
 #include <QSettings>
 #include <QDrag>
@@ -29,6 +29,7 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QTextStream>
+#include <QFont>
 
 #define PI 3.14159265
 
@@ -49,11 +50,10 @@ QMovie *animGif;
 QTimer *timer;
 captioneditor *cped;
 QSettings setty("vap", "vap");
-//QThread *thread;
 loadpicture *ldp;
 QString str_time;
 QavLabel *fon;
-QavLabel *rez; // рамка обрезки
+QavLabel *rez;          // рамка обрезки
 QRect virt_paper;       // виртуальный лист бумаги, на котором рисуется картинка
                         // т.е. лист накладывается на А4 и печатается.
 bool flag2;
@@ -101,6 +101,7 @@ int  gor_old;           // предыдущие размеры окна
 int  offset=0;          // смещение кнопок компоновки при прокрутке
 bool l, r, t, b;        // флаги захвата рамки обрезки
 double list_scl;        // реальное соотношение размеров экрана и бумаги
+bool pathFile=false;    // запоминать путь к последнему файлу и открывать диалоги там же
 
 // поля бумаги
 int left_m;
@@ -131,7 +132,7 @@ QString caption;
 bool show_cap;
 QColor font_cl;  // цвет шрифта подписи
 QColor back_cl;  // цвет шрифта фона
-QFont  font_cpt; // шрифт подписи
+QFont  font_cpt("Ubuntu"); // шрифт подписи
 bool trans;      // прозрачный фон надписи
 bool runShow=false; // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
 double font_scl;
@@ -154,8 +155,6 @@ struct pict {                // загруженная картинка и вс�
     int       yl;            // Y подписи
     char      fnt_Name[31];  // имя фонта подписи
     int       fnt_Size;      // размер фонта подписи
-    //fnt_Style: tfontstyles;   // стиль фонта подписи
-    //fnt_Color: tColor;        // цвет
     int       dxl;           // относительное смещение положения подписи от картинки (по Х)
     int       dyl;           // относительное смещение положения подписи от картинки (по Y)
     int       prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
@@ -285,6 +284,9 @@ MainWindow::MainWindow(QWidget *parent) :
     make_list();
     show_paper_size();
     gor_old=gor;
+    setty.beginGroup("Settings");
+    pathFile=setty.value("path",false).toBool();
+    setty.endGroup();
  }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -643,6 +645,9 @@ void loadpicture::start_load(QString filename) // start load
 void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
 {
     QString fileName = get_file();
+    setty.beginGroup("Settings");
+    setty.setValue("inPath", GetPathFrom(fileName));
+    setty.endGroup();
     if (!fileName.isEmpty())
     {
         ind_start();
@@ -657,8 +662,18 @@ void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
 void MainWindow::on_pushButton_12_clicked() // открыть папку
 {
    ind_start();
+   QString hm="/home";
+   if(pathFile)
+   {
+       setty.beginGroup("Settings");
+       hm=setty.value("inPath","/home").toString();
+       setty.endGroup();
+   }
    QString dirf = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+                    hm, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+   setty.beginGroup("Settings");
+   setty.setValue("inPath", dirf);
+   setty.endGroup();
    load_folder(dirf);
    show_pict();
    ind_stop();
@@ -671,7 +686,7 @@ void MainWindow::on_pushButton_clicked() // all in oun
    img_on_list=buf+1;
    w_cou=h_cou=2;
    recomp();
-   ui->label_10->setText("All in oun");
+   ui->label_10->setText(tr("All in oun"));
 }
 
 void MainWindow::on_pushButton_8_clicked() // my layout
@@ -713,10 +728,14 @@ void MainWindow::on_pushButton_7_clicked() // настройка бумаги
     if(ps == 0)
     {
         ps=new PageSetup();
+        QFont font;
+        font.setPointSize(fn_size);
+        ps->setFont(font);
         QObject::connect(ps, SIGNAL(end_set()), this, SLOT(set_setting()));
     }
     ps->load_data();
     ps->show();
+    ps->set_path(pathFile);
     connect(ps, SIGNAL(set_all_em(bool)), this, SLOT(set_all_rot(bool)));
 
 }
@@ -742,7 +761,7 @@ double MainWindow::get_scaleX()
 {
    double x_size;
    double x_prew;
-   x_size=x_pg*prx;
+   x_size=(x_pg-left_m-right_m)*prx;
    x_prew=fon->width();
    return x_size/x_prew;
 }
@@ -751,7 +770,7 @@ double MainWindow::get_scaleY()
 {
    double y_size;
    double y_prew;
-   y_size=y_pg*pry;
+   y_size=(y_pg-top_m-bottom_m)*pry;
    y_prew=fon->height();
    return y_size/y_prew;
 }
@@ -783,7 +802,7 @@ void MainWindow::set_printer() // настройка принтера
          pry=rc.height()/prn_size_x;
          dy=(prn_size_y-y_pg)/2;
      }
-     //printer->setPageMargins(dx+left_m, top_m, right_m, bottom_m, QPrinter::Millimeter);
+     //printer->setPageMargins(dx+left_m, dy+top_m, right_m, bottom_m, QPrinter::Millimeter);
      printer->setPageMargins(dx, dy, 0, 0, QPrinter::Millimeter);
 }
 
@@ -797,11 +816,15 @@ void MainWindow::on_pushButton_5_clicked() //печать
     }
     QRect rc;   // шаблон для печати
     QBrush br;  // кисть
+    QPixmap pxm;// пиксмэп для печати
     double sclX, sclY; // коэф. масштабирования при пересчете размеров и координат
-    double t;   // time var
+    double cp;
     bool f_prn=true;
     sclX=get_scaleX();
     sclY=get_scaleY();
+    double x,y,h,w;
+    int hh=ui->sheet->rect().height()*sclY; // высота бумаги
+    int ww=ui->sheet->rect().width()*sclX;  // ширина бумаги
     for (int i=0; i<=lists; i++)
     {
         if (f_prn)pntr->begin(printer); // начать рисование
@@ -810,13 +833,47 @@ void MainWindow::on_pushButton_5_clicked() //печать
         {
             if (toprint[j].list==i)
             {
-                    t=toprint[j].top;    rc.setTop(t*sclY);
-                    t=toprint[j].left;   rc.setLeft(t*sclX);
+                    x=toprint[j].left;
+                    y=toprint[j].top;
+                    h=toprint[j].heigth;
+                    w=toprint[j].width;
+                    cp=toprint[j].compress;
+                    rc.setTop(y*sclY+(top_m*pry));
+                    rc.setLeft(x *sclX+(left_m*prx));
                     cout << "picture position: top = " << rc.top() << "; left = " << rc.left() << endl;
-                    t=toprint[j].heigth; rc.setHeight(t*sclY);
-                    t=toprint[j].width;  rc.setWidth(t*sclX);
-                    cout << "picture size: heigth = " << toprint[j].heigth << "; width = " << toprint[j].width << endl;
-                    pntr->drawImage(rc, toprint[j].pix.toImage());
+                    rc.setHeight(h*sclY);
+                    rc.setWidth(w*sclX);
+                    if (rap)cout << "picture size: heigth = " << toprint[j].heigth << "; width = " << toprint[j].width << endl;
+                    pxm=toprint[j].pix;
+                    if(y<0) // обрезать верх, если он выходит за пределы
+                    {
+                        pxm=cut_pix(pxm,QRect(0,(-y*cp),w*cp,(h+y)*cp));
+                        rc.setTop(top_m*pry);
+                        rc.setHeight((h+y)*sclY);
+                        h=h+y;
+                        y=0;
+                    }
+                    if(hh<(rc.top()+rc.height())) // картинку надо подрезать снизу, чтобы не вызвать цветного мусора
+                    {
+                        pxm=cut_pix(pxm, QRect(0,0,w*cp,double(fon->height()-y)*cp));
+                        rc.setHeight(double(fon->height()-y)*sclY);
+                        h=fon->height()-y;
+                    }
+                    if(x<0) // обрезать картинку слева - торчит
+                    {
+                        pxm=cut_pix(pxm,QRect((-x*cp),0,(w+x)*cp,h*cp));
+                        rc.setLeft(left_m*prx);
+                        rc.setWidth((w+x)*sclX);
+                        w=w+x;
+                        x=0;
+                    }
+                    if(ww<(rc.left()+rc.width()))  // картинка торчит справа, надо обрезать
+                    {
+                        pxm=cut_pix(pxm,QRect(0,0,double(fon->width()-x)*cp,h*cp));
+                        rc.setWidth(double(fon->width()-x)*sclX);
+                        w=fon->width()-x;
+                    }
+                    pntr->drawImage(rc, pxm.toImage());
                     cout << "rect size: heigth = "<< rc.height() << "; width = " << rc.width() << " " << endl;
                     cout << "picture " << j+1 << " : " << " painted" << endl;
                     //caption
@@ -867,6 +924,8 @@ void MainWindow::tstPrin() // test print
     int h=ui->sheet->rect().height()*sclY;
     QRect rc(0,0,w,h);
     pntr->drawRect(rc);
+    pntr->drawLine(0,0,w,h);
+    pntr->drawLine(0,h,w,0);
     pntr->end();
     cout << "Test printing is end" << endl;
 }
@@ -1000,6 +1059,9 @@ void MainWindow::set_setting()
     new_margins();
     x_pg=paper_w;
     y_pg=paper_h;
+    setty.beginGroup("Settings");
+    pathFile=setty.value("path", false).toBool();
+    setty.endGroup();
 }
 
 void MainWindow::new_margins()
@@ -1011,8 +1073,15 @@ void MainWindow::new_margins()
 
 QString MainWindow::get_file()
 {
+    QString hm="/home";
+    if(pathFile)
+    {
+        setty.beginGroup("Settings");
+        hm=setty.value("inPath","/home").toString();
+        setty.endGroup();
+    }
     return QFileDialog::getOpenFileName(this, tr("Open File"),
-            "/home", tr("Images (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)"));
+            hm, tr("Images (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)"));
 }
 
 void MainWindow::ind_start()
@@ -1234,10 +1303,10 @@ void MainWindow::show_pict() // показать картинки текущег
 
     set_z();
     QString s, c;
-    s.append("List ");
+    s.append(tr("List "));
     c = QString::number(curlist);
     s.append(c);
-    s.append(" from ");
+    s.append(tr(" from "));
     c = QString::number(lists);
     s.append(c);
     ui->label_2->setText(s);
@@ -1291,7 +1360,7 @@ void MainWindow::on_l1_clicked()
     h_cou=1;
     btn_comp_press(0);
     recomp();
-    ui->label_10->setText("1 in center");
+    ui->label_10->setText(tr("1 in center"));
 }
 
 
@@ -1302,7 +1371,7 @@ void MainWindow::on_l2_clicked()
     h_cou=1;
     btn_comp_press(1);
     recomp();
-    ui->label_10->setText("1 in top");
+    ui->label_10->setText(tr("1 in top"));
 }
 
 void MainWindow::on_l3_clicked()
@@ -1848,7 +1917,7 @@ QString MainWindow::esc_to_utf(QString st)
 
 void MainWindow::show_paper_size()
 {
-    ui->label_11->setText("Your paper:");
+    ui->label_11->setText(tr("Your paper:"));
     QString l;
     l.append("Width: ");
     l.append(QString::number(paper_w));
@@ -1870,7 +1939,7 @@ void MainWindow::show_paper_size()
 void MainWindow::show_pict_size()
 {
     QSize sz=toshow[imgpress2].pct->size();
-    ui->label_11->setText("Curent picture:");
+    ui->label_11->setText(tr("Curent picture:"));
     QString l;
     double d1;
     l.append("Width: ");
@@ -2195,6 +2264,9 @@ void MainWindow::show_cap_editor()
     if (cped==0)
     {
         cped=new captioneditor;
+        QFont font;
+        font.setPointSize(fn_size);
+        cped->setFont(font);
         connect(cped, SIGNAL(end_edit(QString,QColor,QColor,QFont,bool,bool)),
                 this, SLOT(set_caption(QString,QColor,QColor,QFont,bool,bool)));
     }
@@ -2204,6 +2276,7 @@ void MainWindow::show_cap_editor()
     back_cl=toprint[bufpress2].back_color;
     font_cpt=toprint[bufpress2].font;
     trans=toprint[bufpress2].trans;
+    cped->fullFileName=toprint[bufpress2].pict;
     cped->load_caption();
     cped->show();
 }
@@ -2376,6 +2449,9 @@ void MainWindow::open_textblockEd()
     if (txed==0)
     {
         txed=new TextEditor;
+        QFont font;
+        font.setPointSize(fn_size);
+        txed->setFont(font);
         connect(txed, SIGNAL(settext(QString,QColor,QColor,QFont,bool,int)),
                 this, SLOT(setTextBlock(QString,QColor,QColor,QFont,bool,int)));
     }
@@ -2507,8 +2583,17 @@ void MainWindow::on_pushButton_15_clicked()
 // сохранить сеанс
 {
     QString user=getenv("HOME");
+    if(pathFile)
+    {
+        setty.beginGroup("Settings");
+        user=setty.value("inPath",user).toString();
+        setty.endGroup();
+    }
     QString fileName = QFileDialog::getSaveFileName
             (this, tr("Save in file..."), user, tr("vap_sessions (*.vap)"));
+    setty.beginGroup("Settings");
+    setty.setValue("inPath", GetPathFrom(fileName));
+    setty.endGroup();
     if (!(isvap(fileName))) fileName.append(".vap");
     if (saveSassion(fileName))
          {if (rap) cout << "Save session in file: "<< fileName.toStdString() << endl;}
@@ -2587,12 +2672,38 @@ bool MainWindow::isvap(QString s)
 }
 
 
+QString MainWindow::GetPathFrom(QString pFile)
+{
+    QString st;
+    for(int i=pFile.length()-1;
+        pFile[i]!='/'; --i)
+    {
+        st=pFile.mid(0,i-1);
+    }
+    if(st=="")
+    {
+        setty.beginGroup("Settings");
+        st=setty.value("inPath", getenv("HOME")).toString();
+        setty.endGroup();
+    }
+    return st;
+}
+
 void MainWindow::on_pushButton_16_clicked()
 // открыть сохраненный сеанс
 {
     QString user=getenv("HOME");
+    if(pathFile)
+    {
+        setty.beginGroup("Settings");
+        user=setty.value("inPath",user).toString();
+        setty.endGroup();
+    }
     QString fileName = QFileDialog::getOpenFileName
             (this, tr("Open file..."), user, tr("vap_sessions (*.vap)"));
+    setty.beginGroup("Settings");
+    setty.setValue("inPath", GetPathFrom(fileName));
+    setty.endGroup();
     if (!(isvap(fileName))) fileName.append(".vap");
     if (openSassion(fileName))
           {if (rap) cout << "Open session from file: "<< fileName.toStdString() << endl;}

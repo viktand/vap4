@@ -201,6 +201,9 @@ void PageSetup::load_data()
    comboBox_3->setCurrentIndex(pap_sor);
    clse=false; // разрешить изменение настроек
    comboBox->setCurrentIndex(pap_name);
+   setts.beginGroup("Settings");
+   spinBox_7->setValue(setts.value("font", 7).toInt());
+   setts.endGroup();
 }
 
 void PageSetup::set_all()
@@ -254,6 +257,9 @@ void PageSetup::on_pushButton_4_clicked() // apply
         prn_size_y=420;
     }
     emit end_set();
+    setts.beginGroup("Settings");
+    setts.setValue("font", spinBox_7->value());
+    setts.endGroup();
 }
 
 void PageSetup::on_pushButton_3_clicked() // close
@@ -304,15 +310,18 @@ void PageSetup::on_pushButton_2_clicked()
     {
         QMessageBox msgBox;
         QString ms;
-        ms.append("You are going to change one of the standard paper sizes! \n");
-        ms.append("Use this option only if you have problems with standart size. \n");
-        ms.append("It would be better if you simply create your custom list.\n");
+        ms.append(tr("You are going to change one of the standard paper sizes! \n"));
+        ms.append(tr("Use this option only if you have problems with standart size. \n"));
+        ms.append(tr("It would be better if you simply create your custom list.\n"));
         msgBox.setText(ms);
         msgBox.exec();
     }
     if (dp==0)
     {
         dp=new Dialog_paper(this);
+        QFont font;
+        font.setPixelSize(10);
+        dp->setFont(font);
         connect(dp, SIGNAL(close_form()), this, SLOT(load_combobox()));
     }
     dp->load_data(comboBox->currentText(), pw, ph, comboBox->currentIndex());
@@ -380,3 +389,17 @@ void PageSetup::on_checkBox_12_clicked(bool checked)
     if(flag_ret)return;
     testPrint=checked;
 }
+
+void PageSetup::on_checkBox_13_clicked(bool checked)
+{
+    if(flag_ret)return;
+    setts.beginGroup("Settings");
+    setts.setValue("path", checked);
+    setts.endGroup();
+}
+
+void PageSetup::set_path(bool ch)
+{
+    checkBox_13->setChecked(ch);
+}
+

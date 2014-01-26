@@ -1,7 +1,7 @@
 #ifndef AVLABEL_H
 #define AVLABEL_H
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 #include <QLabel>
 
 

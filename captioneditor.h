@@ -14,6 +14,7 @@ class captioneditor : public QDialog
 public:
     explicit captioneditor(QWidget *parent = 0);
     ~captioneditor();
+    QString fullFileName;
 
 public slots:
     void load_caption();        // загрузить надпись в редактор
@@ -33,6 +34,10 @@ private slots:
     void on_buttonBox_accepted();
 
     void on_checkBox_3_clicked(bool checked);
+
+    void on_pushButton_4_clicked();
+
+    void on_pushButton_5_clicked();
 
 private:
     Ui::captioneditor *ui;

@@ -2,9 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QCloseEvent>
+#include <QResizeEvent>
+//#include <QtGui/QResizeEvent>
+#include <QCloseEvent>
+//#include <QtGui/QCloseEvent>
 #include <QTextEdit>
+#include <QTranslator>
 
 // "сверхглобальные" переменные
 extern int  ornl;       // ориентация листа
@@ -12,6 +15,10 @@ extern int  left_m;     // левое поле
 extern int  right_m;    // правое поле
 extern int  top_m;      // верхнее поле
 extern int  bottom_m;   // нижнее поле
+//extern int  left_mm;    // левое поле min
+//extern int  right_mm;   // правое поле min
+//extern int  top_mm;     // верхнее поле min
+//extern int  bottom_mm;  // нижнее поле min
 extern int  paper_w;    // ширина бумаги
 extern int  paper_h;    // высота бумаги
 extern bool rap;        // выводить сообщения программы в терминал
@@ -53,6 +60,7 @@ public:
     ~MainWindow();
     QStringList prm;        // список параметров запуска программы
     int cou_prm;            // кол-во параметров
+    int fn_size;            // размер фонта
     struct arch {char *el[];};
 
 
@@ -150,6 +158,7 @@ private slots:
     void  open_textblockEd();               // открыть редактор текстовых блоков
     void  get_marg();                       // расчет области непечати
     void  tstPrin();                        // печать тестового квадрата по размеру листа
+    QString GetPathFrom(QString pFile);     // получить путь к файлу по его полному имени (отбросить имя из пути), без слеша на конце
 
     void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
     void on_l2_clicked();
