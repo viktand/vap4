@@ -806,8 +806,25 @@ void MainWindow::set_printer() // настройка принтера
      printer->setPageMargins(dx, dy, 0, 0, QPrinter::Millimeter);
 }
 
+void MainWindow::prePint()
+{
+    // прогон листов перед печатью
+    int j=curlist;
+    for(int i=1; i<=lists; i++)
+    {
+        for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
+        curlist=i;
+        if (int(list_orn.size())<lists) list_orn.push_back(list_orn.back());
+        show_pict();
+    }
+    for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
+    curlist=j;
+    show_pict();
+}
+
 void MainWindow::on_pushButton_5_clicked() //печать
 {
+    prePint();
     set_printer(); // настроить принтер
     if(testPrint)
     {
