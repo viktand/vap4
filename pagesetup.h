@@ -70,6 +70,8 @@ private slots:
 
     void on_checkBox_13_clicked(bool checked);
 
+    void on_checkBox_11_clicked(bool checked);
+
 public slots:
     void load_data(); // загрузить данные в форму
     void set_all();   // уточнить состояние флага "ориентация для всех"

@@ -218,6 +218,71 @@ bool marlin_check()
     return file.exists();
 }
 
+void pcman_set(bool ch) // to PCMan-FM
+{
+    char *home;
+    QString fold;
+    QString com;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.local/share/applications");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr) // папки нет, надо создать
+        {
+            com.clear();
+            com.append("mkdir ");
+            com.append(fold);
+            run(com);
+        }
+    fold.append("/userapp-vap-REY2AX.desktop");
+    QFile file(fold);
+    if (!ch)
+        {
+            file.remove();
+            cout << "integration into the PCMan-FM is disabled" << endl;
+            return;
+        }
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    if(!file.isOpen())
+        {
+            cout << "error open file for PCMan-FM" << endl;
+            return;
+        }
+    QTextStream out(&file);
+    out << "[Desktop Entry]\n";
+    out << "Type=Application\n";
+    out << "MimeType=image\n";
+    out << "Name=Print(vap)\n";
+    out << "Exec=vap %U\n";
+    out << "Icon=vap\n";
+    out << "Comment=Fast printig pictures\n";
+    out << "Comment[ru]=Быстрая печать миниатюр изображений\n";
+    out << "Description=Print(vap)\n";
+    out << "Categories=Oder;\n";
+    out << "NoDisplay=true\n";
+    file.close();
+    com.clear();
+    com.append("chmod 664");
+    com.append(fold);
+    run(com);
+    cout << "integration into PCMan-FM enabled" << endl;
+}
+
+bool pcman_check()
+{
+    char *home;
+    QString fold;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.local/share/applications");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr) return false;  // папки нет, интеграции тоже
+    fold.append("/userapp-vap-REY2AX.desktop");
+    QFile file(fold);
+    return file.exists();
+}
+
+
 void nemo_set(bool ch)  // to Nemo
 {
     char *home;
@@ -559,3 +624,67 @@ void thunar_set(bool ch) // to Thunar
     com.append(fold);
     run(com);
 }
+
+
+//void thunar_set(bool ch) // to thunar 2
+//{
+//    char *home;
+//    QString fold;
+//    QString com;
+//    home=getenv("HOME");
+//    fold.append(home);
+//    fold.append("/.local/share/Thunar");
+//    DIR *dr = opendir(fold.toUtf8());
+//    if (!dr) // папки нет, надо создать
+//        {
+//            com.clear();
+//            com.append("mkdir ");
+//            com.append(fold);
+//            run(com);
+//        }
+//    fold.append("/vap.desktop");
+//    QFile file(fold);
+//    if (!ch)
+//        {
+//            file.remove();
+//            cout << "integration into the Thunar is disabled" << endl;
+//            return;
+//        }
+//    file.open(QIODevice::WriteOnly | QIODevice::Text);
+//    if(!file.isOpen())
+//        {
+//            cout << "error open file for Thunar" << endl;
+//            return;
+//        }
+//    QTextStream out(&file);
+//    out << "[Desktop Entry]\n";
+//    out << "Type=Application\n";
+//    out << "MimeType=image\n";
+//    out << "Name=Print(vap)\n";
+//    out << "Exec=vap %U\n";
+//    out << "Icon=vap\n";
+//    out << "Comment=Fast printig pictures\n";
+//    out << "Description=Print(vap)\n";
+//    out << "Categories=Oder;\n";
+//    out << "NoDisplay=true\n";
+//    file.close();
+//    com.clear();
+//    com.append("chmod 664");
+//    com.append(fold);
+//    run(com);
+//    cout << "integration into Thunar enabled" << endl;
+//}
+
+//bool thunar_check()
+//{
+//    char *home;
+//    QString fold;
+//    home=getenv("HOME");
+//    fold.append(home);
+//    fold.append("/.local/share/Thunar");
+//    DIR *dr = opendir(fold.toUtf8());
+//    if (!dr) return false;  // папки нет, интеграции тоже
+//    fold.append("/vap.desktop");
+//    QFile file(fold);
+//    return file.exists();
+//}

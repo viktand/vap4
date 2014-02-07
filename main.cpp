@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-//#include <QTextCodec>
+#include <QTextCodec>
 //#include <QWidget>
 #include <QLocale>
 #include <QSettings>
@@ -14,19 +14,24 @@ int main(int argc, char *argv[])
     cout << "Hello, World!" << endl;
     cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
 
+//    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); //изменения
+//    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); //изменения
+//    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8")); //изменения
+
     QApplication a(argc, argv);
     QLocale lc;
     QTranslator translator;
     cout << "Locale " << QLocale::countryToString(lc.country()).toStdString() << endl;
-    if(lc.country()==QLocale::Russia  ||
-       lc.country()==QLocale::RussianFederation)
+    if(lc.country()==QLocale::RussianFederation)
         {
             if(translator.load(":/new/prefix1/vap_ru"))
-              if(a.installTranslator(&translator))
+              {
+                a.installTranslator(&translator);
                 cout << "Russian interface selected and connected" << endl;
+              }
         }
     MainWindow w;
-    QFont font;
+    QFont font("Ubuntu");
     int fSize;   // font size
     QSettings settu("vap", "vap");
     settu.beginGroup("Settings");

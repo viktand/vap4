@@ -130,13 +130,14 @@ PageSetup::PageSetup(QWidget *parent) :
     checkBox_7->setChecked(gnome_check());
     checkBox_8->setChecked(caja_check());
     checkBox_10->setChecked(thunar_check());
+    checkBox_11->setChecked(pcman_check());
     flag_ret=false;
     spinBox->setEnabled(false);
     spinBox_2->setEnabled(false);
     spinBox_3->setEnabled(false);
     spinBox_4->setEnabled(false);
-    label_24->setVisible(false);
-    checkBox_11->setVisible(false);
+    //label_24->setVisible(false);
+    //checkBox_11->setVisible(false);
     checkBox_12->setChecked(testPrint);
  }
 
@@ -403,3 +404,9 @@ void PageSetup::set_path(bool ch)
     checkBox_13->setChecked(ch);
 }
 
+
+void PageSetup::on_checkBox_11_clicked(bool checked)
+{
+    if (flag_ret) return;
+    pcman_set(checked);
+}

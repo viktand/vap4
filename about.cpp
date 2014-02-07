@@ -6,6 +6,9 @@ about::about(QWidget *parent) :
     ui(new Ui::about)
 {
     ui->setupUi(this);
+    QFont font("Ubuntu");
+    font.setPointSize(10);
+    ui->textEdit->setFont(font);
 }
 
 about::~about()

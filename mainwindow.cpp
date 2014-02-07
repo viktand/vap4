@@ -30,6 +30,7 @@
 #include <QBitmap>
 #include <QTextStream>
 #include <QFont>
+#include <QUrl>
 
 #define PI 3.14159265
 
@@ -312,6 +313,19 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void MainWindow::dropEvent(QDropEvent *event) // сброс картинок мышью на программу
 {
     cout << "was drag and drop..."<< endl;
+    if (event->mimeData()->hasUrls())
+    {
+        prm.clear();
+        prm.append("drops");
+        for(int i=0;i<event->mimeData()->urls().count();i++)
+        {
+            prm.append(event->mimeData()->urls()[i].toString());
+        }
+        cou_prm=prm.count();
+        if_show();
+        return;
+    }
+
     if (event->mimeData()->hasText())
     {
         QString dropFiles;
@@ -517,7 +531,7 @@ void MainWindow::load_param() // обработка параметров ком�
         if (fn.contains("file:///")) fn=esc_to_utf(fn);
         if(i+1<cou_prm)
         {
-            if(prm[i+1].mid(0,1)!="/")
+            if((prm[i+1].mid(0,1)!="/") && ((prm[i+1].mid(0,8)!="file:///")))
             {
                 fl_no=false;
                 fn.append(" ");
@@ -645,6 +659,7 @@ void loadpicture::start_load(QString filename) // start load
 void MainWindow::on_pushButton_2_clicked() //открыть 1 файл
 {
     QString fileName = get_file();
+    if(fileName=="") return;
     setty.beginGroup("Settings");
     setty.setValue("inPath", GetPathFrom(fileName));
     setty.endGroup();
@@ -671,6 +686,7 @@ void MainWindow::on_pushButton_12_clicked() // открыть папку
    }
    QString dirf = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                     hm, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+   if(dirf=="") return;
    setty.beginGroup("Settings");
    setty.setValue("inPath", dirf);
    setty.endGroup();
@@ -1899,7 +1915,7 @@ int HexToInt(char ch)
 QString MainWindow::esc_to_utf(QString st)
 // преобразование строки из escape последовательности в UTF8
 // только для кириллицы !!!
-// долбаный марлин...
+// долбаный марлин... и не только он...
 {
     int h;
     QString res;
@@ -1923,6 +1939,7 @@ QString MainWindow::esc_to_utf(QString st)
                 if (h==1105)res.append("ё");
                 h=h-1040;
                 if (h>-1 && h<64)  res.append(alp.mid(h,1));
+                cout << res.toStdString() << endl;
                 i=i+5;
             }
            }
@@ -2143,6 +2160,9 @@ void MainWindow::on_pushButton_9_clicked()
     if(ab==0)
     {
         ab=new about();
+        QFont font("Ubuntu");
+        font.setPointSize(10);
+        ab->setFont(font);
     }
     ab->show();
 }
@@ -2608,6 +2628,7 @@ void MainWindow::on_pushButton_15_clicked()
     }
     QString fileName = QFileDialog::getSaveFileName
             (this, tr("Save in file..."), user, tr("vap_sessions (*.vap)"));
+    if(fileName=="") return;
     setty.beginGroup("Settings");
     setty.setValue("inPath", GetPathFrom(fileName));
     setty.endGroup();
@@ -2718,6 +2739,7 @@ void MainWindow::on_pushButton_16_clicked()
     }
     QString fileName = QFileDialog::getOpenFileName
             (this, tr("Open file..."), user, tr("vap_sessions (*.vap)"));
+    if(fileName=="") return;
     setty.beginGroup("Settings");
     setty.setValue("inPath", GetPathFrom(fileName));
     setty.endGroup();
@@ -2811,8 +2833,6 @@ bool MainWindow::openSassion(QString fileName)
     }
     return r;
 }
-
-
 
 
 

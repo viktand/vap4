@@ -23,4 +23,7 @@ bool caja_check();
 void thunar_set(bool ch);
 bool thunar_check();
 
+void pcman_set(bool ch);
+bool pcman_check();
+
 #endif // INTEGRO_H
