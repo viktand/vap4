@@ -50,3 +50,16 @@ void QavLabel::mouseMoveEvent(QMouseEvent *e)
 }
 
 
+void QavLabel::wheelEvent(QWheelEvent *event)  // вращение колеса (1) - вверх (-1) - вниз
+{
+    int i=event->delta();
+    if(i>0)
+    {
+        i=1;
+    }
+    else
+    {
+        i=-1;
+    }
+    emit mouse_wheel(i);
+}

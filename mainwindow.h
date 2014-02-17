@@ -66,6 +66,7 @@ public:
 
 private slots:
 
+    // слоты, напсанные руками
     void btn_comp_press(int i);             // завершение обработки на жатия на одну из кнопок компоновки
     void pct_press(int x, int y, int i);    // нажатие мышки на превьюшке
     void pct_move(int x, int y, int i);     // движение мышки по превьюшке
@@ -160,8 +161,13 @@ private slots:
     void  tstPrin();                        // печать тестового квадрата по размеру листа
     QString GetPathFrom(QString pFile);     // получить путь к файлу по его полному имени (отбросить имя из пути), без слеша на конце
     void  prePint();                        // прогон листов перед печатью.
+    void  setAutoOrn();                     // Автоматически установить оринетацию бумаги
+    void  setInterface();                   // Установить вид интерфейса (лента/обычный)
+    void  setIconOrns(bool b);              // Установить иконки на кнопках ориентации бумаги true - портретная
+    void  mouseWheel(int i);                // Вращение колесика мыши - пролистывание страниц колесиком мыши
 
-    void on_l1_clicked();                   // Здесь и далее слоты событий виджетов главной формы
+    // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
+    void on_l1_clicked();
     void on_l2_clicked();
     void on_l3_clicked();
     void on_l4_clicked();
@@ -194,6 +200,42 @@ private slots:
     void on_pushButton_15_clicked();
     void on_pushButton_16_clicked();
     void on_checkBox_6_clicked(bool checked);
+    void on_l1_2_clicked();
+    void on_l2_2_clicked();
+    void on_l3_2_clicked();
+    void on_l4_2_clicked();
+    void on_l5_2_clicked();
+    void on_l6_2_clicked();
+    void on_l7_2_clicked();
+    void on_l8_2_clicked();
+    void on_l9_2_clicked();
+    void on_l10_2_clicked();
+    void on_pushButton_38_clicked();
+    void on_pushButton_39_clicked();
+    void on_pushButton_25_clicked();
+    void on_pushButton_26_clicked();
+    void on_pushButton_27_clicked();
+    void on_pushButton_28_clicked();
+    void on_pushButton_37_clicked();
+    void on_pushButton_32_clicked();
+    void on_pushButton_30_clicked();
+    void on_pushButton_31_clicked();
+    void on_pushButton_29_clicked();
+    void on_pushButton_35_clicked();
+    void on_pushButton_33_clicked();
+    void on_pushButton_34_clicked();
+    void on_checkBox_7_clicked(bool checked);
+    void on_checkBox_8_clicked(bool checked);
+    void on_checkBox_9_clicked(bool checked);
+    void on_checkBox_10_clicked(bool checked);
+    void on_checkBox_11_clicked(bool checked);
+    void on_checkBox_12_clicked(bool checked);
+    void on_dial_3_valueChanged(int value);
+    void on_dial_4_valueChanged(int value);
+
+    void on_checkBox_13_clicked(bool checked);
+
+    void on_pushButton_36_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение
@@ -201,7 +243,6 @@ private:
 
 public slots:
     void if_show();                     // Обработка события "Показать форму"
-    void new_margins();                 // Обработка обновления размеров полей
     void set_all_rot(bool b);           // Обработка изменения флага "Общая ориентация для всех листов"
 
 signals:

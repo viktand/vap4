@@ -22,9 +22,11 @@ int pw=210;
 int ph=297;
 QSettings setts("vap", "vap");
 QString nms[8];             // список имен бумаг
-std::vector<int> p_w;  // список размеров
+std::vector<int> p_w;       // список размеров
 std::vector<int> p_h;
-
+bool auto_orn=true;         // автоматический выбор ориентации бумаги
+QString lngv;               // язык программы
+bool ribbon=true;           // вид интерфейса
 
 void PageSetup::load_combobox()
 {
@@ -132,13 +134,6 @@ PageSetup::PageSetup(QWidget *parent) :
     checkBox_10->setChecked(thunar_check());
     checkBox_11->setChecked(pcman_check());
     flag_ret=false;
-    spinBox->setEnabled(false);
-    spinBox_2->setEnabled(false);
-    spinBox_3->setEnabled(false);
-    spinBox_4->setEnabled(false);
-    //label_24->setVisible(false);
-    //checkBox_11->setVisible(false);
-    checkBox_12->setChecked(testPrint);
  }
 
 
@@ -179,6 +174,10 @@ void PageSetup::load_data()
    spinBox_3->setValue(right_m);
    spinBox_4->setValue(bottom_m);
    doubleSpinBox_2->setValue(font_scl);
+   ph=paper_h;
+   pw=paper_w;
+   ornl=0;
+   if(ph>=pw) ornl=1;
    if (ornl==0)
    {
        on_radioButton_2_clicked();
@@ -204,6 +203,19 @@ void PageSetup::load_data()
    comboBox->setCurrentIndex(pap_name);
    setts.beginGroup("Settings");
    spinBox_7->setValue(setts.value("font", 7).toInt());
+   lngv=setts.value("lng", "Auto").toString();
+   auto_orn=setts.value("autoOrn", true).toBool();
+   ribbon=setts.value("ribbon", true).toBool();
+   checkBox_16->setChecked(setts.value("without_m", false).toBool());
+   on_checkBox_16_clicked(checkBox_16->isChecked());
+   checkBox_12->setChecked(testPrint);
+   // Замута для совместимости с Qt 4.8 вместо comboBox_4->setCurrentText(lngv);
+   for(int i=0; i<comboBox_4->count(); i++)if(comboBox_4->itemText(i)==lngv)comboBox_4->setCurrentIndex(i);
+   checkBox_15->setChecked(ribbon);
+   spinBox->setValue(setts.value("top_m", 5).toInt());
+   spinBox_2->setValue(setts.value("left_m", 5).toInt());
+   spinBox_3->setValue(setts.value("right_m", 5).toInt());
+   spinBox_4->setValue(setts.value("bottom_m", 5).toInt());
    setts.endGroup();
 }
 
@@ -232,10 +244,6 @@ void PageSetup::on_pushButton_clicked() // Ok
 
 void PageSetup::on_pushButton_4_clicked() // apply
 {
-    top_m=spinBox->value();
-    left_m=spinBox_2->value();
-    right_m=spinBox_3->value();
-    bottom_m=spinBox_4->value();
     if(radioButton->isChecked()) ornl=1; else ornl=0;
     print_color=checkBox_2->isChecked();
     paper_h=ph;
@@ -257,10 +265,35 @@ void PageSetup::on_pushButton_4_clicked() // apply
         prn_size_x=297;
         prn_size_y=420;
     }
-    emit end_set();
+
     setts.beginGroup("Settings");
     setts.setValue("font", spinBox_7->value());
+    setts.setValue("lng", lngv);
+    setts.setValue("autoOrn", auto_orn);
+    setts.setValue("ribbon", ribbon);
+    setts.setValue("heigth", ph);
+    setts.setValue("width", pw);
+    setts.setValue("without_m", checkBox_16->isChecked());
+    if(checkBox_16->isChecked())
+    {
+        bottom_m=0;
+        left_m=0;
+        top_m=0;
+        right_m=0;
+    }
+    else
+    {
+        top_m=spinBox->value();
+        left_m=spinBox_2->value();
+        right_m=spinBox_3->value();
+        bottom_m=spinBox_4->value();
+    }
+    setts.setValue("left_m", left_m);
+    setts.setValue("right_m", right_m);
+    setts.setValue("top_m", top_m);
+    setts.setValue("bottom_m", bottom_m);
     setts.endGroup();
+    emit end_set();
 }
 
 void PageSetup::on_pushButton_3_clicked() // close
@@ -371,7 +404,8 @@ void PageSetup::on_checkBox_9_clicked(bool checked)
 
 void PageSetup::on_radioButton_toggled()
 {
-     swap(pw, ph);
+    if (clse) return;
+    swap(pw, ph);
 }
 
 void PageSetup::on_doubleSpinBox_2_valueChanged(double arg1)
@@ -410,3 +444,33 @@ void PageSetup::on_checkBox_11_clicked(bool checked)
     if (flag_ret) return;
     pcman_set(checked);
 }
+
+void PageSetup::on_comboBox_4_activated(const QString &arg1)
+{
+    // Установка языка интерфейса программы
+    lngv=arg1;
+    QMessageBox msgBox;
+    QString ms;
+    ms.append(tr("The interface will be changed at the next start program! \n"));
+    msgBox.setText(ms);
+    msgBox.exec();
+}
+
+void PageSetup::on_checkBox_14_clicked(bool checked)
+{
+    auto_orn=checked;
+}
+
+void PageSetup::on_checkBox_15_clicked(bool checked)
+{
+    ribbon=checked;
+}
+
+void PageSetup::on_checkBox_16_clicked(bool checked) // без полей
+{
+    spinBox->setEnabled(!checked);
+    spinBox_2->setEnabled(!checked);
+    spinBox_3->setEnabled(!checked);
+    spinBox_4->setEnabled(!checked);
+}
+

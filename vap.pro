@@ -6,13 +6,14 @@
 
 QT       += core gui
 
-
-qtHaveModule(printsupport): QT += printsupport
+greaterThan(QT_MAJOR_VERSION, 4)
+{
+    qtHaveModule(printsupport): QT += printsupport
+    QT += widgets
+}
 
 TRANSLATIONS += vap_ru.ts
 
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = vap
 TEMPLATE = app

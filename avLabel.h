@@ -2,6 +2,7 @@
 #define AVLABEL_H
 
 #include <QMouseEvent>
+#include <QWheelEvent>
 #include <QLabel>
 
 
@@ -29,11 +30,12 @@ class QavLabel : public QLabel
         void rclicked(int x, int y, int i);
         void mouse_press(int x, int y, int i);
         void mouse_move(int x, int y, int i);
+        void mouse_wheel(int i);
 
     protected:
         void mouseReleaseEvent(QMouseEvent *e);
         void mousePressEvent(QMouseEvent *e);
         void mouseMoveEvent(QMouseEvent *e);
-
+        void wheelEvent(QWheelEvent *event);
 };
 #endif // AVLABEL_H

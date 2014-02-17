@@ -1,9 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QTextCodec>
+#ifdef HAVE_QT4
+    #include <QTextCodec>
+#endif
 //#include <QWidget>
 #include <QLocale>
 #include <QSettings>
+#include <QStyleFactory>
 
 #include <iostream>
 using namespace std;
@@ -14,15 +17,27 @@ int main(int argc, char *argv[])
     cout << "Hello, World!" << endl;
     cout << "I'm vap! If you want to contact me at viktand@bk.ru" << endl;
 
-//    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8")); //изменения
-//    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8")); //изменения
-//    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8")); //изменения
 
+    #ifdef HAVE_QT4
+    {
+        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+        QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+        QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    }
+    #endif
+
+
+    QSettings settu("vap", "vap");
+    settu.beginGroup("Settings");
+    int fSize=settu.value("font",7).toInt(); // font size
+    QString lng_app=settu.value("lng", "Auto").toString(); // язык программы
+    settu.endGroup();
     QApplication a(argc, argv);
+    a.setStyle(QStyleFactory::create("gtk"));
     QLocale lc;
     QTranslator translator;
     cout << "Locale " << QLocale::countryToString(lc.country()).toStdString() << endl;
-    if(lc.country()==QLocale::RussianFederation)
+    if(((lc.country()==QLocale::RussianFederation) && (lng_app=="Auto")) || (lng_app=="Russian"))
         {
             if(translator.load(":/new/prefix1/vap_ru"))
               {
@@ -32,11 +47,6 @@ int main(int argc, char *argv[])
         }
     MainWindow w;
     QFont font("Ubuntu");
-    int fSize;   // font size
-    QSettings settu("vap", "vap");
-    settu.beginGroup("Settings");
-    fSize=settu.value("font",7).toInt();
-    settu.endGroup();
     font.setPointSize(fSize);
     w.setFont(font);
     w.cou_prm=argc;

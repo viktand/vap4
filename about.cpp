@@ -9,6 +9,7 @@ about::about(QWidget *parent) :
     QFont font("Ubuntu");
     font.setPointSize(10);
     ui->textEdit->setFont(font);
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 about::~about()
