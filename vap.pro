@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     dialog_paper.cpp \
     about.cpp \
     captioneditor.cpp \
-    texteditor.cpp
+    texteditor.cpp \
+    avlistbox.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     dialog_paper.h \
     about.h \
     captioneditor.h \
-    texteditor.h
+    texteditor.h \
+    avlistbox.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \

@@ -4,10 +4,11 @@
 #include <QMainWindow>
 #include <QResizeEvent>
 //#include <QtGui/QResizeEvent>
-#include <QCloseEvent>
+//#include <QCloseEvent>
 //#include <QtGui/QCloseEvent>
 #include <QTextEdit>
 #include <QTranslator>
+#include <QKeyEvent>
 
 // "сверхглобальные" переменные
 extern int  ornl;       // ориентация листа
@@ -44,6 +45,8 @@ extern bool frm_cpt;    // показывать рамку подписи
 extern bool trans;      // прозрачный фон надписи
 extern double font_scl; // масштаб шрифта в предпросмотре
 extern bool testPrint;  // печать тестового креста (для проверки позиционирования)
+extern int sheet_size;  // индекс размера листа (для передачи параметра из окна настроек)
+extern bool all_sizes;  // true - все листы имеют одинаковый размер бумаги (по умолчанию)
 
 
 namespace Ui {
@@ -78,12 +81,12 @@ private slots:
     void set_z();                           // установить z-порядок для превьюшек
     void recomp();                          // перекомпоновать все
     void recomp_curlist();                  // перекомпоновать текущий лист
-    double get_scaleX();                    // расчет масштаба печати по Х
-    double get_scaleY();                    // расчет масштаба печати по Y
+    double get_scaleX();                    // расчет масштаба печати по Х для листа i
+    double get_scaleY();                    // расчет масштаба печати по Y для листа i
     void make_list();                       // построить шаблон для листа предпросмотра
     void get_pp();                          // расчитать точки на мм для принтера
-    void set_printer();                     // настроить принтер
-    void set_setting();                     // применить настройки
+    void set_printer(int index);            // настроить принтер
+    void set_setting(int r);                // применить настройки
     QString get_file();                     // получить имя файла из диалога для загрузки
     void ind_start();                       // старт индикатора
     void ind_stop();                        // стоп индикатора
@@ -164,7 +167,15 @@ private slots:
     void  setAutoOrn();                     // Автоматически установить оринетацию бумаги
     void  setInterface();                   // Установить вид интерфейса (лента/обычный)
     void  setIconOrns(bool b);              // Установить иконки на кнопках ориентации бумаги true - портретная
-    void  mouseWheel(int i);                // Вращение колесика мыши - пролистывание страниц колесиком мыши
+    void  mouseWheel(int i, int index);     // Вращение колесика мыши - пролистывание страниц колесиком мыши
+    void  img_size_ch(int step);            // Изменить размер текущей картинки на step точек по горизонтале
+    void  set_printer_pap_size(int i);      // Установить размер бумаги принтера для листа i
+    void  load_my_pSizes();                 // Загрузить список предпочтительных размеров бумаги на ленту
+    void  set_rott_btn();                   // создать кнопку вращения картинки
+    void  set_delt_btn();                   // создать кнопку удаления картинки
+    void  set_resiz_btn();                  // создать кнопку изм. размера картинки
+    void  set_clip_btn();                   // создать кнопку обрезки картинки
+    void  set_timer();                      // создать таймер
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_clicked();
@@ -232,10 +243,9 @@ private slots:
     void on_checkBox_12_clicked(bool checked);
     void on_dial_3_valueChanged(int value);
     void on_dial_4_valueChanged(int value);
-
     void on_checkBox_13_clicked(bool checked);
-
     void on_pushButton_36_clicked();
+    void on_comboBox_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;                 // Рождение
@@ -253,6 +263,8 @@ protected:
     void closeEvent(QCloseEvent *cl);    // событие закрытия окна
     void dragEnterEvent(QDragEnterEvent *event);  //
     void dropEvent(QDropEvent *event);
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 };
 
 // Класс, загружающий картинку. Выносится в отдельный поток, чтобы не подвешивать основное окно

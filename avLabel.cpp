@@ -11,7 +11,6 @@ QavLabel::QavLabel(QWidget *parent) : QLabel(parent)
     mem_pix=new QPixmap(1,1);
 }
 
-
 QavLabel::~QavLabel()
 {
    //cout << "kill preview" << endl;
@@ -61,5 +60,6 @@ void QavLabel::wheelEvent(QWheelEvent *event)  // вращение колеса 
     {
         i=-1;
     }
-    emit mouse_wheel(i);
+    emit mouse_wheel(i, Imnum);
 }
+

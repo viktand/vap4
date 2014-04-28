@@ -30,7 +30,7 @@ class QavLabel : public QLabel
         void rclicked(int x, int y, int i);
         void mouse_press(int x, int y, int i);
         void mouse_move(int x, int y, int i);
-        void mouse_wheel(int i);
+        void mouse_wheel(int i, int index);
 
     protected:
         void mouseReleaseEvent(QMouseEvent *e);

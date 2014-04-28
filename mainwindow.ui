@@ -931,7 +931,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -1934,7 +1934,7 @@
        <rect>
         <x>60</x>
         <y>10</y>
-        <width>131</width>
+        <width>121</width>
         <height>21</height>
        </rect>
       </property>
@@ -1945,10 +1945,10 @@
      <widget class="QCheckBox" name="checkBox_11">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>180</x>
         <y>10</y>
-        <width>131</width>
-        <height>16</height>
+        <width>111</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -1956,6 +1956,32 @@
       </property>
       <property name="checked">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>10</y>
+        <width>171</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Only for the current session</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_15">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>10</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Paper size</string>
       </property>
      </widget>
     </widget>

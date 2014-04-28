@@ -24,47 +24,28 @@ QSettings setts("vap", "vap");
 QString nms[8];             // список имен бумаг
 std::vector<int> p_w;       // список размеров
 std::vector<int> p_h;
+struct paps{                // описание размеров листов бумаги
+    QString name;           // имя
+    int     index;          // условный индекс
+    int     W;              // ширина листа, mm
+    int     H;              // высота листа, mm
+};
+
+std::vector<paps> nmsp;  // список
 bool auto_orn=true;         // автоматический выбор ориентации бумаги
 QString lngv;               // язык программы
 bool ribbon=true;           // вид интерфейса
+int result=0;               // код, возвращаемый при закрытии
 
-void PageSetup::load_combobox()
+void PageSetup::load_combobox3(int r)
 {
-    int i=0;
-    bool go=true;
-    p_w.clear(); p_h.clear();
-    p_w.push_back(210); p_h.push_back(297);
-    p_w.push_back(148); p_h.push_back(210);
-    p_w.push_back(105); p_h.push_back(148);
-    p_w.push_back(90); p_h.push_back(127);
-    p_w.push_back(102); p_h.push_back(152);
-    p_w.push_back(127); p_h.push_back(178);
-    p_w.push_back(152); p_h.push_back(203);
-    p_w.push_back(297); p_h.push_back(420);
-    p_w.push_back(50); p_h.push_back(50);
-    QString n;
-    comboBox->clear();
-    while(go)
-    {
-    setts.beginGroup("Paper sizes");
-        setts.beginGroup(QString::number(i));
-        n.clear();
-        n.append(setts.value("name", "").toString());
-        if (n.length()!=0)
-        {
-            comboBox->addItem(n);
-            p_w[i]=setts.value("width", 0).toInt();
-            p_h[i]=setts.value("heigth", 0).toInt();
-            p_w.push_back(i);
-            p_h.push_back(i);
-        }
-        else if (i<8) comboBox->addItem(nms[i]);
-        setts.endGroup();
-    setts.endGroup();
-    go=!(i>7 && n.length()==0);
-    i++;
-    }
-    comboBox->addItem("My size (make new size)");
+    load_combobox(r==1);
+}
+
+void PageSetup::load_combobox(bool res)
+{
+    if (res)result=1;
+    load_combobox2();
     comboBox_3->clear();
     comboBox_3->addItem("OnlyOne");         // 0
     comboBox_3->addItem("Lower");           // 1
@@ -82,6 +63,33 @@ void PageSetup::load_combobox()
     comboBox_3->addItem("MaxPageSource");   // 13
 }
 
+
+void PageSetup::load_combobox2() // загрузка списка "любимых" размеров бумаги
+{
+    paps p;
+    comboBox->clear();
+    nmsp.clear();
+    comboBox->addItem("A4: 210 x 297 mm");
+    p.name="A4: 210 x 297 mm"; p.index=0; p.W=210; p.H=297;
+    nmsp.push_back(p);
+    setts.beginGroup("Paper sizes");
+    bool go=true;
+    int  i=0;
+    while(go)
+    {
+        p.name=setts.value("name"+QString::number(i), "").toString();
+        p.index=setts.value("index"+QString::number(i), -1).toInt();
+        p.W=setts.value("W"+QString::number(i), -1).toInt();
+        p.H=setts.value("H"+QString::number(i++), -1).toInt();
+        if (p.index>0){
+            comboBox->addItem(p.name);
+            nmsp.push_back(p);
+        }
+        else  go=false;
+    }
+    setts.endGroup();
+}
+
 PageSetup::PageSetup(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -89,18 +97,8 @@ PageSetup::PageSetup(QWidget *parent) :
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
-    nms[0].append("A4 - 210 x 297 mm");         // 0
-    nms[1].append("A5 - 148 x 210 mm");         // 9
-    nms[2].append("A6 - 105 x 148 mm");         // 10
-    nms[3].append("Photo 9x13 (90x127 mm)");    // 90x127
-    nms[4].append("Photo 10x15 (102x152 mm)");  // 102x152
-    nms[5].append("Photo 13x18 (127x178 mm)");  // 127x178
-    nms[6].append("Photo 15x20 (152x203 mm)");  // 152x203
-    nms[7].append("A3 - 297 x 420 mm");         // 8
     mysz.setWidth(210);
     mysz.setHeight(297);
-    spinBox_5->setValue(210);
-    spinBox_6->setValue(297);
     checkBox->setChecked(all_rot);
     // список принтеров
     QString l;
@@ -152,16 +150,28 @@ QString PageSetup::get_run(QString s)
 PageSetup::~PageSetup()
 {
     delete ui2;
+    emit end_set(result);
+}
+
+void PageSetup::reset_result()
+{
+    result=0;
+}
+
+void PageSetup::closeEvent(QCloseEvent *event)
+{
+    emit end_set(result);
+    event->~QEvent();
 }
 
 void PageSetup::on_radioButton_2_clicked()
 {
-     label_4->setGeometry(100,215, 75, 50);
+     label_4->setGeometry(100,185, 75, 50);
 }
 
 void PageSetup::on_radioButton_clicked()
 {
-     label_4->setGeometry(110,200, 50, 75);
+     label_4->setGeometry(110,170, 50, 75);
 }
 
 void PageSetup::load_data()
@@ -169,10 +179,6 @@ void PageSetup::load_data()
    clse=true;
    checkBox_2->setChecked(print_color);
    checkBox_9->setChecked(printer_a3);
-   spinBox->setValue(top_m);
-   spinBox_2->setValue(left_m);
-   spinBox_3->setValue(right_m);
-   spinBox_4->setValue(bottom_m);
    doubleSpinBox_2->setValue(font_scl);
    ph=paper_h;
    pw=paper_w;
@@ -196,27 +202,54 @@ void PageSetup::load_data()
        {
            comboBox_2->setCurrentIndex(i);
        }
-   load_combobox();
+   load_combobox(false);
    doubleSpinBox->setValue(h_ofsett);
    comboBox_3->setCurrentIndex(pap_sor);
    clse=false; // разрешить изменение настроек
-   comboBox->setCurrentIndex(pap_name);
+   comboBox->setCurrentIndex(get_index(get_real_index(pap_name)));
    setts.beginGroup("Settings");
    spinBox_7->setValue(setts.value("font", 7).toInt());
    lngv=setts.value("lng", "Auto").toString();
    auto_orn=setts.value("autoOrn", true).toBool();
    ribbon=setts.value("ribbon", true).toBool();
    checkBox_16->setChecked(setts.value("without_m", false).toBool());
-   on_checkBox_16_clicked(checkBox_16->isChecked());
    checkBox_12->setChecked(testPrint);
    // Замута для совместимости с Qt 4.8 вместо comboBox_4->setCurrentText(lngv);
    for(int i=0; i<comboBox_4->count(); i++)if(comboBox_4->itemText(i)==lngv)comboBox_4->setCurrentIndex(i);
    checkBox_15->setChecked(ribbon);
-   spinBox->setValue(setts.value("top_m", 5).toInt());
-   spinBox_2->setValue(setts.value("left_m", 5).toInt());
-   spinBox_3->setValue(setts.value("right_m", 5).toInt());
-   spinBox_4->setValue(setts.value("bottom_m", 5).toInt());
    setts.endGroup();
+}
+
+QString PageSetup::get_real_index(int pap)
+{
+    if(pap==0) return "@";
+    setts.beginGroup("Paper sizes");
+    int  i=0,j=0;
+    while(j>-1)
+    {
+        j=setts.value("index"+QString::number(i), -1).toInt();
+        if(j>-1){
+            if(j==pap) {
+                QString s=setts.value("name"+QString::number(i), "").toString();
+                setts.endGroup();
+                return s;
+            }
+        }
+        i++;
+    }
+    setts.endGroup();
+    return "";
+}
+
+int PageSetup::get_index(QString s)
+{
+    if(s=="@") return 0;
+    for(int i=0; i<comboBox->count(); i++) {
+        if(s==comboBox->itemText(i)){
+            return i;
+        }
+    }
+    return -1;
 }
 
 void PageSetup::set_all()
@@ -248,16 +281,7 @@ void PageSetup::on_pushButton_4_clicked() // apply
     print_color=checkBox_2->isChecked();
     paper_h=ph;
     paper_w=pw;
-    list_n.clear();
-    if (comboBox->currentIndex()<7) list_n.append(nms[comboBox->currentIndex()]);
-        else
-        {
-            list_n.append("Users size ");
-            list_n.append(QString::number(pw));
-            list_n.append(" x ");
-            list_n.append(QString::number(ph));
-            list_n.append(" mm");
-        }
+    list_n=nmsp[comboBox->currentIndex()].name;
     prn_size_x=210;
     prn_size_y=297;
     if (checkBox_9->isChecked()) // to A3 printer format
@@ -265,7 +289,7 @@ void PageSetup::on_pushButton_4_clicked() // apply
         prn_size_x=297;
         prn_size_y=420;
     }
-
+    QString ss=list_n;
     setts.beginGroup("Settings");
     setts.setValue("font", spinBox_7->value());
     setts.setValue("lng", lngv);
@@ -274,31 +298,23 @@ void PageSetup::on_pushButton_4_clicked() // apply
     setts.setValue("heigth", ph);
     setts.setValue("width", pw);
     setts.setValue("without_m", checkBox_16->isChecked());
-    if(checkBox_16->isChecked())
-    {
-        bottom_m=0;
-        left_m=0;
-        top_m=0;
-        right_m=0;
-    }
-    else
-    {
-        top_m=spinBox->value();
-        left_m=spinBox_2->value();
-        right_m=spinBox_3->value();
-        bottom_m=spinBox_4->value();
-    }
+    bottom_m=0;
+    left_m=0;
+    top_m=0;
+    right_m=0;
     setts.setValue("left_m", left_m);
     setts.setValue("right_m", right_m);
     setts.setValue("top_m", top_m);
     setts.setValue("bottom_m", bottom_m);
     setts.endGroup();
-    emit end_set();
+    emit end_set(2);
+    result=0;
 }
 
 void PageSetup::on_pushButton_3_clicked() // close
 {
     this->close();
+    emit end_set(result);
 }
 
 void PageSetup::on_checkBox_3_clicked(bool checked) // интеграция в наутилус
@@ -338,27 +354,17 @@ void PageSetup::on_checkBox_8_clicked(bool checked)
     caja_set(checked);
 }
 
-void PageSetup::on_pushButton_2_clicked()
+void PageSetup::on_pushButton_2_clicked() // Добавление нового варианта размера бумаги в список
 {
-    if(comboBox->currentIndex()<8)
-    {
-        QMessageBox msgBox;
-        QString ms;
-        ms.append(tr("You are going to change one of the standard paper sizes! \n"));
-        ms.append(tr("Use this option only if you have problems with standart size. \n"));
-        ms.append(tr("It would be better if you simply create your custom list.\n"));
-        msgBox.setText(ms);
-        msgBox.exec();
-    }
     if (dp==0)
     {
         dp=new Dialog_paper(this);
         QFont font;
         font.setPixelSize(10);
         dp->setFont(font);
-        connect(dp, SIGNAL(close_form()), this, SLOT(load_combobox()));
+        connect(dp, SIGNAL(close_form(int)), this, SLOT(load_combobox3(int)));
     }
-    dp->load_data(comboBox->currentText(), pw, ph, comboBox->currentIndex());
+    dp->load_lists();
     dp->show();
 }
 
@@ -366,22 +372,10 @@ void PageSetup::on_comboBox_currentIndexChanged(int index)
 {
     if (clse) return;
     radioButton->setChecked(true);
-    label_4->setGeometry(110,200, 50, 75);
-    spinBox_5->setValue(p_w[index]);
-    spinBox_6->setValue(p_h[index]);
-    pw=p_w[index];
-    ph=p_h[index];
-    pap_name=index;
-}
-
-void PageSetup::on_spinBox_5_valueChanged(int arg1)
-{
-    pw=arg1;
-}
-
-void PageSetup::on_spinBox_6_valueChanged(int arg1)
-{
-    ph=arg1;
+    label_4->setGeometry(110,170, 50, 75);
+    pw=nmsp[index].W;
+    ph=nmsp[index].H;
+    pap_name=nmsp[index].index;
 }
 
 void PageSetup::on_comboBox_3_currentIndexChanged(int index)
@@ -466,11 +460,5 @@ void PageSetup::on_checkBox_15_clicked(bool checked)
     ribbon=checked;
 }
 
-void PageSetup::on_checkBox_16_clicked(bool checked) // без полей
-{
-    spinBox->setEnabled(!checked);
-    spinBox_2->setEnabled(!checked);
-    spinBox_3->setEnabled(!checked);
-    spinBox_4->setEnabled(!checked);
-}
+
 
