@@ -532,15 +532,15 @@ void MainWindow::setInterface()
     // Установить вид интерфейса программы в соответствии с настройками
     if(fun)cout << "setInterface" << endl;
     ui->tabWidget_2->setVisible(lenta);
-    ui->tabWidget_2->setGeometry(1,1,611,65);
+    ui->tabWidget_2->setGeometry(1,1,611,69);
     ui->tabWidget->setVisible(!lenta);
     ui->scrollArea->setVisible(!lenta);
     ui->scrollArea_2->setVisible(!lenta);
     ui->pushButton_32->setVisible(false);
     if(lenta)
     {
-        ui->label_2->setGeometry(270,5,211,16);
-        ui->label_3->setGeometry(300,5,211,16);
+        ui->label_2->setGeometry(300,5,211,16);
+        ui->label_3->setGeometry(400,5,211,16);
         QRect rc=ui->sheet->geometry();
         rc.setLeft(1);
         ui->sheet->setGeometry(rc);
@@ -1811,10 +1811,10 @@ void MainWindow::show_pict() // показать картинки текущег
 
     set_z();
     QString s, c;
-    s.append(tr("List "));
+    s.append(tr("Sheet "));
     c = QString::number(curlist);
     s.append(c);
-    s.append(tr(" from "));
+    s.append(tr(" of "));
     c = QString::number(lists);
     s.append(c);
     ui->label_2->setText(s);
@@ -2478,6 +2478,8 @@ void MainWindow::show_paper_size()
     }
     ui->pushButton_6->hide();
     ui->pushButton_32->hide();
+    ui->checkBox_10->setVisible(true);
+    ui->checkBox_12->setVisible(true);
 }
 
 void MainWindow::show_pict_size()
@@ -2574,6 +2576,8 @@ void MainWindow::show_clip() // включить рамку обрезки
     ui->pushButton_6->show();
     ui->pushButton_32->show();
     ui->tabWidget_2->setCurrentIndex(2);
+    ui->checkBox_10->setVisible(false);
+    ui->checkBox_12->setVisible(false);
 }
 
 void MainWindow::paint_frame()
@@ -2671,6 +2675,8 @@ void MainWindow::on_pushButton_6_clicked() // обрезка
     ui->pushButton_6->hide();
     ui->pushButton_32->hide();
     rez->hide();
+    ui->checkBox_10->setVisible(true);
+    ui->checkBox_12->setVisible(true);
 }
 
 void MainWindow::on_pushButton_9_clicked()

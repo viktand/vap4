@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     QSettings settu("vap", "vap");
     settu.beginGroup("Settings");
-    int fSize=settu.value("font",7).toInt(); // font size
+    int fSize=settu.value("font",10).toInt(); // font size
     QString lng_app=settu.value("lng", "Auto").toString(); // язык программы
     settu.endGroup();
     QApplication a(argc, argv);

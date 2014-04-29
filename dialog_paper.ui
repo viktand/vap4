@@ -10,6 +10,11 @@
     <height>442</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Paper size editor</string>
   </property>
@@ -128,7 +133,7 @@
     <rect>
      <x>320</x>
      <y>390</y>
-     <width>41</width>
+     <width>61</width>
      <height>23</height>
     </rect>
    </property>

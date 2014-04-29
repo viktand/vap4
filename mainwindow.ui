@@ -16,12 +16,6 @@
     <height>200</height>
    </size>
   </property>
-  <property name="font">
-   <font>
-    <family>Ubuntu</family>
-    <pointsize>10</pointsize>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Fast print</string>
   </property>
@@ -76,17 +70,15 @@
      <rect>
       <x>170</x>
       <y>50</y>
-      <width>211</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
-     <string>List 0 from 0</string>
+     <string>Sheet 0 of 0</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -97,11 +89,6 @@
       <width>171</width>
       <height>20</height>
      </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Ubuntu</family>
-     </font>
     </property>
     <property name="text">
      <string>A4</string>
@@ -927,7 +914,7 @@
       <x>0</x>
       <y>540</y>
       <width>611</width>
-      <height>65</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -1693,7 +1680,7 @@
      <widget class="Line" name="line_4">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>160</x>
         <y>0</y>
         <width>3</width>
         <height>35</height>
@@ -1706,9 +1693,9 @@
      <widget class="QCheckBox" name="checkBox_8">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>170</x>
         <y>1</y>
-        <width>91</width>
+        <width>121</width>
         <height>16</height>
        </rect>
       </property>
@@ -1722,9 +1709,9 @@
      <widget class="QCheckBox" name="checkBox_9">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>170</x>
         <y>18</y>
-        <width>101</width>
+        <width>141</width>
         <height>21</height>
        </rect>
       </property>
@@ -1738,9 +1725,9 @@
      <widget class="QCheckBox" name="checkBox_10">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>310</x>
         <y>1</y>
-        <width>131</width>
+        <width>141</width>
         <height>16</height>
        </rect>
       </property>
@@ -1754,9 +1741,9 @@
      <widget class="QCheckBox" name="checkBox_12">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>310</x>
         <y>20</y>
-        <width>131</width>
+        <width>141</width>
         <height>16</height>
        </rect>
       </property>
@@ -1932,9 +1919,9 @@
      <widget class="QCheckBox" name="checkBox_13">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>10</y>
-        <width>121</width>
+        <x>70</x>
+        <y>0</y>
+        <width>201</width>
         <height>21</height>
        </rect>
       </property>
@@ -1945,9 +1932,9 @@
      <widget class="QCheckBox" name="checkBox_11">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>10</y>
-        <width>111</width>
+        <x>70</x>
+        <y>20</y>
+        <width>211</width>
         <height>21</height>
        </rect>
       </property>
@@ -1976,7 +1963,7 @@
        <rect>
         <x>510</x>
         <y>10</y>
-        <width>81</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
