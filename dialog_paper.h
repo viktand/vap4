@@ -34,6 +34,10 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_listWidget_currentRowChanged(int currentRow);
+
+    void on_listWidget_2_currentRowChanged(int currentRow);
+
 private:
     Ui::Dialog_paper *ui;
 

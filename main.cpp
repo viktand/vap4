@@ -3,7 +3,6 @@
 #ifdef HAVE_QT4
     #include <QTextCodec>
 #endif
-//#include <QWidget>
 #include <QLocale>
 #include <QSettings>
 #include <QStyleFactory>

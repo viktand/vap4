@@ -2,7 +2,6 @@
 #include "ui_dialog_paper.h"
 #include <QSettings>
 #include <QVector>
-#include <avlistbox.h>
 
 int ind;
 QSettings sett("vap", "vap");
@@ -10,7 +9,6 @@ int indexSel;                       // выбранный индекс в спи
 bool chen=false;                    // было ли изменение списка
 std::vector <double> Xses;          // массив ширин дополнительных размеров бумаги
 std::vector <double> Yses;          // массив высот дополнительных размеров бумаги
-QavListBox *lBox0, *lBox1;          // списки размеров
 
 
 
@@ -24,12 +22,16 @@ Dialog_paper::Dialog_paper(QWidget *parent) :
     ui->pushButton->setVisible(false);
     ui->pushButton_4->setEnabled(false);
     ui->pushButton_5->setEnabled(false);
-    lBox0=new QavListBox(this);
-    lBox0->setGeometry(10,50,256,281);
-    connect(lBox0, SIGNAL(newSelectLine(int)), this, SLOT(listV_indexCh(int)));
-    lBox1=new QavListBox(this);
-    lBox1->setGeometry(340,50,256,281);
-    connect(lBox1, SIGNAL(newSelectLine(int)),this,SLOT(list_index_cl(int)));
+}
+
+void Dialog_paper::on_listWidget_currentRowChanged(int currentRow)
+{
+    listV_indexCh(currentRow);
+}
+
+void Dialog_paper::on_listWidget_2_currentRowChanged(int currentRow)
+{
+    list_index_cl(currentRow);
 }
 
 void Dialog_paper::load_lists()
@@ -54,55 +56,55 @@ Dialog_paper::~Dialog_paper()
 
 void Dialog_paper::load_papes()
 {
-    lBox0->clearAll();
-    lBox0->add("A4: 210 x 297 mm");
-    lBox0->add("B5: 176 x 250 mm");
-    lBox0->add("Letter: 215.9 x 279.4 mm");
-    lBox0->add("Legal: 215.9 x 355.6 mm");
-    lBox0->add("Executive: 190.5 x 254 mm");
-    lBox0->add("A0: 841 x 1189 mm");
-    lBox0->add("A1: 594 x 841 mm");
-    lBox0->add("A2: 420 x 594 mm");
-    lBox0->add("A3: 297 x 420 mm");
-    lBox0->add("A5: 148 x 210 mm");
-    lBox0->add("A6: 105 x 148 mm");
-    lBox0->add("A7: 74 x 105 mm");
-    lBox0->add("A8: 52 x 74 mm");
-    lBox0->add("A9: 37 x 52 mm");
-    lBox0->add("B0: 1000 x 1414 mm");
-    lBox0->add("B1: 707 x 1000 mm");
-    lBox0->add("B10: 31 x 44 mm");
-    lBox0->add("B2: 500 x 707 mm");
-    lBox0->add("B3: 353 x 500 mm");
-    lBox0->add("B4: 250 x 353 mm");
-    lBox0->add("B6: 125 x 176 mm");
-    lBox0->add("B7: 88 x 125 mm");
-    lBox0->add("B8: 62 x 88 mm");
-    lBox0->add("B9: 33 x 62 mm");
-    lBox0->add("C5E: 163 x 229 mm");
-    lBox0->add("Comm10E: 105 x 241 mm");
-    lBox0->add("DLE: 110 x 220 mm");
-    lBox0->add("Folio: 210 x 330 mm");
-    lBox0->add("Ledger: 431.8 x 279.4 mm");
-    lBox0->add("Tabloid: 279.4 x 431.8 mm");
-    lBox0->add("Photo 9x13: 90 x 127 mm");
-    lBox0->add("Photo 10x15: 102 x 152 mm");
-    lBox0->add("Photo 13x18: 127 x 178 mm");
-    lBox0->add("Photo 15x20: 152 x 203 mm");
+    ui->listWidget->clear();
+    ui->listWidget->addItem("A4: 210 x 297 mm");
+    ui->listWidget->addItem("B5: 176 x 250 mm");
+    ui->listWidget->addItem("Letter: 215.9 x 279.4 mm");
+    ui->listWidget->addItem("Legal: 215.9 x 355.6 mm");
+    ui->listWidget->addItem("Executive: 190.5 x 254 mm");
+    ui->listWidget->addItem("A0: 841 x 1189 mm");
+    ui->listWidget->addItem("A1: 594 x 841 mm");
+    ui->listWidget->addItem("A2: 420 x 594 mm");
+    ui->listWidget->addItem("A3: 297 x 420 mm");
+    ui->listWidget->addItem("A5: 148 x 210 mm");
+    ui->listWidget->addItem("A6: 105 x 148 mm");
+    ui->listWidget->addItem("A7: 74 x 105 mm");
+    ui->listWidget->addItem("A8: 52 x 74 mm");
+    ui->listWidget->addItem("A9: 37 x 52 mm");
+    ui->listWidget->addItem("B0: 1000 x 1414 mm");
+    ui->listWidget->addItem("B1: 707 x 1000 mm");
+    ui->listWidget->addItem("B10: 31 x 44 mm");
+    ui->listWidget->addItem("B2: 500 x 707 mm");
+    ui->listWidget->addItem("B3: 353 x 500 mm");
+    ui->listWidget->addItem("B4: 250 x 353 mm");
+    ui->listWidget->addItem("B6: 125 x 176 mm");
+    ui->listWidget->addItem("B7: 88 x 125 mm");
+    ui->listWidget->addItem("B8: 62 x 88 mm");
+    ui->listWidget->addItem("B9: 33 x 62 mm");
+    ui->listWidget->addItem("C5E: 163 x 229 mm");
+    ui->listWidget->addItem("Comm10E: 105 x 241 mm");
+    ui->listWidget->addItem("DLE: 110 x 220 mm");
+    ui->listWidget->addItem("Folio: 210 x 330 mm");
+    ui->listWidget->addItem("Ledger: 431.8 x 279.4 mm");
+    ui->listWidget->addItem("Tabloid: 279.4 x 431.8 mm");
+    ui->listWidget->addItem("Photo 9x13: 90 x 127 mm");
+    ui->listWidget->addItem("Photo 10x15: 102 x 152 mm");
+    ui->listWidget->addItem("Photo 13x18: 127 x 178 mm");
+    ui->listWidget->addItem("Photo 15x20: 152 x 203 mm");
     ui->pushButton_6->setVisible(false);
 }
 
 void Dialog_paper::load_myPap()
 {
-    lBox1->clearAll();
-    lBox1->add("A4: 210 x 297 mm");
+    ui->listWidget_2->clear();
+    ui->listWidget_2->addItem("A4: 210 x 297 mm");
     sett.beginGroup("Paper sizes");
     bool go=true;
     int  i=0;
     while(go)
     {
         if (sett.value("index"+QString::number(i), -1).toInt()>0){
-            lBox1->add(sett.value("name"+QString::number(i++), "").toString());
+            ui->listWidget_2->addItem(sett.value("name"+QString::number(i++), "").toString());
         }
         else  go=false;
     }
@@ -117,8 +119,8 @@ void Dialog_paper::on_pushButton_2_clicked() // Ok
 
 void Dialog_paper::on_pushButton_4_clicked() // добавить в список предпочтительных размеров
 {
-    QString nm=lBox0->textInLine(indexSel);
-    lBox1->add(nm);
+    QString nm=ui->listWidget->item(indexSel)->text();
+    ui->listWidget_2->addItem(nm);
     sett.beginGroup("Paper sizes");
     int i=0;
     int j=-1;
@@ -239,9 +241,9 @@ void Dialog_paper::on_Dialog_paper_finished(int result)
 void Dialog_paper::on_pushButton_5_clicked() // убрать из списка предпочтений
 {
     if(indexSel==-1)return;
-    QString nm=lBox1->textInLine(indexSel), rm;
+    QString nm=ui->listWidget_2->item(indexSel)->text(), rm;
     // убрать из списка
-    lBox1->kill(indexSel);
+    ui->listWidget_2->takeItem(indexSel);
     indexSel=-1;
     ui->pushButton_5->setEnabled(false);
     // убрать из файла
@@ -316,7 +318,7 @@ void Dialog_paper::on_pushButton_clicked() // сохранить вариант 
             }
             }
     }
-    if(x>0 and y>0)lBox0->add(ui->lineEdit->text());
+    if(x>0 and y>0)ui->listWidget->addItem(ui->lineEdit->text());
     sett.beginGroup("Paper add sizes");
     int j=sett.value("count",0).toInt(); // кол-во уже сохраненных размеров
     sett.setValue("index"+QString::number(j), indexSel);
@@ -340,7 +342,7 @@ void Dialog_paper::load_addSizes() // загрузить дополнитель�
     Yses.clear();
     for(int i=0; i<j; i++)
     {
-        lBox0->add(sett.value("name"+QString::number(i), "???").toString());
+        ui->listWidget->addItem(sett.value("name"+QString::number(i), "???").toString());
         Xses.push_back(sett.value("W"+QString::number(i), 0).toDouble());
         Yses.push_back(sett.value("H"+QString::number(i), 0).toDouble());
     }
@@ -350,9 +352,9 @@ void Dialog_paper::load_addSizes() // загрузить дополнитель�
 void Dialog_paper::on_pushButton_6_clicked() // Удалить выбранный в списке дополнительный размер бумаги
 {
     if(indexSel==-1)return;
-    QString nm=lBox0->textInLine(indexSel), rm;
+    QString nm=ui->listWidget->item(indexSel)->text(), rm;
     // убрать из списка
-    lBox0->kill(indexSel);
+    ui->listWidget->takeItem(indexSel);
     indexSel=-1;
     ui->pushButton_6->setVisible(false);
     // убрать из файла
@@ -382,3 +384,7 @@ void Dialog_paper::on_pushButton_6_clicked() // Удалить выбранны�
     sett.endGroup();
     chen=true;
 }
+
+
+
+

@@ -2008,8 +2008,8 @@
        <rect>
         <x>480</x>
         <y>0</y>
-        <width>46</width>
-        <height>41</height>
+        <width>56</width>
+        <height>44</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -2043,8 +2043,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>354</width>
-        <height>40</height>
+        <width>434</width>
+        <height>44</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -2256,8 +2256,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>90</width>
-        <height>41</height>
+        <width>110</width>
+        <height>44</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -2308,6 +2308,22 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>20</y>
+      <width>451</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Downloading files. It may take some time ...</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
    <zorder>list</zorder>
    <zorder>sheet</zorder>
    <zorder>label_2</zorder>
@@ -2317,6 +2333,7 @@
    <zorder>tabWidget_2</zorder>
    <zorder>scrollArea</zorder>
    <zorder>scrollArea_2</zorder>
+   <zorder>label_16</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

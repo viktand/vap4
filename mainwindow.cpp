@@ -31,6 +31,7 @@
 #include <QTextStream>
 #include <QFont>
 #include <QUrl>
+#include <QMessageBox>
 
 #define PI 3.14159265
 
@@ -293,6 +294,8 @@ MainWindow::MainWindow(QWidget *parent) :
     rap=true;
     animGif = new QMovie(":/new/prefix1/indicator");
     ui->label->setMovie(animGif);
+    // Скрыть элемeнты управления на период тормозов при загрузке fhhdffffffddddddfffffffff
+    hide_interf();
     // кнопки по углам превьюшек:
     set_indic_pos();
     set_rott_btn();
@@ -329,6 +332,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //setInterface();
     load_my_pSizes();
     flag3=false;
+}
+
+void MainWindow::hide_interf()
+{
+    ui->tabWidget_2->setVisible(false);
+    ui->tabWidget->setVisible(false);
+    ui->scrollArea->setVisible(false);
+    ui->scrollArea_2->setVisible(false);
+    ui->pushButton_32->setVisible(false);
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_16->setGeometry(5,20,451,20);
 }
 
 void MainWindow::set_rott_btn() // создать кнопку вращения картинки
@@ -537,6 +552,9 @@ void MainWindow::setInterface()
     ui->scrollArea->setVisible(!lenta);
     ui->scrollArea_2->setVisible(!lenta);
     ui->pushButton_32->setVisible(false);
+    ui->label_2->setVisible(true);
+    ui->label_3->setVisible(true);
+    ui->label_16->setVisible(false);
     if(lenta)
     {
         ui->label_2->setGeometry(300,5,211,16);
@@ -1277,7 +1295,12 @@ void MainWindow::on_pushButton_5_clicked() //печать
     {
         set_printer(i);             // настроить принтер
         rc=printer->paperRect();    // размер бумаги
-        pntr->begin(printer);       // начать рисование
+        if(!pntr->begin(printer))   // начать рисование
+        {
+            cout << "Attempt to access the printer caused the error." << endl;
+            QMessageBox::critical(NULL,QObject::tr("Error"),tr("Printer not found! Check the settings and printer availability."));
+            return;
+        }
 
         // Расчет смещения области печати от края листа
         qreal left, top, right, bottom, b2=0;
