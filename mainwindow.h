@@ -11,15 +11,6 @@
 #include <QKeyEvent>
 
 // "сверхглобальные" переменные
-extern int  ornl;       // ориентация листа
-extern int  left_m;     // левое поле
-extern int  right_m;    // правое поле
-extern int  top_m;      // верхнее поле
-extern int  bottom_m;   // нижнее поле
-//extern int  left_mm;    // левое поле min
-//extern int  right_mm;   // правое поле min
-//extern int  top_mm;     // верхнее поле min
-//extern int  bottom_mm;  // нижнее поле min
 extern int  paper_w;    // ширина бумаги
 extern int  paper_h;    // высота бумаги
 extern bool rap;        // выводить сообщения программы в терминал
@@ -31,8 +22,6 @@ extern bool set_orn;    // ориентация листа true - портрет
 extern bool print_color;// true - печать в цвете
 extern bool printer_a3; // true - A3 (big size paper)
 extern QString list_n;  // описание текущего листа
-extern int  prn_size_x; // базовый размер листа для принтера (ширина в мм)
-extern int  prn_size_y; // базовый размер листа для принтера (высота в мм)
 extern double h_ofsett; // горизонтальное смещение позиции печати
 extern int pap_sor;     // источник бумаги
 extern int pap_name;    // имя бумаги (по списку)
@@ -69,11 +58,11 @@ public:
 
 private slots:
 
-    // слоты, напсанные руками
+    // слоты, написанные руками
     void btn_comp_press(int i);             // завершение обработки на жатия на одну из кнопок компоновки
     void pct_press(int x, int y, int i);    // нажатие мышки на превьюшке
     void pct_move(int x, int y, int i);     // движение мышки по превьюшке
-    void pct_up(int x, int y, int i);       // отпускание ммышки на превьюшке
+    void pct_up(int x, int y, int i);       // отпускание мышки на превьюшке
     void open_pct(QString filename);        // открыть картинку
     void load_param();                      // загрузить параметры из командной строки
     void show_pict();                       // показать картинки текущего листа
@@ -112,7 +101,6 @@ private slots:
     void rest_sind_size();                  // восстановить размеры главного окна
     void save_printer_sett();               // сохранить настройки принтера
     void rest_printer_sett();               // восстановить настройки принтера
-    void set_btn_pos(int d);                // расстановка кнопок компоновки
     QString esc_to_utf(QString st);         // преобразовать escape последовательность в utf-строку
     void show_paper_size();                 // показать размер бумаги в окошке на панеле радактирования
     void save_view_sett();                  // сохранить некоторые настройки внешнего вида
@@ -176,42 +164,18 @@ private slots:
     void  set_resiz_btn();                  // создать кнопку изм. размера картинки
     void  set_clip_btn();                   // создать кнопку обрезки картинки
     void  set_timer();                      // создать таймер
-    void  hide_interf();                    // Скрытый интерфейс для запуска
+    void  hide_interf();                    // скрытый интерфейс для запуска
+    void  slfunc1();                        // служебная функция для сокращения повторов кода
+    void  setPrinter();                     // общая настройка принтера
+    void  setNewSizeOfPct();                // зафиксировать новый размер после изменения кнопкой из ленты (и положение)
+    void  moveTo(int x, int y);             // сдвинуть выбранную картинку на соотв. количество точек
+    void  resizeTo(float c);                // изменить размер картинки в с раз
+    void  showPctBord(bool b);              // показать/скрыть рамку вокруг картинки - типа курсор на картинке
+    void  getNewVal();                      // получить новые значения координат и размеров для текущего размера листа.
+    void  setCaptionRect(int index, QRect r);// сохранить значения геометрии подписи для index
+    QRect getCaptionRect(int index);        // получить значение геометрии подписи для index
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
-    void on_l1_clicked();
-    void on_l2_clicked();
-    void on_l3_clicked();
-    void on_l4_clicked();
-    void on_l5_clicked();
-    void on_l6_clicked();
-    void on_l7_clicked();
-    void on_l8_clicked();
-    void on_l9_clicked();
-    void on_l10_clicked();
-    void on_pushButton_2_clicked();
-    void on_pushButton_12_clicked();
-    void on_pushButton_clicked();
-    void on_pushButton_4_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_7_clicked();
-    void on_pushButton_5_clicked();
-    void on_pushButton_8_clicked();
-    void on_pushButton_11_clicked();
-    void on_pushButton_10_clicked();
-    void on_checkBox_clicked(bool checked);
-    void on_checkBox_3_clicked(bool checked);
-    void on_dial_valueChanged(int value);
-    void on_dial_2_valueChanged(int value);
-    void on_checkBox_4_clicked(bool checked);
-    void on_verticalScrollBar_valueChanged(int value);
-    void on_checkBox_5_clicked(bool checked);
-    void on_pushButton_6_clicked();
-    void on_pushButton_9_clicked();
-    void on_pushButton_14_clicked();
-    void on_pushButton_15_clicked();
-    void on_pushButton_16_clicked();
-    void on_checkBox_6_clicked(bool checked);
     void on_l1_2_clicked();
     void on_l2_2_clicked();
     void on_l3_2_clicked();
@@ -238,15 +202,20 @@ private slots:
     void on_pushButton_34_clicked();
     void on_checkBox_7_clicked(bool checked);
     void on_checkBox_8_clicked(bool checked);
-    void on_checkBox_9_clicked(bool checked);
     void on_checkBox_10_clicked(bool checked);
-    void on_checkBox_11_clicked(bool checked);
     void on_checkBox_12_clicked(bool checked);
-    void on_dial_3_valueChanged(int value);
-    void on_dial_4_valueChanged(int value);
-    void on_checkBox_13_clicked(bool checked);
     void on_pushButton_36_clicked();
     void on_comboBox_currentIndexChanged(const QString &arg1);
+    void on_dial_3_valueChanged(int value);
+    void on_dial_4_valueChanged(int value);
+    void on_pushButton_clicked();
+    void on_checkBox_clicked();
+    void on_pushButton_17_clicked();
+    void on_pushButton_18_clicked();
+    void on_pushButton_19_clicked();
+    void on_pushButton_20_clicked();
+    void on_pushButton_21_clicked();
+    void on_pushButton_22_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение

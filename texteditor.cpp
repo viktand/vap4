@@ -86,7 +86,7 @@ void TextEditor::refresh()
 void TextEditor::on_pushButton_3_clicked()
 // liters color
 {
-    const QColor color = QColorDialog::getColor(Qt::white, this, tr("Select background color"));
+    const QColor color = QColorDialog::getColor(Qt::white, this, tr("Select font color"));
     if (color.isValid())
     {
         LtColor=color;

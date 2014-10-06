@@ -2,7 +2,6 @@
 #include <QDesktopWidget>
 #include <mainwindow.h>
 #include <QPrinterInfo>
-//#include <QtGui/QPrinterInfo>
 #include <QList>
 #include <QProcess>
 #include "integro.h"
@@ -18,8 +17,8 @@ bool clse=true;
 bool flag_ret=false;
 QSize mysz;
 Dialog_paper *dp;
-int pw=210;
-int ph=297;
+int pw;
+int ph;
 QSettings setts("vap", "vap");
 QString nms[8];             // список имен бумаг
 std::vector<int> p_w;       // список размеров
@@ -99,6 +98,7 @@ PageSetup::PageSetup(QWidget *parent) :
     move(rect.topLeft());
     mysz.setWidth(210);
     mysz.setHeight(297);
+    tabWidget->setCurrentIndex(0);
     checkBox->setChecked(all_rot);
     // список принтеров
     QString l;
@@ -166,25 +166,22 @@ void PageSetup::closeEvent(QCloseEvent *event)
 
 void PageSetup::on_radioButton_2_clicked()
 {
-     label_4->setGeometry(100,185, 75, 50);
+     label_4->setGeometry(130,185, 75, 50);
 }
 
 void PageSetup::on_radioButton_clicked()
 {
-     label_4->setGeometry(110,170, 50, 75);
+     label_4->setGeometry(150,170, 50, 75);
 }
 
 void PageSetup::load_data()
 {
    clse=true;
    checkBox_2->setChecked(print_color);
-   checkBox_9->setChecked(printer_a3);
    doubleSpinBox_2->setValue(font_scl);
    ph=paper_h;
    pw=paper_w;
-   ornl=0;
-   if(ph>=pw) ornl=1;
-   if (ornl==0)
+   if (ph<pw)
    {
        on_radioButton_2_clicked();
        radioButton_2->setChecked(true);
@@ -208,15 +205,12 @@ void PageSetup::load_data()
    clse=false; // разрешить изменение настроек
    comboBox->setCurrentIndex(get_index(get_real_index(pap_name)));
    setts.beginGroup("Settings");
-   spinBox_7->setValue(setts.value("font", 7).toInt());
+   spinBox_7->setValue(setts.value("font", 0).toInt());
    lngv=setts.value("lng", "Auto").toString();
    auto_orn=setts.value("autoOrn", true).toBool();
-   ribbon=setts.value("ribbon", true).toBool();
-   checkBox_16->setChecked(setts.value("without_m", false).toBool());
    checkBox_12->setChecked(testPrint);
    // Замута для совместимости с Qt 4.8 вместо comboBox_4->setCurrentText(lngv);
    for(int i=0; i<comboBox_4->count(); i++)if(comboBox_4->itemText(i)==lngv)comboBox_4->setCurrentIndex(i);
-   checkBox_15->setChecked(ribbon);
    setts.endGroup();
 }
 
@@ -277,35 +271,17 @@ void PageSetup::on_pushButton_clicked() // Ok
 
 void PageSetup::on_pushButton_4_clicked() // apply
 {
-    if(radioButton->isChecked()) ornl=1; else ornl=0;
+    if(radioButton->isChecked()) emit end_set(3); else emit end_set(4);
     print_color=checkBox_2->isChecked();
     paper_h=ph;
     paper_w=pw;
     list_n=nmsp[comboBox->currentIndex()].name;
-    prn_size_x=210;
-    prn_size_y=297;
-    if (checkBox_9->isChecked()) // to A3 printer format
-    {
-        prn_size_x=297;
-        prn_size_y=420;
-    }
-    QString ss=list_n;
     setts.beginGroup("Settings");
-    setts.setValue("font", spinBox_7->value());
-    setts.setValue("lng", lngv);
-    setts.setValue("autoOrn", auto_orn);
-    setts.setValue("ribbon", ribbon);
-    setts.setValue("heigth", ph);
-    setts.setValue("width", pw);
-    setts.setValue("without_m", checkBox_16->isChecked());
-    bottom_m=0;
-    left_m=0;
-    top_m=0;
-    right_m=0;
-    setts.setValue("left_m", left_m);
-    setts.setValue("right_m", right_m);
-    setts.setValue("top_m", top_m);
-    setts.setValue("bottom_m", bottom_m);
+        setts.setValue("font", spinBox_7->value());
+        setts.setValue("lng", lngv);
+        setts.setValue("autoOrn", auto_orn);
+        setts.setValue("heigth", ph);
+        setts.setValue("width", pw);
     setts.endGroup();
     emit end_set(2);
     result=0;
@@ -314,7 +290,6 @@ void PageSetup::on_pushButton_4_clicked() // apply
 void PageSetup::on_pushButton_3_clicked() // close
 {
     this->close();
-    emit end_set(result);
 }
 
 void PageSetup::on_checkBox_3_clicked(bool checked) // интеграция в наутилус
@@ -359,9 +334,7 @@ void PageSetup::on_pushButton_2_clicked() // Добавление нового �
     if (dp==0)
     {
         dp=new Dialog_paper(this);
-        QFont font;
-        font.setPixelSize(10);
-        dp->setFont(font);
+        dp->setFont(checkBox->font());
         connect(dp, SIGNAL(close_form(int)), this, SLOT(load_combobox3(int)));
     }
     dp->load_lists();
@@ -388,12 +361,6 @@ void PageSetup::on_doubleSpinBox_valueChanged(double arg1)
 {
     if (clse) return;
     h_ofsett=arg1;
-}
-
-void PageSetup::on_checkBox_9_clicked(bool checked)
-{
-    if (clse) return;
-    printer_a3=checked;
 }
 
 void PageSetup::on_radioButton_toggled()
@@ -454,11 +421,4 @@ void PageSetup::on_checkBox_14_clicked(bool checked)
 {
     auto_orn=checked;
 }
-
-void PageSetup::on_checkBox_15_clicked(bool checked)
-{
-    ribbon=checked;
-}
-
-
 

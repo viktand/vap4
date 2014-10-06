@@ -24,8 +24,6 @@ private slots:
 
     void on_spinBox_2_valueChanged(int arg1);
 
-    void on_checkBox_clicked(bool checked);
-
 public slots:
     void make_preview();            // построить картинку предпросмотра компоновки
     QSize set_size();               // подогнать размер

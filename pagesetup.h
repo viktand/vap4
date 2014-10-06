@@ -43,7 +43,6 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
     void on_comboBox_3_currentIndexChanged(int index);
     void on_doubleSpinBox_valueChanged(double arg1);
-    void on_checkBox_9_clicked(bool checked);
     void on_radioButton_toggled();
     void on_doubleSpinBox_2_valueChanged(double arg1);
     void on_checkBox_10_clicked(bool checked);
@@ -52,7 +51,6 @@ private slots:
     void on_checkBox_11_clicked(bool checked);
     void on_comboBox_4_activated(const QString &arg1);
     void on_checkBox_14_clicked(bool checked);
-    void on_checkBox_15_clicked(bool checked);
 
 public slots:
     void load_data();       // загрузить данные в форму

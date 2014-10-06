@@ -30,7 +30,6 @@ void userlayout::on_buttonBox_accepted() // Ok
 {
     ul_hor=ui->spinBox->value();
     ul_ver=ui->spinBox_2->value();
-    set_orn=!(ui->checkBox->isChecked());
     emit is_ok();
 }
 
@@ -105,24 +104,3 @@ void userlayout::on_spinBox_2_valueChanged(int arg1)
     make_preview();
 }
 
-void userlayout::on_checkBox_clicked(bool checked)
-{
-    QRect r;
-    if (checked)
-    {
-        r.setLeft(30);
-        r.setTop(30);
-        r.setWidth(150);
-        r.setHeight(105);
-        ui->label->setGeometry(r);
-    }
-    else
-    {
-        r.setLeft(60);
-        r.setTop(10);
-        r.setWidth(105);
-        r.setHeight(150);
-        ui->label->setGeometry(r);
-    }
-    make_preview();
-}

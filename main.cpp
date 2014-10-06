@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     QSettings settu("vap", "vap");
     settu.beginGroup("Settings");
-    int fSize=settu.value("font",10).toInt(); // font size
+    int fSize=settu.value("font",0).toInt(); // font size
     QString lng_app=settu.value("lng", "Auto").toString(); // язык программы
     settu.endGroup();
     QApplication a(argc, argv);
@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
     QLocale lc;
     QTranslator translator;
     cout << "Locale " << QLocale::countryToString(lc.country()).toStdString() << endl;
-    if(((lc.country()==QLocale::RussianFederation) && (lng_app=="Auto")) || (lng_app=="Russian"))
+    if(((lc.country()==QLocale::RussianFederation) && (lng_app=="Auto"))
+            || (lng_app=="Russian") || (lng_app=="Русский") )
         {
             if(translator.load(":/new/prefix1/vap_ru"))
               {
@@ -45,8 +46,14 @@ int main(int argc, char *argv[])
               }
         }
     MainWindow w;
-    QFont font("Ubuntu");
-    font.setPointSize(fSize);
+    QFont font;
+    if(fSize==0){
+        font.setFamily(font.defaultFamily());
+        fSize=font.family().size();
+    } else {
+        font.setFamily("Ubuntu");
+        font.setPointSize(fSize);
+    }
     w.setFont(font);
     w.cou_prm=argc;
     w.fn_size=fSize;
@@ -56,7 +63,9 @@ int main(int argc, char *argv[])
             w.prm<<argv[i];
         }
     w.show();
+    //w.showArg(argv[1]);
     w.if_show();
+
 
     return a.exec();
 }

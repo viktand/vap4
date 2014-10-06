@@ -54,5 +54,12 @@
         <file alias="fontColor">resurs/fontcolor.png</file>
         <file alias="thunar">resurs/thunar.png</file>
         <file alias="vap_ru">vap_ru.qm</file>
+        <file alias="pls">resurs/pls.png</file>
+        <file alias="mns">resurs/mns.png</file>
+        <file alias="toup">resurs/toup.png</file>
+        <file alias="toright">resurs/toright.png</file>
+        <file alias="toleft">resurs/toleft.png</file>
+        <file alias="todown">resurs/todown.png</file>
+        <file alias="pdf">resurs/pdf.png</file>
     </qresource>
 </RCC>
