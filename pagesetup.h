@@ -46,7 +46,6 @@ private slots:
     void on_radioButton_toggled();
     void on_doubleSpinBox_2_valueChanged(double arg1);
     void on_checkBox_10_clicked(bool checked);
-    void on_checkBox_12_clicked(bool checked);
     void on_checkBox_13_clicked(bool checked);
     void on_checkBox_11_clicked(bool checked);
     void on_comboBox_4_activated(const QString &arg1);

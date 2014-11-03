@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     dialog_paper.cpp \
     about.cpp \
     captioneditor.cpp \
-    texteditor.cpp
+    texteditor.cpp \
+    qdeformation.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     dialog_paper.h \
     about.h \
     captioneditor.h \
-    texteditor.h
+    texteditor.h \
+    qdeformation.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
@@ -46,7 +48,8 @@ FORMS    += mainwindow.ui \
     dialog_paper.ui \
     about.ui \
     captioneditor.ui \
-    texteditor.ui
+    texteditor.ui \
+    qdeformation.ui
 
 RESOURCES += \
     res.qrc

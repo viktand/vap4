@@ -61,5 +61,13 @@
         <file alias="toleft">resurs/toleft.png</file>
         <file alias="todown">resurs/todown.png</file>
         <file alias="pdf">resurs/pdf.png</file>
+        <file alias="boll">resurs/boll.png</file>
+        <file alias="hor_rot">resurs/hor_rot.png</file>
+        <file alias="ver_rot">resurs/ver_rot.png</file>
+        <file alias="to_mem">resurs/to_mem.png</file>
+        <file alias="from_mem">resurs/from_mem.png</file>
+        <file alias="transform">resurs/transform.png</file>
+        <file alias="undo">resurs/undo.png</file>
+        <file alias="reset">resurs/reset.png</file>
     </qresource>
 </RCC>

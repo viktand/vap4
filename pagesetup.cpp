@@ -30,7 +30,7 @@ struct paps{                // описание размеров листов б
     int     H;              // высота листа, mm
 };
 
-std::vector<paps> nmsp;  // список
+std::vector<paps> nmsp;     // список
 bool auto_orn=true;         // автоматический выбор ориентации бумаги
 QString lngv;               // язык программы
 bool ribbon=true;           // вид интерфейса
@@ -208,7 +208,6 @@ void PageSetup::load_data()
    spinBox_7->setValue(setts.value("font", 0).toInt());
    lngv=setts.value("lng", "Auto").toString();
    auto_orn=setts.value("autoOrn", true).toBool();
-   checkBox_12->setChecked(testPrint);
    // Замута для совместимости с Qt 4.8 вместо comboBox_4->setCurrentText(lngv);
    for(int i=0; i<comboBox_4->count(); i++)if(comboBox_4->itemText(i)==lngv)comboBox_4->setCurrentIndex(i);
    setts.endGroup();
@@ -282,6 +281,7 @@ void PageSetup::on_pushButton_4_clicked() // apply
         setts.setValue("autoOrn", auto_orn);
         setts.setValue("heigth", ph);
         setts.setValue("width", pw);
+        setts.setValue("printer_name", p_name);
     setts.endGroup();
     emit end_set(2);
     result=0;
@@ -378,12 +378,6 @@ void PageSetup::on_checkBox_10_clicked(bool checked)
 {
     if (flag_ret) return;
     thunar_set(checked);
-}
-
-void PageSetup::on_checkBox_12_clicked(bool checked)
-{
-    if(flag_ret)return;
-    testPrint=checked;
 }
 
 void PageSetup::on_checkBox_13_clicked(bool checked)

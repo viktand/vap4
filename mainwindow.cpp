@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "pagesetup.h"
 #include "avLabel.h"
@@ -6,6 +6,7 @@
 #include "about.h"
 #include "captioneditor.h"
 #include "texteditor.h"
+#include "qdeformation.h"
 #include <math.h>
 #include <qmath.h>
 
@@ -40,44 +41,8 @@
 using namespace std;
 
 /*
-Список размеров листов.
 Каждый лист имеет свой размер бумаги, который задается в переменной int sheet[N].size,
 где N=0,1,... - номер листа
-Возможны следующие размеры и значения указанной переменной:
-
-Constant        Value	Description
-    A0          5       841 x 1189 mm
-    A1          6       594 x 841 mm
-    A2          7       420 x 594 mm
-    A3          8       297 x 420 mm
-    A4          0       210 x 297 mm, 8.26 x 11.69 inches
-    A5          9       148 x 210 mm
-    A6          10      105 x 148 mm
-    A7          11      74 x 105 mm
-    A8          12      52 x 74 mm
-    A9          13      37 x 52 mm
-    B0          14      1000 x 1414 mm
-    B1          15      707 x 1000 mm
-    B2          17      500 x 707 mm
-    B3          18      353 x 500 mm
-    B4          19      250 x 353 mm
-    B5          1       176 x 250 mm, 6.93 x 9.84 inches
-    B6          20      125 x 176 mm
-    B7          21      88 x 125 mm
-    B8          22      62 x 88 mm
-    B9          23      33 x 62 mm
-    B10         16      31 x 44 mm
-    C5E         24      163 x 229 mm
-    Comm10E     25      105 x 241 mm, U.S. Common 10 Envelope
-    DLE         26      110 x 220 mm
-    Executive	4       7.5 x 10 inches, 190.5 x 254 mm
-    Folio       27      210 x 330 mm
-    Ledger      28      431.8 x 279.4 mm
-    Legal       3       8.5 x 14 inches, 215.9 x 355.6 mm
-    Letter      2       8.5 x 11 inches, 215.9 x 279.4 mm
-    Tabloid     29      279.4 x 431.8 mm
-    Custom      30      sheet[N].width x sheet[N].height mm
-
 ориентация листа указывается в переменной bool sheet[N].list_orn: true - портретная
 Физические размеры в мм хранятся в переменных
     int     sheet[N].height - высота
@@ -101,22 +66,19 @@ loadpicture *ldp;
 QString str_time;
 QavLabel *fon;
 QavLabel *rez;          // рамка обрезки
-QRect virt_paper;       // виртуальный лист бумаги, на котором рисуется картинка
-                        // т.е. лист накладывается на А4 и печатается.
+Qdeformation *deform;
+
 bool flag2;
-int  count=0;
 int	 img_count=-1; 	    // количество превьюшек
 int  cpt_count=-1;      // количество подписей на текущем листе
 int	 comp = 0;			// текущая компоновка
 int  getx = 0;			// максимальный размер х для картинки  в этой компоновке
 int  gety = 0;			// максимальный размер y для картинки  в этой компоновке
 double  prt_x= 210;     // x для портретной ориентации
-double  scl_pg = 2;		// масштаб листа предпросмотра
 int  gor = 420;			// w листа предпросмотра
 int  ver = 594;			// h листа предпросмотра
 int  pg_mar = 10;		// поля листа бумаги
 int  pol = 10;			// поля между картинок mm
-int  crd[20][2];		// список стандартных координат для текущей компоновки
 int  buf=-1; 		    // количество загруженных картинок, отсчет с нуля
 int  ttx, tty;			// временные значения для отработки перемещения объектов
 int  imgpress=-1;		// № нажатой превьюшки
@@ -165,27 +127,28 @@ bool all_rot;
 // пользовательская компоновка
 int ul_hor;
 int ul_ver;
-QString p_name; // имя принтера
+QString p_name;         // имя принтера
 int sheet_size;
 bool all_sizes;
 bool set_orn;
 bool print_color;
 QString list_n;
-double h_ofsett;    // горизонтальное смещение позиции печати
-int pap_sor;        // источник бумаги
+double h_ofsett;        // горизонтальное смещение позиции печати
+int pap_sor;            // источник бумаги
 int pap_name;
 QString caption;
 bool show_cap;
-QColor font_cl;     // цвет шрифта подписи
-QColor back_cl;     // цвет шрифта фона
+QColor font_cl;         // цвет шрифта подписи
+QColor back_cl;         // цвет шрифта фона
 QFont  font_cpt("Ubuntu"); // шрифт подписи
-bool trans;         // прозрачный фон надписи
-bool runShow=false; // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
+bool trans;             // прозрачный фон надписи
+bool runShow=false;     // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
 double font_scl;
-bool testPrint;     // печать тестового креста (для проверки позиционирования)
+bool testPrint;         // печать тестового креста (для проверки позиционирования)
 bool noResizewindow=false; // Запрет на изменение размера окна программы
-bool ctrl=false;    // нажата клавиша ctrl
-bool flag3=true;    // флаг, запрещающий реакцию на изменение размера бумаги из ленты
+bool ctrl=false;        // нажата клавиша ctrl
+bool flag3=true;        // флаг, запрещающий реакцию на изменение размера бумаги из ленты
+QPoint wind_pos;        // координаты главного окна (после перемещения)
 
 struct pict {                // загруженная картинка и все ее свойства
     QString   pict;          // путь к файлу
@@ -200,20 +163,11 @@ struct pict {                // загруженная картинка и вс�
     int       list;          // номер страницы этой картинки
     int       load;          // флаг того, картинка уже загружена в память
     int       z;             // z-порядок
-    int       xl;            // Х подписи
-    int       yl;            // Y подписи
-    char      fnt_Name[31];  // имя фонта подписи
-    int       fnt_Size;      // размер фонта подписи
-    int       dxl;           // относительное смещение положения подписи от картинки (по Х)
-    int       dyl;           // относительное смещение положения подписи от картинки (по Y)
     int       prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
     double    compress;      // коэф. компрессии для уже показанной картинки
-    float     scale;         // коэф. приведения координат к единице: гор. сторону листа считаем за 1,
-                             // далее пропорционально пересчитываем координаты и размер картинки - для изменения размера окна программы.
     // caption
     QString   caption;       // подпись к картинке
     bool      show_caption;  // показывать подпись
-    //bool      frame;         // с рамкой
     QColor    back_color;    // цвет фона
     bool      trans;         // прозрачный фон
     QColor    font_color;    // цвет шрифта
@@ -224,10 +178,16 @@ struct pict {                // загруженная картинка и вс�
     double    widthCap;      // ширина
     int       cpt;           // номер подписи на экране к этой картинке
     int       cp_num;        // номер avLabel - подписи на экране
-    int       cp_z;          // z-орядок для подписи
+    int       cp_z;          // z-порядок для подписи
     QPixmap   cp_pixmap;     // pixmap подписи
     bool      isTextBlock;   // true - это текстовый блок
     int       alig;          // выравнивание в текстовом болоке 0-1-2 -> слева-по центру-справа
+    // polygon -
+//    bool      transformed;   // картинка была подвержена трансформации
+//    QPoint    lTop;
+//    QPoint    rTop;
+//    QPoint    rBot;
+//    QPoint    lBot;
 };
 
 struct prew {
@@ -253,8 +213,6 @@ QavLabel *clip;              // кнопка ножницы
 std::vector<pict> toprint;      //массив загруженных картинок
 std::vector<prew> toshow;       //массив превьющек
 std::vector<prew> tocaption;    //массив подписей
-std::vector<prew> totext;       //массив надписей (блоков текста)
-//std::vector<bool> list_orn;     // массив ориентаций листов true - портретная ориентация
 std::vector<sheets> sheet;      // массив описаний листов
 
 
@@ -317,7 +275,6 @@ MainWindow::MainWindow(QWidget *parent) :
     pathFile=setty.value("path",true).toBool();
     autoOrn=setty.value("autoOrn", true).toBool();
     setty.endGroup();
-    //setInterface();
     load_my_pSizes();
     flag3=false;
 }
@@ -561,18 +518,19 @@ void MainWindow::resizeEvent(QResizeEvent *e)
         noResizewindow=false;
         return;
     }
+    list_scl=double(ui->list->widthMM())/double(curSheet.width);
     gor_old=gor;
     wind_sz=e->size();
     make_list();
-    getNewVal();
+    layout_scale();
     show_pict();
     save_wind_size();
 }
 
-void MainWindow::getNewVal() // перерасположить картики и подписи на новом размере листа
+void MainWindow::moveEvent(QMoveEvent *e)
 {
-    layout_scale(); // картинки
-    reScl();        // подписи
+    wind_pos=e->pos();
+    save_wind_size();
 }
 
 void MainWindow::closeEvent(QCloseEvent *cl)
@@ -662,21 +620,6 @@ void MainWindow::get_marg()
     setty.endGroup();
 }
 
-void MainWindow::reScl()
-{
-    if(fun)cout << "reScl" << endl;
-    return;
-    double scl=double(ui->list->widthMM())/double(paper_w)/list_scl; // здесь может быть ошибка - в мм
-    for (int i=0; i<=buf; i++)
-    {
-        toprint[i].leftCap=toprint[i].leftCap*scl;
-        toprint[i].topCap=toprint[i].topCap*scl;
-        toprint[i].widthCap=toprint[i].widthCap*scl;
-        toprint[i].heightCap=toprint[i].heightCap*scl;
-    }
-    list_scl=double(ui->list->widthMM())/double(paper_w);
-}
-
 void MainWindow::setIconOrns(bool b)
 {
     if(b)
@@ -727,7 +670,6 @@ void MainWindow::make_list() // создать пустой лист предп�
     w_fon=w;
     h_fon=h;
     set_indic_pos();
-    //reScl();
 }
 
 void MainWindow::redraw()
@@ -738,7 +680,6 @@ void MainWindow::redraw()
     double x, y, w, h;                 //будущий рект окна
     y=curSheet.height;
     x=curSheet.width;
-    //if(!curSheet.list_orn) swap(x,y);
     int lft=150;
     lft=10;
     paper_ratio=x/y;
@@ -752,8 +693,6 @@ void MainWindow::redraw()
     y_prw=((wind_sz.height()-75)-h)/2+73;
     gor=w;
     ver=h;
-    scl_pg=w/297.0;
-    //layout_scale();
     setIconOrns(h>=w);
 }
 
@@ -762,10 +701,8 @@ void MainWindow::layout_scale()
     if(fun)cout << "layout_scale" << endl;
     if(gor_old==gor) return;
     double k=double(gor)/double(gor_old);
-    for(int i=0;i<=buf;i++)
-    {
-        if(toprint[i].show)
-        {
+    for(int i=0;i<=buf;i++){
+        if(toprint[i].show){
             toprint[i].left=k*toprint[i].left;
             toprint[i].top=k*toprint[i].top;
             toprint[i].height=k*toprint[i].height;
@@ -777,7 +714,7 @@ void MainWindow::layout_scale()
         }
     }
     gor_old=gor;
-    list_scl=double(ui->list->widthMM())/double(paper_w);
+    img_size_cur_comp();
 }
 
 void MainWindow::get_pp() // получить количество точек на мм для текущего предпросмотра
@@ -821,6 +758,7 @@ void MainWindow::if_show()
     ind_stop();
     setInterface();
 }
+
 
 
 void MainWindow::load_param() // обработка параметров командной строки
@@ -928,7 +866,7 @@ void MainWindow::open_pct(QString filename) // добавить картинку
             filename.append("/home/and/1.jpg");
         }
         str_time.append(filename);
-        toprint.push_back(pict());
+        toprint.resize(buf+1);
         toprint[buf].pict=filename;
         toprint[buf].caption=get_name(filename);
         toprint[buf].back_color=Qt::white;    // цвет фона
@@ -938,12 +876,10 @@ void MainWindow::open_pct(QString filename) // добавить картинку
         QFont fn;
         fn.setPointSize(10);
         fn.setFamily("Sans");
-        toprint[buf].font=fn;            // шрифт
-        toprint[buf].cp_num=-1;          // нет привязанного avLabel
-        toprint[buf].show_caption=false; // без подписи
-        QRect rc;
-        rc.setRect(0,0,0,0);
-        setCaptionRect(buf, rc);         // начальная геометрия подписи
+        toprint[buf].font=fn;                 // шрифт
+        toprint[buf].cp_num=-1;               // нет привязанного avLabel
+        toprint[buf].show_caption=false;      // без подписи
+        setCaptionRect(buf, QRect(0,0,0,0));  // начальная геометрия подписи
         QThread *thread = new QThread;
         ldp = new loadpicture;
         ldp->moveToThread(thread);
@@ -962,7 +898,7 @@ void MainWindow::end_load_picture(QImage image)
         double d;
         toprint[buf].pix0 = toprint[buf].pix = QPixmap::fromImage(image);
         if(autoOrn && buf==0) setAutoOrn();
-        toprint[buf].show=0;
+        toprint[buf].show=false;
         d=buf+1;
         d=ceil(d/img_on_list);
         toprint[buf].list=d;
@@ -1132,9 +1068,11 @@ void MainWindow::setPrinter()
     printer->setFullPage(true);
     if(!pdf){
         printer->setPrinterName(p_name);
+        printer->setOutputFileName("");
         printer->setOutputFormat(QPrinter::NativeFormat);
+        cout << "printer: " << p_name.toStdString() << endl;
     }
-    if (print_color || ui->checkBox->isChecked()) printer->setColorMode(QPrinter::Color);
+    if (print_color) printer->setColorMode(QPrinter::Color);
         else printer->setColorMode(QPrinter::GrayScale);
     // физическое разрешение принтера по x и y (точек на мм)
     prx=printer->physicalDpiX()/25.4;
@@ -1144,18 +1082,13 @@ void MainWindow::setPrinter()
 void MainWindow::on_pushButton_29_clicked() //печать
 {
     if(fun)cout << "on_pushButton_29_cliked (printing)" << endl;
-    prePint();     // прогон листов перед печатью
-    if(testPrint)
-    {
-        tstPrin();
-        return;
-    }
-    QRect rc;     // пригодится ниже...
-    QBrush br;         // кисть
-    QPixmap pxm;       // пиксмэп для печати
-    double sclX, sclY; // коэф. масштабирования между бумагой и предросмотром при пересчете размеров и координат
+    prePint();          // прогон листов перед печатью
+    QRect rc;           // пригодится ниже...
+    QBrush br;          // кисть
+    QPixmap pxm;        // пиксмэп для печати
+    double sclX, sclY;  // коэф. масштабирования между бумагой и предросмотром при пересчете размеров и координат
     double px=0,py=0,ph,pw,x,y;
-    double dx, dy;     // Смещение области печати от края листа бумаги
+    double dx, dy;      // Смещение области печати от края листа бумаги
     bool f;
     // общая настройка принтера
     setPrinter();
@@ -1277,22 +1210,6 @@ void MainWindow::on_pushButton_29_clicked() //печать
    cout << "end printing" << endl;
 }
 
-void MainWindow::tstPrin() // test print
-{
-    if(fun)cout << "tstPrint" << endl;
-    pntr->begin(printer); // начать рисование
-    double sclX=get_scaleX();
-    int w=ui->sheet->rect().width()*sclX;
-    double sclY=get_scaleY();
-    int h=ui->sheet->rect().height()*sclY;
-    QRect rc(0,0,w,h);
-    pntr->drawRect(rc);
-    pntr->drawLine(0,0,w,h);
-    pntr->drawLine(0,h,w,0);
-    pntr->end();
-    cout << "Test printing is end" << endl;
-}
-
 void MainWindow::start_load_picture()
 {
     if(fun)cout << "start_load_picture" << endl;
@@ -1346,6 +1263,7 @@ void MainWindow::pct_press(int x, int y, int i) // нажатие на прев�
     ui->dial_4->setValue(toprint[bufpress].rot);
     out_rot=false;
     show_pict_size();
+    ui->pushButton_2->setEnabled(true);
 }
 
 void MainWindow::pct_move(int x, int y, int i)
@@ -1596,7 +1514,7 @@ void MainWindow::show_pict() // показать картинки текущег
     if(comp==1) n=2;
     curz=max_z(curlist);
 
-    for (int i=0; i<buf+1; i++)
+    for (int i=0; i<=buf; i++)
     {
       if (toprint[i].list==curlist)
       {   // создать превью
@@ -1608,13 +1526,14 @@ void MainWindow::show_pict() // показать картинки текущег
           //toshow[img_count].pct->setBackgroundRole(QPalette::Base);
           toshow[img_count].pct->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
           toshow[img_count].pct->setScaledContents(true);
-          if(ui->checkBox->isChecked())toshow[img_count].pct->setPixmap(toprint[i].pix);
-          else{ // черно-белая картинка
-               QPixmap alpha = toprint[i].pix;
-               QImage img = alpha.toImage();
-               img=img.convertToFormat(QImage::Format_Mono);
-               toshow[img_count].pct->setPixmap(QPixmap::fromImage(img));
-          }
+          toshow[img_count].pct->setPixmap(toprint[i].pix);
+//          if(ui->checkBox->isChecked())toshow[img_count].pct->setPixmap(toprint[i].pix);
+//          else{ // черно-белая картинка
+//               QPixmap alpha = toprint[i].pix;
+//               QImage img = alpha.toImage();
+//               img=img.convertToFormat(QImage::Format_Mono);
+//               toshow[img_count].pct->setPixmap(QPixmap::fromImage(img));
+//          }
           toshow[img_count].pct->setCursor(Qt::OpenHandCursor);
           toshow[img_count].pct->setImnum(img_count);
           toshow[img_count].pct->setAttribute(Qt::WA_DeleteOnClose);
@@ -1671,17 +1590,15 @@ void MainWindow::show_pict() // показать картинки текущег
                 toprint[i].show=true;
                 toprint[i].width=sz.width();
                 toprint[i].height=sz.height();
-                toprint[i].scale=float(x)/float(ui->sheet->width());
               }
         else
           {  // картинка уже была нарисована
               x=toprint[i].left;
               y=toprint[i].top;
-
               toshow[img_count].pct->setGeometry(x, y,toprint[i].width, toprint[i].height);
               toprint[i].compress=double(toprint[i].pix.width())/double(toprint[i].width);
           }
-          show_caption(i,(toprint[i].show_caption));
+          show_caption(i);
       }
     }
 
@@ -2046,20 +1963,34 @@ void MainWindow::save_printer_sett()
         setty.setValue("sourse", pap_sor);
         setty.setValue("font_scl", font_scl);
     setty.endGroup();
-    ui->checkBox->setChecked(print_color);
+}
+
+QString MainWindow::get_run(QString s)
+{
+    QProcess proc;
+    proc.start(s);
+    proc.waitForFinished(-1);
+    QByteArray btar;
+    btar = proc.readAll();
+    QString ver;
+    ver.append(btar);
+    return ver;
 }
 
 void MainWindow::rest_printer_sett()
 {
+    // принтер по умолчанию
+    QString l;
+    l.append(get_run("lpstat -d"));
+    p_name=(l.mid(28, l.length()-29));
+
     setty.beginGroup("Printer");
-        p_name.clear();
-        p_name.append(setty.value("printer_name", "").toString());
+        p_name=(setty.value("printer_name", p_name).toString());
         left_m=setty.value("left_m", 10).toInt() ;
         right_m=setty.value("right_m", 10).toInt();
         top_m=setty.value("top_m", 10).toInt();
         bottom_m=setty.value("bottom_m", 10).toInt();
         print_color=setty.value("color", true).toBool();
-        ui->checkBox->setChecked(print_color);
         pap_name=setty.value("paper_name", 0).toInt();
         pap_sor=setty.value("sourse", 0).toInt();
         paper_h=setty.value("height", 297).toInt();
@@ -2131,22 +2062,18 @@ QString MainWindow::esc_to_utf(QString st)
 
 void MainWindow::show_paper_size()
 {
-    QString l;
-    l.append("Width: ");
-    l.append(QString::number(paper_w));
-    l.clear();
-    l.append("height: ");
-    l.append(QString::number(paper_h));
     if(imgpress2>-1)
     {
         imgpress2=-1;
         bufpress2=-1;
         quick_buttons_off();
         if (rez!=0)rez->hide();
+        showPctBord(false);
     }
     ui->pushButton_32->hide();
     ui->checkBox_10->setVisible(true);
     ui->checkBox_12->setVisible(true);
+    ui->pushButton_2->setEnabled(false);
 }
 
 void MainWindow::show_pict_size()
@@ -2334,7 +2261,7 @@ void MainWindow::on_pushButton_36_clicked()
 }
 
 void MainWindow::show_r_menu(int x, int y, int i)
-{
+{    
     if (rmenu==0)
     {
         rmenu = new QMenu;
@@ -2347,6 +2274,8 @@ void MainWindow::show_r_menu(int x, int y, int i)
     rmenu->setGeometry(rc);
     imgpress2=i;
     bufpress2=toshow[i].buf;
+    showPctBord(true);
+    quick_buttons_off();
     if(toprint[bufpress2].isTextBlock) set_rmenu(2);
     else set_rmenu(1);
 }
@@ -2396,6 +2325,8 @@ void MainWindow::make_menu_1()
     ac6->setIcon(QPixmap(":/new/prefix1/down"));
     QAction *ac7 = rmenu->addAction(tr("Move to the &next sheet"), this, SLOT(move_next()));
     ac7->setIcon(QPixmap(":/new/prefix1/up"));
+    QAction *ac8 = rmenu->addAction(tr("Transform picture"), this, SLOT(on_pushButton_2_clicked()));
+    ac8->setIcon(QPixmap(":/new/prefix1/transform"));
 }
 
 void MainWindow::make_menu_2()
@@ -2414,8 +2345,10 @@ void MainWindow::make_menu_2()
     ac6->setIcon(QPixmap(":/new/prefix1/down"));
     QAction *ac7 = rmenu->addAction(tr("Move to the &next sheet"), this, SLOT(move_next()));
     ac7->setIcon(QPixmap(":/new/prefix1/up"));
-
+    QAction *ac8 = rmenu->addAction(tr("Transform picture"), this, SLOT(on_pushButton_2_clicked()));
+    ac8->setIcon(QPixmap(":/new/prefix1/transform"));
 }
+
 
 void MainWindow::edit_textBlock()
 // редактировать текстовый блок
@@ -2453,7 +2386,7 @@ void MainWindow::move_next()
 void MainWindow::turn_caption() //переключить состояние видимости подписи
 {
     toprint[bufpress2].show_caption=!toprint[bufpress2].show_caption;
-    show_caption(bufpress2, toprint[bufpress2].show_caption);
+    show_caption(bufpress2);
 }
 
 void MainWindow::show_cap_editor()
@@ -2487,36 +2420,25 @@ void MainWindow::set_caption(QString text, QColor f_cl, QColor b_cl, QFont fn, b
     toprint[bufpress2].font=fn;            // шрифт
     toprint[bufpress2].trans=tr;           // порзрачный фон
     cp_setGeometry(bufpress2);             // геометрия подписи
-    cp_setPixmap(bufpress2); // картинка подписи
-    show_caption(bufpress2, shw);          // show caption
+    cp_setPixmap(bufpress2);               // картинка подписи
+    show_caption(bufpress2);               // show caption
 }
 
-void MainWindow::cp_setGeometry(int index)
+void MainWindow::cp_setGeometry(int index) // начальная геометрия подписи
 {
     QFontMetrics m(toprint[index].font);
     int w=m.width(toprint[index].caption);
     int h=m.height();
-    int t;
-    int l;
-    if(toprint[index].widthCap==0)
-    {
-        t=toprint[index].top+toprint[index].height;
-        l=toprint[index].left+(toprint[index].width-w)/2;
-    }
-    else
-    {
-        t=toprint[index].topCap;
-        l=toprint[index].leftCap;
-    }
-    QRect rc;
-    rc.setRect(l,t,w,h);
-    setCaptionRect(index,rc);       // геометрия подписи
+    int t=toprint[index].top+toprint[index].height;
+    int l=toprint[index].left+(toprint[index].width-w)/2;
+    setCaptionRect(index,QRect(l,t,w,h));       // геометрия подписи
 }
 
 
 void MainWindow::cp_setPixmap(int index)
 // создать картинку надписи - нужно для предпросмотра, чтобы масштабировать
 {
+    cp_setGeometry(index);
     QRect rc=getCaptionRect(index);
     int h=rc.height();
     int w=rc.width();
@@ -2536,14 +2458,14 @@ void MainWindow::cp_setPixmap(int index)
     toprint[index].cp_pixmap=pm;
 }
 
-void MainWindow::show_caption(int index, bool sh) // показать подпись к картинке index
+void MainWindow::show_caption(int index) // показать подпись к картинке index
 {
     int count;
     QRect rc;
-    if (toprint[index].list==curlist){
-        if(sh)
+    if (toprint[index].list!=curlist)return;
+        if(toprint[index].show_caption)
         {   // создать подпись
-          cp_setGeometry(index);    // геометрия
+          if(toprint[index].widthCap==0)cp_setGeometry(index);    // создать геометрию
           if(toprint[index].cp_num==-1)
           { // создать avLabel для этой подписи, если надо
             cpt_count++;
@@ -2565,12 +2487,12 @@ void MainWindow::show_caption(int index, bool sh) // показать подпи
             cp_setPixmap(index);
           }
           else count=toprint[index].cp_num;
-          tocaption[count].pct->setPixmap(toprint[index].cp_pixmap);
           tocaption[count].pct->setScaledContents(true);
           rc=getCaptionRect(index);
           rc.setWidth(double(rc.width())*list_scl*font_scl);
           rc.setHeight(double(rc.height())*list_scl*font_scl);
           tocaption[count].pct->setGeometry(rc);
+          tocaption[count].pct->setPixmap(toprint[index].cp_pixmap);
           tocaption[count].pct->show();
           tocaption[count].pct->raise();
           toprint[index].cp_z=++curz;
@@ -2583,7 +2505,6 @@ void MainWindow::show_caption(int index, bool sh) // показать подпи
             cpt_count--;
             }
         }
-    }
 }
 void MainWindow::cp_press(int x, int y, int i) // нажатие на caption
 {
@@ -2810,10 +2731,58 @@ bool MainWindow::saveSassion(QString fileName)
         r=file.open(QIODevice::WriteOnly ); //| QIODevice::Text);
         //QTextStream out(&file);
         QDataStream out(&file);
-        out << comp;
-        out << buf;
+        out<<flag2;     out<<comp;      out<<getx;
+        out<<gety;      out<<prt_x;
+        out<<gor;       out<<ver;       out<<pg_mar;
+        out<<pol;       out<<buf;       out<<ttx;
+        out<<tty;       out<<curz;      out<<lists;
+        out<<curlist;   out<<img_on_list; out<<ppx;
+        out<<ppy;       out<<prx;       out<<pry;
+        out<<x_prw;     out<<y_prw;     out<<rott_press;
+        out<<prop;      out<<w_cou;     out<<h_cou;
+        out<<w_fon;     out<<h_fon;     out<<t_comp;
+        out<<out_rot;   out <<  fillsize; out<< mem_pol;
+        out <<  h_min_l;        // минимальная высота окна для ланшафтной ориентации
+        out <<  h_min_p;        // минимальная высота окна для портретной ориентации
+        out <<  paper_ratio;    // пропорции бумаги h/w
+        out <<  wind_sz;        // текущие размеры главного окна
+        out <<  gor_old;        // предыдущие размеры окна
+        out <<  offset;         // смещение кнопок компоновки при прокрутке
+        out <<  list_scl;       // реальное соотношение размеров экрана и бумаги
+        out <<  pathFile;       // запоминать путь к последнему файлу и открывать диалоги там же
+        out <<  autoOrn;        // автоматический выбор ориентации бумаги
+        out <<  exitFlag;       // флаг выхода из функции, когда она вызывается, но выполнять ее не надо
+        out <<  fun;            // выдавать имена вызывемых функций в терминал
+        QApplication::processEvents();
+        out << left_m;
+        out << right_m;
+        out << top_m;
+        out << bottom_m;
+        out << paper_w;
+        out << paper_h;
+        out << rap;
         out << all_rot;
-        out << gor;
+        out << ul_hor;
+        out << ul_ver;
+        out << p_name;
+        out << sheet_size;
+        out << all_sizes;
+        out << set_orn;
+        out << print_color;
+        out << list_n;
+        out << h_ofsett;        // горизонтальное смещение позиции печати
+        out << pap_sor;         // источник бумаги
+        out << pap_name;
+        out << caption;
+        out << show_cap;
+        out << font_cl;         // цвет шрифта подписи
+        out << back_cl;         // цвет шрифта фона
+        out <<  font_cpt;       // шрифт подписи
+        out << trans;           // прозрачный фон надписи
+        out << runShow;         // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
+        out << font_scl;
+        out << noResizewindow;  // Запрет на изменение размера окна программы
+
         for(int i=0; i<=buf; i++)
             {
             out<<toprint[i].pict;          // путь к файлу
@@ -2821,6 +2790,7 @@ bool MainWindow::saveSassion(QString fileName)
             out<<toprint[i].pix0;          // исходный pixmap
             QApplication::processEvents();
             out<<toprint[i].pix;           // текущий pixmap
+            QApplication::processEvents();
             out<<toprint[i].left;          // координата Х
             out<<toprint[i].top;           // координата Y
             out<<toprint[i].height;        // высота
@@ -2829,10 +2799,6 @@ bool MainWindow::saveSassion(QString fileName)
             out<<toprint[i].list;          // номер страницы этой картинки
             out<<toprint[i].load;          // флаг того, картинка уже загружена в память
             out<<toprint[i].z;             // z-порядок
-            out<<toprint[i].xl;            // Х подписи
-            out<<toprint[i].yl;            // Y подписи
-            out<<toprint[i].dxl;           // относительное смещение положения подписи от картинки (по Х)
-            out<<toprint[i].dyl;           // относительное смещение положения подписи от картинки (по Y)
             out<<toprint[i].prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
             out<<toprint[i].compress;      // кэф. компрессии для уже показанной картинки
             out<<toprint[i].caption;       // подпись к картинке
@@ -2853,13 +2819,15 @@ bool MainWindow::saveSassion(QString fileName)
             out<<toprint[i].alig;
             QApplication::processEvents();
             }
-        out << lists;
         if (int(sheet.size())<lists)
             for(int i=sheet.size(); i<lists; i++)
                 sheet.push_back(curSheet);
         for (int i=0; i<=lists-1; i++)
         {
             out << sheet[i].list_orn;
+            out << sheet[i].height;
+            out << sheet[i].size;
+            out << sheet[i].width;
         }
         file.close();
         ind_stop();
@@ -2920,29 +2888,95 @@ bool MainWindow::openSassion(QString fileName)
     if(fileName.trimmed()==".vap") return r;
     if (!fileName.isEmpty())
     {
-        buf=0;
         toprint.clear();
         ind_start();
-        toprint.clear();
-        buf=-1;
         QFile file(fileName);
         r=file.open(QIODevice::ReadOnly);
         QDataStream in(&file);
-        in >> comp;
+
+        in >>  flag2;
+        in >>	comp;			// текущая компоновка
         set_layout(comp);
-        in >> buf;
+        in >>  getx;			// максимальный размер х для картинки  в этой компоновке
+        in >>  gety;			// максимальный размер y для картинки  в этой компоновке
+        in >>  prt_x;          // x для портретной ориентации
+        in >>  gor;			// w листа предпросмотра
+        in >>  ver;			// h листа предпросмотра
+        in >>  pg_mar;		    // поля листа бумаги
+        in >>  pol;			// поля между картинок mm
+        in >> buf; 		    // количество загруженных картинок, отсчет с нуля
+        toprint.resize(buf+1);
+        in >>  ttx;
+        in >>  tty;			// временные значения для отработки перемещения объектов
+        in >>  curz;           // z порядок для текущей страницы, используется для расчета наложений
+        in >>  lists;
+        in >>  curlist;        // всего листов и текущий лист; отсчет с 1, т.е. 0 - ничего нет
+        in >>  img_on_list;    // кол-во картинок на листе в текущей компоновке
+        in >>  ppx;
+        in >>  ppy;            // точек на мм по Х и У для текущего предпросмотра
+        in >>  prx;
+        in >>  pry;            // точек на мм по Х и У для текущего принтера
+        in >>  x_prw;
+        in >>  y_prw;          // координаты листа предпросмотра
+        in >>  rott_press;     // флаг нажатия на ручку вращения
+        in >>  prop;           // флаг пропорциональности при изменении размера
+        in >>  w_cou;
+        in >>  h_cou;          // компоновка w_cou x h_cou
+        in >>  w_fon;
+        in >>  h_fon;          // текущие размеры фона
+        in >>  t_comp;         // временно для хранения номера компоновки
+        in >>  out_rot;        // не вызывать слот поворота true - без поворота
+        in >>  fillsize;       // режим заполнения по максимальному
+        in >>  mem_pol;        // сохраненное значение полей между картинок pol
+        in >>  h_min_l;        // минимальная высота окна для ланшафтной ориентации
+        in >>  h_min_p;        // минимальная высота окна для портретной ориентации
+        in >>  paper_ratio;    // пропорции бумаги h/w
+        in >>  wind_sz;        // текущие размеры главного окна
+        resize(wind_sz);
+        in >>  gor_old;        // предыдущие размеры окна
+        in >>  offset;         // смещение кнопок компоновки при прокрутке
+        in >>  list_scl;       // реальное соотношение размеров экрана и бумаги
+        in >>  pathFile;       // запоминать путь к последнему файлу и открывать диалоги там же
+        in >>  autoOrn;        // автоматический выбор ориентации бумаги
+        in >>  exitFlag;       // флаг выхода из функции, когда она вызывается, но выполнять ее не надо
+        in >>  fun;            // выдавать имена вызывемых функций в терминал
+        QApplication::processEvents();
+        in >> left_m;
+        in >> right_m;
+        in >> top_m;
+        in >> bottom_m;
+        in >> paper_w;
+        in >> paper_h;
+        in >> rap;
         in >> all_rot;
-        in >> gor_old;
-        double d=1;
-        if (gor!=gor_old) d=double(gor)/double(gor_old);
+        in >> ul_hor;
+        in >> ul_ver;
+        in >> p_name;
+        in >> sheet_size;
+        in >> all_sizes;
+        in >> set_orn;
+        in >> print_color;
+        in >> list_n;
+        in >> h_ofsett;        // горизонтальное смещение позиции печати
+        in >> pap_sor;         // источник бумаги
+        in >> pap_name;
+        in >> caption;
+        in >> show_cap;
+        in >> font_cl;         // цвет шрифта подписи
+        in >> back_cl;         // цвет шрифта фона
+        in >> font_cpt;       // шрифт подписи
+        in >> trans;           // прозрачный фон надписи
+        in >> runShow;         // флаг разрешения работы процедуры show_pict - чтобы избежать бесконечной рекурсии
+        in >> font_scl;
+        in >> noResizewindow;  // Запрет на изменение размера окна программы
         for(int i=0; i<=buf; i++)
             {
-            toprint.push_back(pict());
             in>>toprint[i].pict;          // путь к файлу
             in>>toprint[i].rot;           // 0 - нормально, угол поворота
             in>>toprint[i].pix0;          // исходный pixmap
             QApplication::processEvents();
             in>>toprint[i].pix;           // текущий pixmap
+            QApplication::processEvents();
             in>>toprint[i].left;          // координата Х
             in>>toprint[i].top;           // координата Y
             in>>toprint[i].height;        // высота
@@ -2951,10 +2985,6 @@ bool MainWindow::openSassion(QString fileName)
             in>>toprint[i].list;          // номер страницы этой картинки
             in>>toprint[i].load;          // флаг того, картинка уже загружена в память
             in>>toprint[i].z;             // z-порядок
-            in>>toprint[i].xl;            // Х подписи
-            in>>toprint[i].yl;            // Y подписи
-            in>>toprint[i].dxl;           // относительное смещение положения подписи от картинки (по Х)
-            in>>toprint[i].dyl;           // относительное смещение положения подписи от картинки (по Y)
             in>>toprint[i].prew;          // номер превьюшки для этой картинки (только в случае pict.list==curlist)
             in>>toprint[i].compress;      // кэф. компрессии для уже показанной картинки
             in>>toprint[i].caption;       // подпись к картинке
@@ -2975,26 +3005,20 @@ bool MainWindow::openSassion(QString fileName)
             in>>toprint[i].alig;
             QApplication::processEvents();
             toprint[i].cp_num=-1;
-            if (d!=1)
-            {   // уточнение координат, если новое окно отличается от старого
-                toprint[i].left=double(toprint[i].left)*d;
-                toprint[i].top=double(toprint[i].top)*d;
-                toprint[i].height=double(toprint[i].height)*d;
-                toprint[i].width=double(toprint[i].width)*d;
-            }
         }
-        in>>lists;
         sheet.clear();
-        bool b;
+        sheet.resize(lists);
         for(int i=0;i<lists;i++)
         {
-            in>>b;
-            sheet.push_back(curSheet);
-            sheet[i].list_orn=b;
+            in>>sheet[i].list_orn;
+            in>>sheet[i].height;
+            in>>sheet[i].size;
+            in>>sheet[i].width;
         }
         file.close();
+        curSheet=sheet[0];
         ind_stop();
-        curlist=1;
+        img_count=-1;
         show_pict();
     }
     return r;
@@ -3362,11 +3386,6 @@ void MainWindow::on_pushButton_clicked() // печать в PDF-файл
     pdf=false;
 }
 
-void MainWindow::on_checkBox_clicked()
-{
-    show_pict();
-}
-
 void MainWindow::setNewSizeOfPct()
 {
     QRect rc=toshow[imgpress2].pct->geometry();
@@ -3463,3 +3482,22 @@ void MainWindow::on_pushButton_21_clicked() // сдвинуть картинку
 
 void MainWindow::on_pushButton_22_clicked() // сдвинуть картинку вниз
     {moveTo(0,-1);}
+
+void MainWindow::on_pushButton_2_clicked() // загрузить активную картинку в окошко трансформатора
+{
+    if(deform==0){
+        deform=new Qdeformation(this);
+        connect(deform,SIGNAL(pixFin(QPixmap)),this,SLOT(setNewPix(QPixmap)));
+    }
+    deform->show();
+    deform->setPixmap(toprint[bufpress2].pix);
+}
+
+void MainWindow::setNewPix(QPixmap p)
+{
+    toprint[bufpress2].pix=toprint[bufpress2].pix0=p;
+    QSize sz=setsize(p.size());
+    toprint[bufpress2].width=sz.width();
+    toprint[bufpress2].height=sz.height();
+    show_pict();
+}

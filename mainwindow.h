@@ -3,9 +3,7 @@
 
 #include <QMainWindow>
 #include <QResizeEvent>
-//#include <QtGui/QResizeEvent>
-//#include <QCloseEvent>
-//#include <QtGui/QCloseEvent>
+#include <QMoveEvent>
 #include <QTextEdit>
 #include <QTranslator>
 #include <QKeyEvent>
@@ -20,7 +18,6 @@ extern int  ul_ver;     // пользовательская компоновка
 extern QString p_name;  // имя принтера
 extern bool set_orn;    // ориентация листа true - портретная, используется для программного нажатия кнопки при выборе пользовательской компоновки
 extern bool print_color;// true - печать в цвете
-extern bool printer_a3; // true - A3 (big size paper)
 extern QString list_n;  // описание текущего листа
 extern double h_ofsett; // горизонтальное смещение позиции печати
 extern int pap_sor;     // источник бумаги
@@ -124,14 +121,13 @@ private slots:
     void set_caption(QString text,
          QColor f_cl, QColor b_cl,
          QFont fn, bool shw, bool tr);      // установить подпись
-    void show_caption(int index, bool sh);  // показать/скрыть подпись к картинке index - абсолютный номер sh "true" - показать
+    void show_caption(int index);           // показать/скрыть подпись к картинке index - абсолютный номер sh "true" - показать
     void cp_press(int x, int y, int i);     // нажатие мышки на подписи
     void cp_move(int x, int y, int i);      // движение мышки по подписи
     void cp_up(int x, int y, int i);        // отпускание ммышки на подписе
     void cp_setGeometry(int index);         // задать геометрию для подписи к картинке № index
     void cp_setPixmap(int index);           // создать картинку подписи
     void turn_caption();                    // переключить состояние подписи (вкл/выкл) для bufpress2
-    void reScl();                           // пересчет масштаба и позиций подписей
     void setTextBlock(QString text,
          QColor BackColor, QColor LitColor,
          QFont TextFont, bool trans,
@@ -149,7 +145,6 @@ private slots:
     void  edit_textBlock();                 // редактировать текстовый блок
     void  open_textblockEd();               // открыть редактор текстовых блоков
     void  get_marg();                       // расчет области непечати
-    void  tstPrin();                        // печать тестового квадрата по размеру листа
     QString GetPathFrom(QString pFile);     // получить путь к файлу по его полному имени (отбросить имя из пути), без слеша на конце
     void  prePint();                        // прогон листов перед печатью.
     void  setAutoOrn();                     // Автоматически установить оринетацию бумаги
@@ -171,9 +166,10 @@ private slots:
     void  moveTo(int x, int y);             // сдвинуть выбранную картинку на соотв. количество точек
     void  resizeTo(float c);                // изменить размер картинки в с раз
     void  showPctBord(bool b);              // показать/скрыть рамку вокруг картинки - типа курсор на картинке
-    void  getNewVal();                      // получить новые значения координат и размеров для текущего размера листа.
     void  setCaptionRect(int index, QRect r);// сохранить значения геометрии подписи для index
     QRect getCaptionRect(int index);        // получить значение геометрии подписи для index
+    void  setNewPix(QPixmap p);             // применить результат трансформации
+    QString get_run(QString s);             // выполнить команду s и вернуть вывод от нее
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();
@@ -209,13 +205,14 @@ private slots:
     void on_dial_3_valueChanged(int value);
     void on_dial_4_valueChanged(int value);
     void on_pushButton_clicked();
-    void on_checkBox_clicked();
     void on_pushButton_17_clicked();
     void on_pushButton_18_clicked();
     void on_pushButton_19_clicked();
     void on_pushButton_20_clicked();
     void on_pushButton_21_clicked();
     void on_pushButton_22_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение
@@ -231,6 +228,7 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *e);   // событие изменение размера окна
     void closeEvent(QCloseEvent *cl);    // событие закрытия окна
+    void moveEvent( QMoveEvent *e);
     void dragEnterEvent(QDragEnterEvent *event);  //
     void dropEvent(QDropEvent *event);
     void keyPressEvent(QKeyEvent *e);
