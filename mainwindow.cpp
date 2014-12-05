@@ -9,6 +9,7 @@
 #include "qdeformation.h"
 #include <math.h>
 #include <qmath.h>
+#include "repaint.h"
 
 #include <QDesktopWidget>
 #include <QPrinter>
@@ -40,6 +41,7 @@
 #include <iostream>
 using namespace std;
 
+
 /*
 Каждый лист имеет свой размер бумаги, который задается в переменной int sheet[N].size,
 где N=0,1,... - номер листа
@@ -51,8 +53,10 @@ using namespace std;
 
 
 // глобальные переменные
+
 QPrinter *printer;       // принтер, в него рисовать и настраивать
 QPainter *pntr;          // устройство рисования (с него печатать)
+QRepaintPixmap *repn;          // форма для корректировки цвета
 PageSetup *ps;
 TextEditor *txed;
 about *ab;
@@ -67,6 +71,8 @@ QString str_time;
 QavLabel *fon;
 QavLabel *rez;          // рамка обрезки
 Qdeformation *deform;
+
+//int oldAA=0; // раскомментировать, если задействована процедура управления прозрачностью (где-то на 3550 строке кода)
 
 bool flag2;
 int	 img_count=-1; 	    // количество превьюшек
@@ -131,7 +137,8 @@ QString p_name;         // имя принтера
 int sheet_size;
 bool all_sizes;
 bool set_orn;
-bool print_color;
+bool print_color=true;  // печать в цвете
+bool print_hi=true;     // печать в макс. качестве
 QString list_n;
 double h_ofsett;        // горизонтальное смещение позиции печати
 int pap_sor;            // источник бумаги
@@ -198,8 +205,11 @@ struct prew {
 struct sheets {              // описание листа
     bool    list_orn;        // ориентация листа true -портретная
     int     size;            // размер листа - номер по списку размеров
-    int     height;          // высота
-    int     width;           // ширина
+    int     height;          // высота mm
+    int     width;           // ширина mm
+    // далее для печати только:
+    int     sheet_h;         // высота области предпросмотра на экране
+    int     sheet_w;         // ширина области предпросмотра на экране
 };
 
 sheets   curSheet;           // описание текущего листа
@@ -230,20 +240,18 @@ MainWindow::MainWindow(QWidget *parent) :
     list_n.append("A4 210x297 mm");
     fon->show();
     all_sizes=true;
-    print_color=true;
     set_orn = true;
     all_rot=true;
     ul_hor=3;
     ul_ver=3;
     h_ofsett=0;
     pap_sor=0;
-    testPrint=false;
     font_scl=1;
     ui->pushButton_13->hide();
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
-    printer = new QPrinter(QPrinter::HighResolution);
+    //printer = new QPrinter(); //QPrinter::HighResolution);
     pntr = new QPainter();
     rap=true;
     animGif = new QMovie(":/new/prefix1/indicator");
@@ -263,7 +271,7 @@ MainWindow::MainWindow(QWidget *parent) :
     curSheet.size=pap_name;    
     curSheet.width=paper_w;
     curSheet.height=paper_h;
-    curSheet.list_orn=(paper_h>paper_w);
+    curSheet.list_orn=true;
     sheet.push_back(curSheet);
     get_marg();
     rest_view_sett();       // восстановить компоновку
@@ -592,7 +600,7 @@ void MainWindow::dropEvent(QDropEvent *event) // сброс картинок м�
 
 }
 
-void MainWindow::get_marg()
+void MainWindow::get_marg() // расчитать поля бумаги - область, недоступную для печати
 {
     if(fun)cout << "get_marg" << endl;
     setty.beginGroup("Settings");
@@ -602,20 +610,12 @@ void MainWindow::get_marg()
     }
     else
     {
-        top_m=setty.value("top_m", -5).toInt();
-        if(top_m==-5)
-        {
+        printer = new QPrinter(QPrinter::HighResolution);
+        printer->setPaperSize(QPrinter::A4);
         QRect pap=printer->paperRect();
         QRect pag=printer->pageRect();
         left_m=right_m=double((pap.width()-pag.width())/2)/(double(printer->resolution())/25.4);
         top_m=bottom_m=double((pap.height()-pag.height())/2)/(double(printer->resolution())/25.4);
-        }
-        else
-        {
-            left_m=setty.value("left_m", 5).toInt();
-            right_m=setty.value("right_m", 5).toInt();
-            bottom_m=setty.value("bottom_m", 5).toInt();
-        }
     }
     setty.endGroup();
 }
@@ -634,14 +634,19 @@ void MainWindow::setIconOrns(bool b)
     }
 }
 
-void MainWindow::end_rotation() // эта функция требует переосмысления...
+void MainWindow::end_rotation() // Завершение поворота листа при смене орентации
 {
     if(fun)cout << "end_rotation" << endl;
+    for(int i=0;i<lists;i++){
+        if(i==curlist-1 || all_rot){
+            swap(sheet[i].height,sheet[i].width);
+            sheet[i].list_orn=!sheet[i].list_orn;
+        }
+    }
     swap(paper_h, paper_w);
-    swap(curSheet.height,curSheet.width);
-    swap(sheet[curlist-1].height,sheet[curlist-1].width);
     swap(gor,ver);
-    sheet[curlist-1].list_orn=curSheet.list_orn=(paper_h>paper_w);
+    swap(curSheet.height,curSheet.width);
+    curSheet.list_orn=!curSheet.list_orn;
     make_list();
     btn_comp_press(comp);
     if (all_rot)
@@ -693,7 +698,7 @@ void MainWindow::redraw()
     y_prw=((wind_sz.height()-75)-h)/2+73;
     gor=w;
     ver=h;
-    setIconOrns(h>=w);
+    setIconOrns(curSheet.list_orn);
 }
 
 void MainWindow::layout_scale()
@@ -722,13 +727,13 @@ void MainWindow::get_pp() // получить количество точек н
     if(fun)cout << "get_pp" << endl;
     if(sheet[curlist-1].list_orn)
     {
-        ppx=double(ui->list->width())/double(sheet[curlist-1].width);
-        ppy=double(ui->list->height())/double(sheet[curlist-1].height);
+        ppx=double(ui->list->width())/double(curSheet.width);
+        ppy=double(ui->list->height())/double(curSheet.height);
     }
     else
     {
-        ppx=double(ui->list->width())/double(sheet[curlist-1].height);
-        ppy=double(ui->list->height())/double(sheet[curlist-1].width);
+        ppx=double(ui->list->width())/double(curSheet.height);
+        ppy=double(ui->list->height())/double(curSheet.width);
     }
 }
 
@@ -817,6 +822,11 @@ void MainWindow::load_folder(QString fn)
 {
     if(fun)cout << "load_folder" << endl;
     QDir dir(fn);
+    if(!dir.exists()){
+        cout << "Oh no. It's something else..."<<endl;
+        flag2=false;
+        return;
+    }
     QStringList nameFilter; // имя фильтра
     nameFilter << "*.png" << "*.xpm" << "*.jpg" << "*.jpeg" << "*.bmp" << "*.gif" << "*.ico";
     QFileInfoList list = dir.entryInfoList( nameFilter, QDir::Files );// только файлы
@@ -1041,9 +1051,12 @@ void MainWindow::set_printer(int index) // настройка принтера �
 {
      if(fun)cout << "set_printer" << endl;
      if(!pdf)printer->setDocName("vap_pictures_"+QString::number(index));
-     if(sheet[index].list_orn) printer->setOrientation(QPrinter::Portrait);
-        else printer->setOrientation(QPrinter::Landscape);
      set_printer_pap_size(index); // установить размер бумаги для этого листа
+     if(sheet[index].list_orn) printer->setOrientation(QPrinter::Portrait);
+        else printer->setOrientation(QPrinter::Landscape);     
+     // физическое разрешение принтера по x и y (точек на мм)
+     prx=printer->physicalDpiX()/25.4;
+     pry=printer->physicalDpiY()/25.4;
 }
 
 void MainWindow::prePint()
@@ -1056,30 +1069,57 @@ void MainWindow::prePint()
         for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
         curlist=i;
         if (int(sheet.size())<lists) sheet.push_back(sheet.back());
+        curSheet=sheet[i-1];
         show_pict();
+        sheet[i-1].sheet_w=ui->sheet->width();
+        sheet[i-1].sheet_h=ui->sheet->height();
     }
     for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
     curlist=j;
+    curSheet=sheet[j-1];
     show_pict();
 }
 
 void MainWindow::setPrinter()
 {
+    // создать принтер и указать его качество печати
+    if (print_hi) printer = new QPrinter(QPrinter::HighResolution);
+        else printer = new QPrinter();
+
     printer->setFullPage(true);
     if(!pdf){
         printer->setPrinterName(p_name);
         printer->setOutputFileName("");
         printer->setOutputFormat(QPrinter::NativeFormat);
         cout << "printer: " << p_name.toStdString() << endl;
+    }else{
+        QString user=getenv("HOME");
+        if(pathFile)
+        {
+            setty.beginGroup("Settings");
+            user=setty.value("inPath",user).toString();
+            setty.endGroup();
+        }
+        QString fileName = QFileDialog::getSaveFileName
+                (this, tr("Print to PDF file..."), user, tr("pdf-file (*.pdf)"));
+        if(fileName.isEmpty()) return;
+        if(fileName.right(4)!=".pdf")fileName.append(".pdf");
+        printer->setOutputFormat(QPrinter::PdfFormat);
+        printer->setOutputFileName(fileName);
     }
+    // настройка цвета
     if (print_color) printer->setColorMode(QPrinter::Color);
         else printer->setColorMode(QPrinter::GrayScale);
-    // физическое разрешение принтера по x и y (точек на мм)
-    prx=printer->physicalDpiX()/25.4;
-    pry=printer->physicalDpiY()/25.4;
 }
 
-void MainWindow::on_pushButton_29_clicked() //печать
+void MainWindow::on_pushButton_29_clicked() //печать в высоком качестве
+{
+    print_color=true;
+    print_hi=true;
+    printAll();
+}
+
+void MainWindow::printAll() // собственно печать
 {
     if(fun)cout << "on_pushButton_29_cliked (printing)" << endl;
     prePint();          // прогон листов перед печатью
@@ -1091,10 +1131,11 @@ void MainWindow::on_pushButton_29_clicked() //печать
     double dx, dy;      // Смещение области печати от края листа бумаги
     bool f;
     // общая настройка принтера
-    setPrinter();
+    setPrinter();   
     for (int i=0; i<lists; i++)
     {
-        set_printer(i);             // настроить принтер
+        set_printer(i);             // дополнительно настроить принтер для текущего листа
+        if(pdf && i!=0)printer->newPage();
         rc=printer->paperRect();    // размер бумаги
         if(i==0 || !pdf)f=pntr->begin(printer);
         px=0;py=0;
@@ -1104,16 +1145,17 @@ void MainWindow::on_pushButton_29_clicked() //печать
             QMessageBox::critical(NULL,QObject::tr("Error"),tr("Printer not found! Check the settings and printer availability."));
             return;
         }
-
+        cout << "pntr->viewport().width()="<< pntr->viewport().width() << endl;
         // Расчет смещения области печати от края листа
         qreal left=0, top=0, right=0, bottom=0, b2=0;
         printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::DevicePixel);
         cout << "maggins: " << left << ", " << top << ", " << right << ", " << bottom << endl;
         dx=left; dy=top;
         // масштаб между предпросмотром и бумагой (в пикселах)
+        if(pdf)if(sheet[i].list_orn!=sheet[0].list_orn)swap(sheet[i].sheet_w,sheet[i].sheet_h);
         if(sheet[i].size<30){
-        sclX=double(pntr->viewport().width())/double(ui->sheet->width());
-        sclY=double(pntr->viewport().height())/double(ui->sheet->height());
+        sclX=double(pntr->viewport().width())/sheet[i].sheet_w;
+        sclY=double(pntr->viewport().height())/sheet[i].sheet_h;
         } else {
             if(sheet[i].list_orn){
                 x=pntr->viewport().width()/(210.0/double(sheet[i].width));
@@ -1124,8 +1166,8 @@ void MainWindow::on_pushButton_29_clicked() //печать
                 y=pntr->viewport().height()/(210.0/double(sheet[i].width));
 
             }
-            sclX=x/double(ui->sheet->width());
-            sclY=y/double(ui->sheet->height());
+            sclX=x/sheet[i].sheet_w;
+            sclY=y/sheet[i].sheet_h;
             px=dx;
             py=dy;
          }
@@ -1204,10 +1246,10 @@ void MainWindow::on_pushButton_29_clicked() //печать
                         }
              }
         }
-            if(pdf && i<lists-1)printer->newPage();
-            else pntr->end(); // отправить на печать
+            if(i==lists-1 || !pdf)pntr->end(); // отправить на печать
     }
    cout << "end printing" << endl;
+   printer->~QPrinter(); // уничтожить экземпляр принтера
 }
 
 void MainWindow::start_load_picture()
@@ -1264,6 +1306,7 @@ void MainWindow::pct_press(int x, int y, int i) // нажатие на прев�
     out_rot=false;
     show_pict_size();
     ui->pushButton_2->setEnabled(true);
+    ui->pushButton_5->setEnabled(true);
 }
 
 void MainWindow::pct_move(int x, int y, int i)
@@ -1401,7 +1444,8 @@ int mmToPixG(int mm) // перевод мм в пиксели предпросм
 int getmx()
 // получить макимальный размер Х для текущей компоновки
 {
-  return(w_fon-mmToPixG(pol))/w_cou-mmToPixG(pol);
+    return(w_fon-mmToPixG(pol))/w_cou-mmToPixG(pol);
+
 }
 
 int getmy()
@@ -1415,7 +1459,7 @@ void MainWindow::img_size_cur_comp()
 {
     getx=getmx();
     gety=getmy();
- }
+}
 
 void MainWindow::btn_comp_press(int i)
 {
@@ -1523,17 +1567,9 @@ void MainWindow::show_pict() // показать картинки текущег
           toshow.push_back(prew());
           toshow[img_count].buf=i;
           toshow[img_count].pct = new QavLabel(fon);
-          //toshow[img_count].pct->setBackgroundRole(QPalette::Base);
           toshow[img_count].pct->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
           toshow[img_count].pct->setScaledContents(true);
           toshow[img_count].pct->setPixmap(toprint[i].pix);
-//          if(ui->checkBox->isChecked())toshow[img_count].pct->setPixmap(toprint[i].pix);
-//          else{ // черно-белая картинка
-//               QPixmap alpha = toprint[i].pix;
-//               QImage img = alpha.toImage();
-//               img=img.convertToFormat(QImage::Format_Mono);
-//               toshow[img_count].pct->setPixmap(QPixmap::fromImage(img));
-//          }
           toshow[img_count].pct->setCursor(Qt::OpenHandCursor);
           toshow[img_count].pct->setImnum(img_count);
           toshow[img_count].pct->setAttribute(Qt::WA_DeleteOnClose);
@@ -1649,7 +1685,7 @@ void MainWindow::recomp()
     }
     lists=0;
     for(int i=0; i<=buf; i++) if(toprint[i].list>lists) lists=toprint[i].list;
-    curlist=1;
+    //curlist=1;
     show_pict();
     save_view_sett();
 }
@@ -1986,10 +2022,6 @@ void MainWindow::rest_printer_sett()
 
     setty.beginGroup("Printer");
         p_name=(setty.value("printer_name", p_name).toString());
-        left_m=setty.value("left_m", 10).toInt() ;
-        right_m=setty.value("right_m", 10).toInt();
-        top_m=setty.value("top_m", 10).toInt();
-        bottom_m=setty.value("bottom_m", 10).toInt();
         print_color=setty.value("color", true).toBool();
         pap_name=setty.value("paper_name", 0).toInt();
         pap_sor=setty.value("sourse", 0).toInt();
@@ -2074,6 +2106,7 @@ void MainWindow::show_paper_size()
     ui->checkBox_10->setVisible(true);
     ui->checkBox_12->setVisible(true);
     ui->pushButton_2->setEnabled(false);
+    ui->pushButton_5->setEnabled(false);
 }
 
 void MainWindow::show_pict_size()
@@ -2144,7 +2177,7 @@ void MainWindow::show_clip() // включить рамку обрезки
     rez->show();
     quick_buttons_off();
     ui->pushButton_32->show();
-    ui->tabWidget_2->setCurrentIndex(2);
+    ui->tabWidget_2->setCurrentIndex(3);
     ui->checkBox_10->setVisible(false);
     ui->checkBox_12->setVisible(false);
     showPctBord(false);
@@ -2155,8 +2188,11 @@ void MainWindow::paint_frame()
     QPixmap pm(QSize(rez->width(), rez->height()));
     pm.fill(Qt::transparent);
     QPainter painter(&pm);
-    //цвет линии
-    painter.setPen(QColor(255,128,0));
+    //цвет линии and style
+    QPen pen;
+    pen.setBrush(QColor(255,128,0));
+    pen.setStyle(Qt::DashLine);
+    painter.setPen(pen);
     //рамка
     painter.drawLine(0,0, rez->width(), 0);
     painter.drawLine(0,0, 0, rez->height());
@@ -3211,7 +3247,7 @@ void MainWindow::on_pushButton_30_clicked() // назад
     if(fun)cout << "on_pushButton_30_cliked" << endl;
     if(curlist>1)
     {
-        for(int i=0; i<=buf; i++) toprint[i].cp_num=-1;
+        for(int i=0; i<=buf; i++) toprint[i].cp_num=-1; // сброс связи каринок с превьюшками на экране
         curlist--;
         curSheet=sheet[curlist-1];
         show_pict();
@@ -3223,13 +3259,14 @@ void MainWindow::on_pushButton_31_clicked() // вперед
     if(fun)cout << "on_pushButton_31_cliked" << endl;
     if (curlist<lists)
     {
-        for(int i=0; i<=buf; i++) toprint[i].cp_num=-1;
+        for(int i=0; i<=buf; i++) toprint[i].cp_num=-1; // сброс связи каринок с превьюшками на экране
         curlist++;
         if (int(sheet.size())<lists)
-        {
+        {   // если лист открывается впервые, то добавить его в вектор и дать ему свойства предыдущего листа
             sheet.resize(curlist);
-            //sheet.push_back(sheets());
             sheet[curlist-1]=curSheet;
+        }else{
+            curSheet=sheet[curlist-1];
         }
         show_pict();
      }
@@ -3367,22 +3404,10 @@ void MainWindow::on_dial_4_valueChanged(int value) // Плавное враще�
 
 void MainWindow::on_pushButton_clicked() // печать в PDF-файл
 {
-    //Задать имя файла
-    QString user=getenv("HOME");
-    if(pathFile)
-    {
-        setty.beginGroup("Settings");
-        user=setty.value("inPath",user).toString();
-        setty.endGroup();
-    }
-    QString fileName = QFileDialog::getSaveFileName
-            (this, tr("Print to PDF file..."), user, tr("pdf-file (*.pdf)"));
-    if(fileName.isEmpty()) return;
-    if(fileName.right(4)!=".pdf")fileName.append(".pdf");
-    printer->setOutputFormat(QPrinter::PdfFormat);
-    printer->setOutputFileName(fileName);
     pdf=true;
-    on_pushButton_29_clicked();
+    print_color=true;
+    print_hi=true;
+    printAll();
     pdf=false;
 }
 
@@ -3496,8 +3521,52 @@ void MainWindow::on_pushButton_2_clicked() // загрузить активну�
 void MainWindow::setNewPix(QPixmap p)
 {
     toprint[bufpress2].pix=toprint[bufpress2].pix0=p;
-    QSize sz=setsize(p.size());
-    toprint[bufpress2].width=sz.width();
-    toprint[bufpress2].height=sz.height();
     show_pict();
 }
+
+void MainWindow::on_pushButton_3_clicked() // печать ч/б качественно
+{
+    print_color=false;
+    print_hi=true;
+    printAll();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    print_color=true;
+    print_hi=false;
+    printAll();
+}
+
+void MainWindow::on_pushButton_5_clicked() // открыть окно коррекции цвета
+{
+    if(repn==0){
+        repn = new QRepaintPixmap(this);
+        connect(repn,SIGNAL(endRepaint(QPixmap)),this,SLOT(setNewPix(QPixmap)));
+    }
+    repn->show();
+    repn->setPixmap(toprint[bufpress2].pix);
+}
+
+// "опрозрачивание" текущей картинки к этой процедуре нужен регулятор, например слайдер
+//void MainWindow::setTransp(int value)
+//{
+//    int a;
+//    QRgb rgb;
+//    QColor cl;
+//    QImage im=toprint[bufpress2].pix.toImage().convertToFormat(QImage::Format_ARGB32,Qt::AutoColor);
+//    for(int x=0;x<im.width();x++)
+//        for(int y=0;y<im.height();y++){
+//            rgb=im.pixel(x,y);
+//            a=qAlpha(rgb);
+//            a+=value-oldAA;
+//            if(a>255)a=255;
+//            if(a<0)a=0;
+//            cl.setRgba(rgb);
+//            cl.setAlpha(a);
+//            im.setPixel(x,y,cl.rgba());
+//        }
+//    toprint[bufpress2].pix=toprint[bufpress2].pix0=QPixmap::fromImage(im);
+//    show_pict();
+//    oldAA=value;
+//}

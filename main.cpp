@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include <QApplication>
 #ifdef HAVE_QT4
     #include <QTextCodec>
@@ -57,16 +57,30 @@ int main(int argc, char *argv[])
     w.setFont(font);
     w.cou_prm=argc;
     w.fn_size=fSize;
-    if (argc>1)
-    for (int i = 0; i < argc; i++) {
-            // Сохраняем список аргументов
-            w.prm<<argv[i];
+    bool go=true;
+    if (argc>1){
+        for (int i = 0; i < argc; i++) {
+                // Сохраняем список аргументов
+                w.prm<<argv[i];
+            }
+        if(w.prm[1]=="--version"){
+                cout << "vap 3.7 Qt 5.3" << endl;
+                cout << "Exit after the request version" << endl;
+                go=false;
+
         }
-    w.show();
-    //w.showArg(argv[1]);
-    w.if_show();
+        if(w.prm[1]=="--about"){
+                cout << "vap - fast print" << endl;
+                cout << "visit qvap.ru" << endl;
+                cout << "Exit after the request about" << endl;
+                go=false;
 
-
-    return a.exec();
+        }
+    }
+    if(go){
+        w.show();
+        w.if_show();
+        return a.exec();
+    }
 }
 

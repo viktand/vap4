@@ -17,7 +17,6 @@ extern int  ul_hor;     // пользовательская компоновка
 extern int  ul_ver;     // пользовательская компоновка - по вертикале
 extern QString p_name;  // имя принтера
 extern bool set_orn;    // ориентация листа true - портретная, используется для программного нажатия кнопки при выборе пользовательской компоновки
-extern bool print_color;// true - печать в цвете
 extern QString list_n;  // описание текущего листа
 extern double h_ofsett; // горизонтальное смещение позиции печати
 extern int pap_sor;     // источник бумаги
@@ -30,7 +29,6 @@ extern QFont  font_cpt; // шрифт подписи
 extern bool frm_cpt;    // показывать рамку подписи
 extern bool trans;      // прозрачный фон надписи
 extern double font_scl; // масштаб шрифта в предпросмотре
-extern bool testPrint;  // печать тестового креста (для проверки позиционирования)
 extern int sheet_size;  // индекс размера листа (для передачи параметра из окна настроек)
 extern bool all_sizes;  // true - все листы имеют одинаковый размер бумаги (по умолчанию)
 
@@ -170,6 +168,7 @@ private slots:
     QRect getCaptionRect(int index);        // получить значение геометрии подписи для index
     void  setNewPix(QPixmap p);             // применить результат трансформации
     QString get_run(QString s);             // выполнить команду s и вернуть вывод от нее
+    void  printAll();                       // вывести на печать
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();
@@ -211,8 +210,11 @@ private slots:
     void on_pushButton_20_clicked();
     void on_pushButton_21_clicked();
     void on_pushButton_22_clicked();
-
     void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
+    void on_pushButton_5_clicked();
+
 
 private:
     Ui::MainWindow *ui;                 // Рождение

@@ -26,4 +26,7 @@ bool thunar_check();
 void pcman_set(bool ch);
 bool pcman_check();
 
+void spacefm_set(bool ch);
+bool spacefm_check();
+
 #endif // INTEGRO_H

@@ -69,5 +69,9 @@
         <file alias="transform">resurs/transform.png</file>
         <file alias="undo">resurs/undo.png</file>
         <file alias="reset">resurs/reset.png</file>
+        <file alias="vap_black">resurs/vap_black.png</file>
+        <file alias="vap_2">resurs/vap_2.png</file>
+        <file alias="spacefm">resurs/spacefm.png</file>
+        <file alias="colors">resurs/colors.png</file>
     </qresource>
 </RCC>

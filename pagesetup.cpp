@@ -131,6 +131,7 @@ PageSetup::PageSetup(QWidget *parent) :
     checkBox_8->setChecked(caja_check());
     checkBox_10->setChecked(thunar_check());
     checkBox_11->setChecked(pcman_check());
+    checkBox_2->setChecked(spacefm_check());
     flag_ret=false;
  }
 
@@ -177,7 +178,6 @@ void PageSetup::on_radioButton_clicked()
 void PageSetup::load_data()
 {
    clse=true;
-   checkBox_2->setChecked(print_color);
    doubleSpinBox_2->setValue(font_scl);
    ph=paper_h;
    pw=paper_w;
@@ -271,7 +271,6 @@ void PageSetup::on_pushButton_clicked() // Ok
 void PageSetup::on_pushButton_4_clicked() // apply
 {
     if(radioButton->isChecked()) emit end_set(3); else emit end_set(4);
-    print_color=checkBox_2->isChecked();
     paper_h=ph;
     paper_w=pw;
     list_n=nmsp[comboBox->currentIndex()].name;
@@ -416,3 +415,9 @@ void PageSetup::on_checkBox_14_clicked(bool checked)
     auto_orn=checked;
 }
 
+
+void PageSetup::on_checkBox_2_clicked(bool checked)
+{
+    if(flag_ret)return;
+    spacefm_set(checked);
+}

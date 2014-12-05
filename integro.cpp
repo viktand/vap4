@@ -225,7 +225,7 @@ void pcman_set(bool ch) // to PCMan-FM
     QString com;
     home=getenv("HOME");
     fold.append(home);
-    fold.append("/.local/share/applications");
+    fold.append("/.local/share/file-manager");
     DIR *dr = opendir(fold.toUtf8());
     if (!dr) // папки нет, надо создать
         {
@@ -234,7 +234,16 @@ void pcman_set(bool ch) // to PCMan-FM
             com.append(fold);
             run(com);
         }
-    fold.append("/userapp-vap-REY2AX.desktop");
+    fold.append("/actions");
+    DIR *dr2 = opendir(fold.toUtf8());
+    if (!dr2) // папки нет, надо создать
+        {
+            com.clear();
+            com.append("mkdir ");
+            com.append(fold);
+            run(com);
+        }
+    fold.append("/vap.desktop");
     QFile file(fold);
     if (!ch)
         {
@@ -249,17 +258,16 @@ void pcman_set(bool ch) // to PCMan-FM
             return;
         }
     QTextStream out(&file);
+
     out << "[Desktop Entry]\n";
-    out << "Type=Application\n";
-    out << "MimeType=image\n";
     out << "Name=Print(vap)\n";
-    out << "Exec=vap %U\n";
     out << "Icon=vap\n";
-    out << "Comment=Fast printig pictures\n";
-    out << "Comment[ru]=Быстрая печать миниатюр изображений\n";
-    out << "Description=Print(vap)\n";
-    out << "Categories=Oder;\n";
-    out << "NoDisplay=true\n";
+    out << "Profiles=on_files;\n";
+    out << "\n";
+    out << "[X-Action-Profile on_files]\n";
+    out << "Name=Print(vap)\n";
+    out << "MimeTypes=all/allfiles; inode/directory\n";
+    out << "Exec=vap %F\n";
     file.close();
     com.clear();
     com.append("chmod 664");
@@ -274,10 +282,10 @@ bool pcman_check()
     QString fold;
     home=getenv("HOME");
     fold.append(home);
-    fold.append("/.local/share/applications");
+    fold.append("/.local/share/file-manager/actions");
     DIR *dr = opendir(fold.toUtf8());
     if (!dr) return false;  // папки нет, интеграции тоже
-    fold.append("/userapp-vap-REY2AX.desktop");
+    fold.append("/vap.desktop");
     QFile file(fold);
     return file.exists();
 }
@@ -501,6 +509,121 @@ void caja_set(bool ch) // to Caja
     cout << "integration into Caja enabled" << endl;
 }
 
+bool spacefm_check() // проверка интеграции с SpaceFM
+{
+    char *home;
+    QString fold;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.config/spacefm");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr) // папки нет, интеграции тоже нет
+    {
+        return false;
+    }
+    fold.append("/session");
+    QFile file(fold);
+    if(!file.exists()) // файла нет, интеграции тоже нет
+    {
+        return false;
+    }
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString line;
+    QByteArray lin;
+    while(!file.atEnd())
+    {
+        lin=file.readLine();
+        line=QString(lin);
+        if(line.contains("open_new-next=cstm_575361ce"))
+        {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void spacefm_set(bool ch) // to SpaceFM
+{
+    char *home;
+    QString fold;
+    QString com;
+    home=getenv("HOME");
+    fold.append(home);
+    fold.append("/.config/spacefm");
+    DIR *dr = opendir(fold.toUtf8());
+    if (!dr && ch) // папки нет, надо создать
+        {
+            com.clear();
+            com.append("mkdir ");
+            com.append(fold);
+            run(com);
+        }
+    fold.append("/session");
+    QFile file(fold);
+    // Загрузить файл для анализа и коррекции
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QByteArray lin;
+    QStringList fl;
+    while(!file.atEnd())
+    {
+        lin=file.readLine();
+        fl.append(QString(lin));
+    }
+    file.close();
+    if (!ch) // удалить интеграцию
+        {
+            QStringList fl2;
+            for(int i=0; i<fl.count(); i++)
+            {
+                if(!fl[i].contains("cstm_575361ce"))
+                {
+                    fl2.append(fl[i]);
+                }
+            }
+            fl.clear();
+            fl=fl2;
+            cout << "integration into the SpaceFM is disabled" << endl;
+        }
+    else // установить интеграцию
+        {
+            if (fl.count()==0) // вообще ничего не было
+            {
+               fl.append("[MOD]\n");
+            }
+            fl.append("open_new-next=cstm_575361ce\n");
+            fl.append("cstm_575361ce-x=2\n");
+            fl.append("cstm_575361ce-y=\n");
+            fl.append("cstm_575361ce-z=vap.desktop\n");
+            fl.append("cstm_575361ce-label=Print (vap)\n");
+            fl.append("cstm_575361ce-icon=vap\n");
+            fl.append("cstm_575361ce-prev=open_new\n");
+            fl.append("cstm_575361ce-task=1\n");
+            fl.append("cstm_575361ce-task_err=1\n");
+            fl.append("cstm_575361ce-task_out=1\n");
+            fl.append("cstm_575361ce-keep=1\n");
+            cout << "integration into SpaceFM enabled" << endl;
+        }
+
+    // сохранить модефицированный файл
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    if(!file.isOpen())
+        {
+            cout << "error open file for SpaceFM" << endl;
+            cout << fold.toStdString() << endl;
+            cout << "Probably you are not the owner of the destination folder. Try sudo vap" << endl;
+            return;
+        }
+    QTextStream out(&file);
+    for(int i=0; i<fl.count();i++) if(fl[i]!="#") out << fl[i];
+    file.close();
+    com.clear();
+    com.append("chmod 664 ");
+    com.append(fold);
+    run(com);
+}
+
 bool thunar_check() // проверка интеграции с Thunar
 {
     char *home;
@@ -577,7 +700,7 @@ void thunar_set(bool ch) // to Thunar
             }
             if(start_line>-1) // секция найдена
             {
-                for(int i=start_line; i<start_line+8;i++)
+                for(int i=start_line; i<start_line+10;i++)
                 {
                     fl[i]="#";
                 }
@@ -598,9 +721,10 @@ void thunar_set(bool ch) // to Thunar
             fl.append("<action>\n");
             fl.append("	<icon>vap</icon>\n");
             fl.append("	<name>Print(vap)</name>\n");
-            fl.append("	<command>vap %F</command>\n");
-            fl.append("	<description>Print yours images</description>\n");
+            fl.append("	<command>/usr/bin/vap %F</command>\n");
+            fl.append("	<description>Print with vap</description>\n");
             fl.append("	<patterns>*</patterns>\n");
+            fl.append("	<directories/>\n");
             fl.append("	<image-files/>\n");
             fl.append("</action>\n");
             fl.append("</actions>\n");

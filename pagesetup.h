@@ -51,6 +51,8 @@ private slots:
     void on_comboBox_4_activated(const QString &arg1);
     void on_checkBox_14_clicked(bool checked);
 
+    void on_checkBox_2_clicked(bool checked);
+
 public slots:
     void load_data();       // загрузить данные в форму
     void set_all();         // уточнить состояние флага "ориентация для всех"
