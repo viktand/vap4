@@ -45,6 +45,15 @@ int main(int argc, char *argv[])
                 cout << "Russian interface selected and connected" << endl;
               }
         }
+    if(((lc.country()==QLocale::Ukraine) && (lng_app=="Auto"))
+            || (lng_app=="Ukraine") || (lng_app=="Українська") )
+        {
+            if(translator.load(":/new/prefix1/vap_uk"))
+              {
+                a.installTranslator(&translator);
+                cout << "Ukrainian interface selected and connected" << endl;
+              }
+        }
     MainWindow w;
     QFont font;
     if(fSize==0){
@@ -64,7 +73,7 @@ int main(int argc, char *argv[])
                 w.prm<<argv[i];
             }
         if(w.prm[1]=="--version"){
-                cout << "vap 3.7 Qt 5.3" << endl;
+                cout << "vap 3.8 Qt 5.3" << endl;
                 cout << "Exit after the request version" << endl;
                 go=false;
 

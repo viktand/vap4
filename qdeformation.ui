@@ -424,7 +424,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Cansel</string>
+    <string>Cancel</string>
    </property>
   </widget>
   <widget class="Line" name="line_3">

@@ -277,8 +277,8 @@ void Dialog_paper::on_pushButton_3_clicked() // включить добавле�
     ui->label_3->setVisible(!ui->label_3->isVisible());
     ui->lineEdit->setVisible(!ui->lineEdit->isVisible());
     ui->pushButton->setVisible(!ui->pushButton->isVisible());
-    if(ui->pushButton->isVisible()) ui->pushButton_3->setText("Add new (click to hide)");
-        else ui->pushButton_3->setText("Add new");
+    if(ui->pushButton->isVisible()) ui->pushButton_3->setText(tr("Add new (click to hide)"));
+        else ui->pushButton_3->setText(tr("Add new"));
 }
 
 bool Dialog_paper::dig(QString s)

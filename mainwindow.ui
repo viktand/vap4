@@ -236,7 +236,7 @@
      <widget class="QPushButton" name="pushButton_30">
       <property name="geometry">
        <rect>
-        <x>270</x>
+        <x>330</x>
         <y>0</y>
         <width>44</width>
         <height>38</height>
@@ -262,7 +262,7 @@
      <widget class="QPushButton" name="pushButton_31">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>500</x>
         <y>0</y>
         <width>44</width>
         <height>38</height>
@@ -288,7 +288,7 @@
      <widget class="Line" name="line">
       <property name="geometry">
        <rect>
-        <x>490</x>
+        <x>550</x>
         <y>2</y>
         <width>3</width>
         <height>35</height>
@@ -301,7 +301,7 @@
      <widget class="Line" name="line_2">
       <property name="geometry">
        <rect>
-        <x>265</x>
+        <x>325</x>
         <y>0</y>
         <width>3</width>
         <height>35</height>
@@ -314,7 +314,7 @@
      <widget class="Line" name="line_3">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>270</x>
         <y>0</y>
         <width>3</width>
         <height>35</height>
@@ -366,7 +366,7 @@
      <widget class="QPushButton" name="pushButton_37">
       <property name="geometry">
        <rect>
-        <x>215</x>
+        <x>275</x>
         <y>0</y>
         <width>44</width>
         <height>38</height>
@@ -392,7 +392,7 @@
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>310</x>
+        <x>370</x>
         <y>10</y>
         <width>131</width>
         <height>20</height>
@@ -419,6 +419,32 @@
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_7">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Save sheet as image file</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/tofile</normaloff>:/new/prefix1/tofile</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -841,7 +867,7 @@
        </rect>
       </property>
       <property name="toolTip">
-       <string>All in oun</string>
+       <string>All in one</string>
       </property>
       <property name="text">
        <string/>
@@ -1154,61 +1180,6 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>0</y>
-        <width>44</width>
-        <height>38</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Transform the selected image</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/transform</normaloff>:/new/prefix1/transform</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>410</x>
-        <y>0</y>
-        <width>44</width>
-        <height>38</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/colors</normaloff>:/new/prefix1/colors</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tab_7">
      <attribute name="title">
@@ -1362,6 +1333,98 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Effects</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Color management</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/colors</normaloff>:/new/prefix1/colors</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Transform the selected image</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/transform</normaloff>:/new/prefix1/transform</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_6">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Lighting effects</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/lamp</normaloff>:/new/prefix1/lamp</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
       <string>Settings</string>
@@ -1485,10 +1548,10 @@
     </property>
    </widget>
    <zorder>list</zorder>
-   <zorder>sheet</zorder>
    <zorder>pushButton_13</zorder>
-   <zorder>tabWidget_2</zorder>
    <zorder>label_16</zorder>
+   <zorder>sheet</zorder>
+   <zorder>tabWidget_2</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

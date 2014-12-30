@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4)
     QT += widgets
 }
 
-TRANSLATIONS += vap_ru.ts
+TRANSLATIONS += vap_ru.ts vap_uk.ts
 
 
 TARGET = vap
@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     captioneditor.cpp \
     texteditor.cpp \
     qdeformation.cpp \
-    repaint.cpp
+    repaint.cpp \
+    lighter.cpp \
+    tofile.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     captioneditor.h \
     texteditor.h \
     qdeformation.h \
-    repaint.h
+    repaint.h \
+    lighter.h \
+    tofile.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
@@ -52,7 +56,9 @@ FORMS    += mainwindow.ui \
     captioneditor.ui \
     texteditor.ui \
     qdeformation.ui \
-    repaint.ui
+    repaint.ui \
+    lighter.ui \
+    tofile.ui
 
 RESOURCES += \
     res.qrc

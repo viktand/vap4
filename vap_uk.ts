@@ -1,38 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.1" language="uk_UA">
+<context>
+    <name></name>
+    <message>
+        <source>Caption editor</source>
+        <translation type="vanished">Редактор підписів</translation>
+    </message>
+    <message>
+        <source>Caption:</source>
+        <translation type="vanished">Підпис:</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="vanished">Налаштування</translation>
+    </message>
+    <message>
+        <source>Font setting</source>
+        <translation type="vanished">Налаштування шрифта</translation>
+    </message>
+    <message>
+        <source>Back color</source>
+        <translation type="vanished">Колір фону</translation>
+    </message>
+    <message>
+        <source>Font color</source>
+        <translation type="vanished">Колір букв</translation>
+    </message>
+    <message>
+        <source>Show this caption</source>
+        <translation type="vanished">Показувати цей підпис</translation>
+    </message>
+    <message>
+        <source>File name</source>
+        <translation type="vanished">Ім’я файлу</translation>
+    </message>
+    <message>
+        <source>Full file name</source>
+        <translation type="vanished">Повне ім’я файлу</translation>
+    </message>
+    <message>
+        <source>Transparent background</source>
+        <translation type="vanished">Прозорий фон</translation>
+    </message>
+    <message>
+        <source>Select background color</source>
+        <translation type="vanished">Вибір кольору фону</translation>
+    </message>
+    <message>
+        <source>Select font color</source>
+        <translation type="vanished">Вибір кольору шрифту</translation>
+    </message>
+    <message>
+        <source>Select caption font</source>
+        <translation type="vanished">Вибір шрифту підпису</translation>
+    </message>
+</context>
 <context>
     <name>Dialog_paper</name>
     <message>
         <location filename="dialog_paper.ui" line="19"/>
         <source>Paper size editor</source>
-        <translation>Редактор размера бумаги</translation>
+        <translation>Редактор розміру паперу</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="44"/>
         <source>Possible options for size:</source>
-        <translation>Возможные варианты размеров</translation>
+        <translation>Можливі варіанти розмірів</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="57"/>
         <source>Preferred sizes:</source>
-        <translation>Выбранные размеры</translation>
+        <translation>Обрані розміри</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="70"/>
         <source>new type</source>
-        <translation>Новый размер</translation>
+        <translation>Новий розмір</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="73"/>
         <location filename="dialog_paper.cpp" line="281"/>
         <source>Add new</source>
-        <translation>Добавить новый</translation>
+        <translation>Додати новий</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="86"/>
         <source>Add to list</source>
-        <translation>Добавить в список</translation>
+        <translation>Додати в список</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="89"/>
@@ -42,7 +97,7 @@
     <message>
         <location filename="dialog_paper.ui" line="102"/>
         <source>Remove from list</source>
-        <translation>Удалить из списка</translation>
+        <translation>Видалити зі списку</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="105"/>
@@ -52,22 +107,22 @@
     <message>
         <location filename="dialog_paper.ui" line="118"/>
         <source>Enter the new size as &quot;name: width x height mm&quot;</source>
-        <translation>Введите новый размер как&quot;имя: ширина x высота mm&quot;</translation>
+        <translation>Введіть новий розмір як&quot;ім’я: ширина x висота mm&quot;</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="141"/>
         <source>Save this size</source>
-        <translation>Сохранить этот размер</translation>
+        <translation>Зберегти цей розмір</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="144"/>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="157"/>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="160"/>
@@ -76,7 +131,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="obsolete">Имя</translation>
+        <translation type="obsolete">Ім’я</translation>
     </message>
     <message>
         <source>Width</source>
@@ -84,15 +139,15 @@
     </message>
     <message>
         <source>Heigth</source>
-        <translation type="obsolete">Высота</translation>
+        <translation type="obsolete">Висота</translation>
     </message>
     <message>
         <source>Save (rewrite)</source>
-        <translation type="obsolete">Сохранить (перезаписать)</translation>
+        <translation type="obsolete">Зберегти (переписати)</translation>
     </message>
     <message>
         <source>Delete (reset to default)</source>
-        <translation type="obsolete">Удалить (Сбросить в исходное)</translation>
+        <translation type="obsolete">Видалити (Відновлення за замовчуванням)</translation>
     </message>
     <message>
         <location filename="dialog_paper.ui" line="31"/>
@@ -101,12 +156,12 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="obsolete">Отмена</translation>
+        <translation type="obsolete">Відмінити</translation>
     </message>
     <message>
         <location filename="dialog_paper.cpp" line="280"/>
         <source>Add new (click to hide)</source>
-        <translation>Добавить новый (нажмите, чтобы скрыть)</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -114,58 +169,58 @@
     <message>
         <location filename="mainwindow.ui" line="20"/>
         <source>Fast print</source>
-        <translation>Быстрая печать</translation>
+        <translation>Швидкий друк</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="405"/>
         <source>Sheet 0 of 0</source>
-        <translation>Лист 0 из 0</translation>
+        <translation>Аркуш 0 з 0</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="136"/>
         <source>Open file</source>
-        <translation>Открыть файл</translation>
+        <translation>Відкрити файл</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="168"/>
         <source>Open folder</source>
-        <translation>Открыть папку</translation>
+        <translation>Відкрити теку</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="194"/>
         <source>Save current session</source>
-        <translation>Сохранить текущую сессию</translation>
+        <translation>Зберегти поточну сесію</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="220"/>
         <source>Open saved session</source>
-        <translation>Открыть сохраненную сессию</translation>
+        <translation>Відкрити збережену сесію</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="376"/>
         <source>Insert text block</source>
-        <translation>Вставить текстовый блок</translation>
+        <translation>Вставити текстовий блок</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="453"/>
         <location filename="mainwindow.ui" line="465"/>
         <source>Print</source>
-        <translation>Печать</translation>
+        <translation>Друк</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1338"/>
         <source>Effects</source>
-        <translation>Эффекты</translation>
+        <translation>Eфекти</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1353"/>
         <source>Color management</source>
-        <translation>Управление цветом</translation>
+        <translation>Управління кольором</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1382"/>
         <source>Transform the selected image</source>
-        <translation>Трансформировать выбранное изображение</translation>
+        <translation>Перетворення вибраного зображення</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1186"/>
@@ -175,28 +230,28 @@
     <message>
         <location filename="mainwindow.ui" line="1232"/>
         <source> Size 1%</source>
-        <translation>Размер 1%</translation>
+        <translation>Розмір 1%</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1329"/>
         <source>Position</source>
-        <translation>Позиция</translation>
+        <translation>Позиція</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1411"/>
         <source>Lighting effects</source>
-        <translation>Эффекты освещения</translation>
+        <translation>Ефекти освітлення</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1430"/>
         <location filename="mainwindow.ui" line="1442"/>
         <source>Settings</source>
-        <translation>Настройки</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="337"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation>Про програму</translation>
     </message>
     <message>
         <source>A4</source>
@@ -205,11 +260,11 @@
     <message>
         <location filename="mainwindow.ui" line="562"/>
         <source>Layout</source>
-        <translation>Компоновка</translation>
+        <translation>Розташування</translation>
     </message>
     <message>
         <source>Select:</source>
-        <translation type="vanished">Выбрано:</translation>
+        <translation type="vanished">Вибрано:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="936"/>
@@ -219,32 +274,32 @@
     <message>
         <location filename="mainwindow.ui" line="574"/>
         <source>1 in center</source>
-        <translation>1 в центре</translation>
+        <translation>1 в центрі</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="434"/>
         <source>Save sheet as image file</source>
-        <translation>Сохранить лист как файл изображения</translation>
+        <translation>Зберегти аркуш як файл зображення</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="491"/>
         <source>Print to PDF file</source>
-        <translation>Печать в PDF-файл</translation>
+        <translation>Друк в PDF-файл</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="517"/>
         <source>Black-and-white version</source>
-        <translation>Черно-белая версия</translation>
+        <translation>Чорно-біла версія</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="543"/>
         <source>Draft</source>
-        <translation>Черновик</translation>
+        <translation>Чорновик</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="606"/>
         <source>1 top</source>
-        <translation>1 сверху</translation>
+        <translation>1 зверху</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="635"/>
@@ -289,22 +344,23 @@
     <message>
         <location filename="mainwindow.ui" line="870"/>
         <source>All in one</source>
-        <translation>Все в одном</translation>
+        <oldsource>All in oun</oldsource>
+        <translation>Все в одному</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="899"/>
         <source>Users layout</source>
-        <translation>Пользовательская компоновка</translation>
+        <translation>Користувацьке розташування</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="964"/>
         <source>Edit</source>
-        <translation>Редакт.</translation>
+        <translation>Редаг.</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1072"/>
         <source>Interval between pictures</source>
-        <translation>Интервал между изображениями</translation>
+        <translation>Інтервал між зображеннями</translation>
     </message>
     <message>
         <source>10</source>
@@ -313,7 +369,7 @@
     <message>
         <location filename="mainwindow.ui" line="1094"/>
         <source>Rotate a picture</source>
-        <translation>Вращение изображения</translation>
+        <translation>Поворот зображення</translation>
     </message>
     <message>
         <source>0</source>
@@ -322,34 +378,34 @@
     <message>
         <location filename="mainwindow.ui" line="1043"/>
         <source>Fill</source>
-        <translation>Заполнить</translation>
+        <translation>Заповнити</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1510"/>
         <source>Quick edit</source>
-        <translation>Быстрое редакт.</translation>
+        <translation>Швидке редаг.</translation>
     </message>
     <message>
         <source>Orientation</source>
-        <translation type="vanished">Ориентация</translation>
+        <translation type="vanished">Орієнтація</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1014"/>
         <source>For all</source>
-        <translation>Для всех</translation>
+        <translation>Для всіх</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1526"/>
         <source>Keep ratio</source>
-        <translation>Сохр. пропорции</translation>
+        <translation>Збер. пропорції</translation>
     </message>
     <message>
         <source>Real size, mm</source>
-        <translation type="vanished">Реальный размер, мм</translation>
+        <translation type="vanished">Реальний размір, мм</translation>
     </message>
     <message>
         <source>Curent picture:</source>
-        <translation type="vanished">Выбранное изображение:</translation>
+        <translation type="vanished">Вибране зображення:</translation>
     </message>
     <message>
         <source>Width:</source>
@@ -357,16 +413,16 @@
     </message>
     <message>
         <source>Heigth:</source>
-        <translation type="vanished">Высота:</translation>
+        <translation type="vanished">Висота:</translation>
     </message>
     <message>
         <source>Show margins</source>
-        <translation type="vanished">Показывать поля</translation>
+        <translation type="vanished">Показувати поля</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1059"/>
         <source>With captions</source>
-        <translation>С подписями</translation>
+        <translation>З підписами</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="124"/>
@@ -376,80 +432,80 @@
     <message>
         <location filename="mainwindow.ui" line="680"/>
         <source>Left</source>
-        <translation>Слева</translation>
+        <translation>Зліва</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1167"/>
         <source>Clip</source>
-        <translation>Обрезать</translation>
+        <translation>Обрізати</translation>
     </message>
     <message>
         <source>Without margins</source>
-        <translation type="vanished">Без полей</translation>
+        <translation type="vanished">Без полів</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1481"/>
         <source>Only for the current session</source>
-        <translation>Только в текущей сессии</translation>
+        <translation>Тільки для поточної сесії</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1494"/>
         <source>Paper size</source>
-        <translation>Размер бумаги</translation>
+        <translation>Размір паперу</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="vanished">В цвете</translation>
+        <translation type="vanished">В кольорі</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1544"/>
         <source>Downloading files. It may take some time ...</source>
-        <translation>Загрузка файлов. Надо подождать.</translation>
+        <translation>Завнтаження файлів. Це може зайняти деякий час ...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="246"/>
         <source>Previous sheet</source>
-        <translation>Предыдущий лист</translation>
+        <translation>Попередній аркуш</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="272"/>
         <source>Next sheet</source>
-        <translation>Следующий лист</translation>
+        <translation>Наступний аркуш</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="325"/>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3240"/>
         <source>Open Directory</source>
-        <translation>Открыть папку</translation>
+        <translation>Відкрити теку</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3195"/>
         <source>Select: All in oun</source>
-        <translation>Выбрано: все сразу</translation>
+        <translation>Вибрано: Все в одному</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1158"/>
         <source>Printer not found! Check the settings and printer availability.</source>
-        <translation>Принтер не найден! Поищите его.</translation>
+        <translation>Принтер не знайдений! Перевірте налаштування і доступність принтера.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1415"/>
         <source>Open File</source>
-        <translation>Открыть файл</translation>
+        <translation>Відкрити файл</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1416"/>
         <source>Images (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)</source>
-        <translation>Изображения (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)</translation>
+        <translation>Зображення (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1479"/>
         <source>Select: </source>
-        <translation>Выбрано: </translation>
+        <translation>Вибрано: </translation>
     </message>
     <message>
         <source>List </source>
@@ -457,130 +513,130 @@
     </message>
     <message>
         <source> from </source>
-        <translation type="obsolete"> из </translation>
+        <translation type="obsolete"> з </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1640"/>
         <source>Sheet </source>
-        <translation>Лист </translation>
+        <translation>Аркуш </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1643"/>
         <source> of </source>
-        <translation> из </translation>
+        <translation> з </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3084"/>
         <source>Select: 1 in center</source>
-        <translation>Выбрано: 1 в центре</translation>
+        <translation>Вибрано: 1 в центрі</translation>
     </message>
     <message>
         <source>1 in top</source>
-        <translation type="vanished">1 сверху</translation>
+        <translation type="vanished">1 зверху</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3095"/>
         <source>Select: 1 in top</source>
-        <translation>Выбрано: 1 сверху</translation>
+        <translation>Вибрано: 1 зверху</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3106"/>
         <source>Select: 1x2</source>
-        <translation>Выбрано: 1х2</translation>
+        <translation>Вибрано: 1х2</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3117"/>
         <source>Select: 1x3</source>
-        <translation>Выбрано: 1х3</translation>
+        <translation>Вибрано: 1х3</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3128"/>
         <source>Select: 2x2</source>
-        <translation>Выбрано: 2х2</translation>
+        <translation>Вибрано: 2х2</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3139"/>
         <source>Select: 2x3</source>
-        <translation>Выбрано: 2х3</translation>
+        <translation>Вибрано: 2х3</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3150"/>
         <source>Select: 2x4</source>
-        <translation>Выбрано: 2х4</translation>
+        <translation>Вибрано: 2х4</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3161"/>
         <source>Select: 3x3</source>
-        <translation>Выбрано: 3х3</translation>
+        <translation>Вибрано: 3х3</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3172"/>
         <source>Select: 3x5</source>
-        <translation>Выбрано: 3х5</translation>
+        <translation>Вибрано: 3х5</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="3183"/>
         <source>Select: 4x5</source>
-        <translation>Выбрано: 4х5</translation>
+        <translation>Вибрано: 4х5</translation>
     </message>
     <message>
         <source>Your paper:</source>
-        <translation type="vanished">Ваша бумага:</translation>
+        <translation type="vanished">Ваш папір:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2342"/>
         <location filename="mainwindow.cpp" line="2368"/>
         <source>&amp;Rotated clockwise by 90 degrees</source>
-        <translation>Повернуть на 90 грд по часовой стрелке</translation>
+        <translation>Повернути за годинниковою стрілкою на 90 градусів</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2345"/>
         <location filename="mainwindow.cpp" line="2371"/>
         <source>&amp;Delete this image</source>
-        <translation>Удалить это изображение</translation>
+        <translation>Видалити це зображення</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2348"/>
         <source>&amp;Cut out a fragment image</source>
-        <translation>Вырезать фргмент изображения</translation>
+        <translation>Вирізати фргмент зображення</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2351"/>
         <source>Caption &amp;editor</source>
-        <translation>Редактор подписей</translation>
+        <translation>Редактор підписів</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2354"/>
         <source>&amp;Simply turn on/off caption</source>
-        <translation>Просто вкл/выкл подписи</translation>
+        <translation>Просто увм/вимк підписи</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2357"/>
         <location filename="mainwindow.cpp" line="2377"/>
         <source>Move to the &amp;previous sheet</source>
-        <translation>Переместить на предыдущий лист</translation>
+        <translation>Перемістити на попередній аркуш</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2359"/>
         <location filename="mainwindow.cpp" line="2379"/>
         <source>Move to the &amp;next sheet</source>
-        <translation>Переместить на следующий лист</translation>
+        <translation>Перемістити на наступний аркуш</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2361"/>
         <location filename="mainwindow.cpp" line="2381"/>
         <source>Transform picture</source>
-        <translation>Трансформировать изображение</translation>
+        <translation>Перетворення зображення</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2374"/>
         <source>&amp;Edit this text block</source>
-        <translation>Редактировать этот текстовый блок</translation>
+        <translation>Редагувати цей текстовий блок</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2758"/>
         <source>Save in file...</source>
-        <translation>Сохранить в файл...</translation>
+        <translation>Зберегти в файл...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2758"/>
@@ -591,12 +647,12 @@
     <message>
         <location filename="mainwindow.cpp" line="2919"/>
         <source>Open file...</source>
-        <translation>Открыть файл...</translation>
+        <translation>Відкрити файл...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1117"/>
         <source>Print to PDF file...</source>
-        <translation>Печать в PDF файл...</translation>
+        <translation>Друк в PDF файл...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1117"/>
@@ -609,27 +665,27 @@
     <message>
         <location filename="pagesetup.ui" line="26"/>
         <source>Setting</source>
-        <translation>Настройки</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="43"/>
         <source>Paper</source>
-        <translation>Бумага</translation>
+        <translation>Папір</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="78"/>
         <source>Landscape</source>
-        <translation>Ландшафтная</translation>
+        <translation>Альбомна</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="96"/>
         <source>Orientation</source>
-        <translation>Ориентация</translation>
+        <translation>Орієнтація</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="109"/>
         <source>For all pages</source>
-        <translation>Для всех листов</translation>
+        <translation>Для всіх аркушiв</translation>
     </message>
     <message>
         <source>Margins</source>
@@ -638,21 +694,21 @@
     <message>
         <location filename="pagesetup.ui" line="138"/>
         <source>Portrait</source>
-        <translation>Портретная</translation>
+        <translation>Книжкова</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="159"/>
         <source>Paper size</source>
-        <translation>Размер бумаги</translation>
+        <translation>Размір паперу</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="191"/>
         <source>Add</source>
-        <translation>Ещё</translation>
+        <translation>Ще</translation>
     </message>
     <message>
         <source>No margins</source>
-        <translation type="vanished">Нет полей</translation>
+        <translation type="vanished">Без полів</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="197"/>
@@ -662,16 +718,16 @@
     <message>
         <location filename="pagesetup.ui" line="209"/>
         <source>Found printers (choose one):</source>
-        <translation>Найдены принтеры (выбрать один):</translation>
+        <translation>Найдені принтери (вибрати один):</translation>
     </message>
     <message>
         <source>Color (if possible)</source>
-        <translation type="vanished">В цвете (если возможно)</translation>
+        <translation type="vanished">В кольорі (якщо можливо)</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="232"/>
         <source>System printer by default:</source>
-        <translation>Системный принтер по умолчанию:</translation>
+        <translation>Системний принтер за замовчуванням:</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="245"/>
@@ -681,36 +737,36 @@
     <message>
         <location filename="pagesetup.ui" line="273"/>
         <source>Use by default</source>
-        <translation>Использовать по умолчанию</translation>
+        <translation>Використовувати за замовчуванням</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="289"/>
         <source>Use only in this session</source>
-        <translation>Использовать только в этой сессии</translation>
+        <translation>Використовувати тільки в цій сесії</translation>
     </message>
     <message>
         <source>This printer A3 size</source>
-        <translation type="vanished">Это принтер размера А3</translation>
+        <translation type="vanished">Це принтер розміру А3</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="345"/>
         <source>Horizontal offset (mm)</source>
-        <translation>Горизонтальное смещение (мм)</translation>
+        <translation>Горизонтальне зміщення (мм)</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="368"/>
         <source>Paper source (if possible)</source>
-        <translation>Источник бумаги (если возможно)</translation>
+        <translation>Джерело паперу (якщо можливо)</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="374"/>
         <source>Integration</source>
-        <translation>Интеграция</translation>
+        <translation>Інтеграція</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="386"/>
         <source>Integration into the right-click menu of your file manager. Just put a check mark.</source>
-        <translation>Интеграция в контекстное меню вашего файлменеджера. Просто поставьте галочку.</translation>
+        <translation>Інтеграція в контекстне меню вашого файлового менеджера. Просто поставте галочку.</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="402"/>
@@ -755,7 +811,7 @@
     <message>
         <location filename="pagesetup.ui" line="677"/>
         <source>Note: close your file manager to changes !!!</source>
-        <translation>Закройте файлменеджер перед изменениями!</translation>
+        <translation>Закрийте файлменеджер перед змінами !!!</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="709"/>
@@ -765,36 +821,32 @@
     <message>
         <location filename="pagesetup.ui" line="715"/>
         <source>Other</source>
-        <translation>Прочее</translation>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="727"/>
         <source>If the size of the labels on the paper does not meet expectations.</source>
-        <translation>Если размер шрифта на бумаге не соответствует ожиданиям.</translation>
+        <translation>Якщо розмір шрифта на папері не відповідає очікуванням.</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="749"/>
         <source>Font scale on paper</source>
-        <translation>Масштаб шрифта на бумаге</translation>
-    </message>
-    <message>
-        <source>Test print rect</source>
-        <translation type="vanished">Тестовая печать (квадрат с крестом)</translation>
+        <translation>Масштаб шрифту на папері</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="762"/>
         <source>Remember the path to images</source>
-        <translation>Запоминать пути к файлам</translation>
+        <translation>Запам’ятовувати шляхи до файлів</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="778"/>
         <source>Font size (requires restart)</source>
-        <translation>Размер шрифта (требуется перезапуск)</translation>
+        <translation>Размір шрифта (потрібен перезапуск)</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="810"/>
         <source>Automatic choice of the orientation</source>
-        <translation>Автоматическое изменение ориентации</translation>
+        <translation>Автоматична зміна орієнтації</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="827"/>
@@ -814,21 +866,22 @@
     <message>
         <location filename="pagesetup.ui" line="842"/>
         <source>Українська</source>
-        <translation>Українська</translation>
+        <oldsource>Український</oldsource>
+        <translation></translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="856"/>
         <source>Language of program:</source>
-        <translation>Язык программы:</translation>
+        <translation>Мова програми:</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="869"/>
         <source>0 - System default font</source>
-        <translation>0 - Системный шрифт</translation>
+        <translation>0 - Системний шрифт</translation>
     </message>
     <message>
         <source>Ribbon</source>
-        <translation type="vanished">Лента</translation>
+        <translation type="vanished">Стрічка</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="887"/>
@@ -838,18 +891,18 @@
     <message>
         <location filename="pagesetup.ui" line="894"/>
         <source>Apply</source>
-        <translation>Применить</translation>
+        <translation>Застосовувати</translation>
     </message>
     <message>
         <location filename="pagesetup.ui" line="901"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <location filename="pagesetup.cpp" line="408"/>
         <source>The interface will be changed at the next start program! 
 </source>
-        <translation>Интерфейс будет изменен при следующем запуске программы!</translation>
+        <translation>Інтерфейс буде змінено при наступному запуску програми!</translation>
     </message>
 </context>
 <context>
@@ -857,7 +910,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1158"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation>Помилка</translation>
     </message>
 </context>
 <context>
@@ -866,7 +919,7 @@
         <location filename="repaint.ui" line="26"/>
         <location filename="repaint.cpp" line="149"/>
         <source>Repaint</source>
-        <translation>Перекрашивание</translation>
+        <translation>Перефарбування</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="46"/>
@@ -876,12 +929,12 @@
     <message>
         <location filename="repaint.ui" line="77"/>
         <source>Brightness</source>
-        <translation>Яркость</translation>
+        <translation>Яскравість</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="112"/>
         <source>Hue</source>
-        <translation>Оттенок</translation>
+        <translation>Відтінок</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="128"/>
@@ -897,7 +950,7 @@
     <message>
         <location filename="repaint.ui" line="186"/>
         <source>Saturation</source>
-        <translation>Насыщенность</translation>
+        <translation>Насичення</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="195"/>
@@ -907,58 +960,58 @@
     <message>
         <location filename="repaint.ui" line="207"/>
         <source>Green</source>
-        <translation>Зеленый</translation>
+        <translation>Зелений</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="223"/>
         <source>Red</source>
-        <translation>Красный</translation>
+        <translation>Червоний</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="239"/>
         <source>Blue</source>
-        <translation>Синий</translation>
+        <translation>Синій</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="344"/>
         <source>Transparency</source>
-        <translation>Прозрачность</translation>
+        <translation>Прозорість</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="388"/>
         <source>Transparent color</source>
-        <translation>Прозрачный цвет</translation>
+        <translation>Прозорий колір</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="394"/>
         <source>no</source>
-        <translation>нет</translation>
+        <translation>ні</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="410"/>
         <location filename="repaint.ui" line="426"/>
         <source>Accuracy of the transparent color selection</source>
-        <translation>Точность назначения прозрачных цветов</translation>
+        <translation>Точність призначення прозорих кольорів</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="442"/>
         <source>Tolerance color, %</source>
-        <translation>Отклонение, %</translation>
+        <translation>Відхилення, %</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="458"/>
         <source>Click on the image to assign a transparent color:</source>
-        <translation>Кликните картинку для указания прозрачного цвета</translation>
+        <translation>Клікніть картинку для вказівки прозорого кольору:</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="487"/>
         <source>Total transparency</source>
-        <translation>Прозрачность</translation>
+        <translation>Прозорість</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="503"/>
         <source>Cancel one last step</source>
-        <translation>Отменить один последний шаг</translation>
+        <translation>Скасувати останній крок</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="506"/>
@@ -968,7 +1021,7 @@
     <message>
         <location filename="repaint.ui" line="521"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation>Скинути</translation>
     </message>
     <message>
         <location filename="repaint.ui" line="534"/>
@@ -978,12 +1031,12 @@
     <message>
         <location filename="repaint.cpp" line="147"/>
         <source>Installation of new colors</source>
-        <translation>Установка нового цвета</translation>
+        <translation>Установка нових кольорів</translation>
     </message>
     <message>
         <location filename="repaint.cpp" line="187"/>
         <source>Installation transparency</source>
-        <translation>Установка прозрачности</translation>
+        <translation>Установка прозорості</translation>
     </message>
 </context>
 <context>
@@ -991,7 +1044,7 @@
     <message>
         <location filename="qdeformation.ui" line="26"/>
         <source>Deformation</source>
-        <translation>Трансформация</translation>
+        <translation>Викривлення</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="73"/>
@@ -1001,75 +1054,74 @@
     <message>
         <location filename="qdeformation.ui" line="86"/>
         <source>Smoothing</source>
-        <translation>Размытие</translation>
+        <translation>Розмиття</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="102"/>
         <source>Change, if smoothing poor</source>
-        <translation>Измените, если качество размытия недостаточное</translation>
+        <translation>Змінити, якщо якість размиття недостатня</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="121"/>
         <source>Filling factor</source>
-        <translation>Коэффициент</translation>
+        <translation>Коефіцієнт</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="134"/>
         <location filename="qdeformation.ui" line="238"/>
         <source>Flip horizontally</source>
-        <translation>Отразить горизонтально</translation>
+        <translation>Відобразити горизонтально</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="173"/>
         <source>Picture</source>
-        <translation>Изображение</translation>
+        <translation>Зображення</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="186"/>
         <location filename="qdeformation.ui" line="264"/>
         <source>Flip vertically</source>
-        <translation>Отразить вертикально</translation>
+        <translation>Відобразити вертикально</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="225"/>
         <source>Polygon</source>
-        <translation>Полигон</translation>
+        <translation>Полігон</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="290"/>
         <source>Save polygon</source>
-        <translation>Сохранить полигон</translation>
+        <translation>Зберегти полігон</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="316"/>
         <source>Apply saved polygon</source>
-        <translation>Применить сохраненный полигон</translation>
+        <translation>Застосовувати збережений полігон</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="385"/>
         <source>Wait</source>
-        <translation>Подождите</translation>
+        <translation>Зачекайте</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="401"/>
         <source>Step back</source>
-        <translation>Шаг назад</translation>
+        <translation>Крок назад</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="427"/>
         <source>Cancel</source>
-        <oldsource>Cansel</oldsource>
-        <translation>Отмена</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="453"/>
         <source>Others</source>
-        <translation>Другое</translation>
+        <translation>Інше</translation>
     </message>
     <message>
         <location filename="qdeformation.ui" line="466"/>
         <source>Reload Image</source>
-        <translation>Перезагрузить изображение</translation>
+        <translation>Перезавантажити зображення</translation>
     </message>
 </context>
 <context>
@@ -1077,7 +1129,7 @@
     <message>
         <location filename="texteditor.ui" line="26"/>
         <source>Text block editor</source>
-        <translation>Редактор текстовых блоков</translation>
+        <translation>Редактор текстових блоків</translation>
     </message>
     <message>
         <location filename="texteditor.ui" line="52"/>
@@ -1087,28 +1139,28 @@
     <message>
         <location filename="texteditor.ui" line="65"/>
         <source>Cancel</source>
-        <translation>Отменить</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="texteditor.ui" line="78"/>
         <source>Transparent background</source>
         <oldsource>Transparent backgrofd</oldsource>
-        <translation>Прозрачный фон</translation>
+        <translation>Прозорий фон</translation>
     </message>
     <message>
         <location filename="texteditor.cpp" line="89"/>
         <source>Select font color</source>
-        <translation>Выбор цвета букв</translation>
+        <translation>Виберіть колір шрифту</translation>
     </message>
     <message>
         <location filename="texteditor.cpp" line="101"/>
         <source>Select background color</source>
-        <translation>Выбор цвета фона</translation>
+        <translation>Виберіть колір фону</translation>
     </message>
     <message>
         <location filename="texteditor.cpp" line="113"/>
         <source>Select caption font</source>
-        <translation>Выбор шрифта</translation>
+        <translation>Виберіть шрифт</translation>
     </message>
 </context>
 <context>
@@ -1117,7 +1169,7 @@
         <location filename="about.ui" line="26"/>
         <location filename="about.ui" line="46"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation>Про програму</translation>
     </message>
     <message>
         <location filename="about.ui" line="86"/>
@@ -1266,17 +1318,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="about.ui" line="107"/>
         <source>License</source>
-        <translation>Лицензия</translation>
+        <translation>Ліцензія</translation>
     </message>
     <message>
         <location filename="about.ui" line="164"/>
         <source>What&apos;s new</source>
-        <translation>Что нового</translation>
+        <translation>Що нового</translation>
     </message>
     <message>
         <location filename="about.ui" line="229"/>
         <source>Thanks</source>
-        <translation>Благодарности</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="about.ui" line="252"/>
@@ -1300,67 +1352,67 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="captioneditor.ui" line="26"/>
         <source>Caption editor</source>
-        <translation>Редактор подписей</translation>
+        <translation>Редактор підписів</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="52"/>
         <source>Caption:</source>
-        <translation>Подпись:</translation>
+        <translation>Підпис:</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="65"/>
         <source>Settings</source>
-        <translation>Настройки</translation>
+        <translation>Налаштування</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="77"/>
         <source>Font setting</source>
-        <translation>Настройка шрифта</translation>
+        <translation>Налаштування шрифта</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="90"/>
         <source>Back color</source>
-        <translation>Цвет фона</translation>
+        <translation>Колір фону</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="103"/>
         <source>Font color</source>
-        <translation>Цвет букв</translation>
+        <translation>Колір букв</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="116"/>
         <source>Show this caption</source>
-        <translation>Показывать эту подпись</translation>
+        <translation>Показувати цей підпис</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="145"/>
         <source>File name</source>
-        <translation>Имя файла</translation>
+        <translation>Ім’я файлу</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="158"/>
         <source>Full file name</source>
-        <translation>Полное имя файла</translation>
+        <translation>Повне ім’я файлу</translation>
     </message>
     <message>
         <location filename="captioneditor.ui" line="171"/>
         <source>Transparent background</source>
-        <translation>Прозрачный фон</translation>
+        <translation>Прозорий фон</translation>
     </message>
     <message>
         <location filename="captioneditor.cpp" line="50"/>
         <source>Select background color</source>
-        <translation>Выбор цвета фона</translation>
+        <translation>Виберіть колір фону</translation>
     </message>
     <message>
         <location filename="captioneditor.cpp" line="65"/>
         <source>Select font color</source>
-        <translation>Выбор цвета букв</translation>
+        <translation>Виберіть колір шрифту</translation>
     </message>
     <message>
         <location filename="captioneditor.cpp" line="82"/>
         <source>Select caption font</source>
-        <translation>Выбор шрифта подписи</translation>
+        <translation>Виберіть шрифт підписі</translation>
     </message>
 </context>
 <context>
@@ -1368,23 +1420,23 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="lighter.ui" line="26"/>
         <source>light</source>
-        <translation>Свет</translation>
+        <translation>Світло</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="46"/>
         <source>Ray</source>
-        <translation>Луч</translation>
+        <translation>Промінь</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="61"/>
         <source>Next ray</source>
-        <translation>Еще луч</translation>
+        <translation>Наступний помінь</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="93"/>
         <location filename="lighter.ui" line="302"/>
         <source>Brightness of lamp</source>
-        <translation>Яркость лампы</translation>
+        <translation>Яскравість лампи</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="106"/>
@@ -1395,12 +1447,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="lighter.ui" line="112"/>
         <source>Flash</source>
-        <translation>Вспышка</translation>
+        <translation>Спалах</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="143"/>
         <source>Power</source>
-        <translation>Мощность</translation>
+        <translation>Потужність</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="156"/>
@@ -1411,27 +1463,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="lighter.ui" line="169"/>
         <source>Length</source>
-        <translation>Длина</translation>
+        <translation>Протяжність</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="217"/>
         <source>Next flash</source>
-        <translation>Еще вспышка</translation>
+        <translation>Наступна спалах</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="223"/>
         <source>Boll</source>
-        <translation>Шар</translation>
+        <translation>Куля</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="276"/>
         <source>Next boll</source>
-        <translation>Еще шар</translation>
+        <translation>Наступний куля</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="289"/>
         <source>Radius</source>
-        <translation>Радиус</translation>
+        <translation>Радіус</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="328"/>
@@ -1446,7 +1498,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="lighter.ui" line="356"/>
         <source>Reload</source>
-        <translation>Перезагрузить</translation>
+        <translation>Перезавантажити</translation>
     </message>
     <message>
         <location filename="lighter.ui" line="372"/>
@@ -1455,7 +1507,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lighting</source>
-        <translation type="vanished">Освещение</translation>
+        <translation type="vanished">Освітлення</translation>
     </message>
     <message>
         <location filename="lighter.cpp" line="255"/>
@@ -1463,7 +1515,7 @@ p, li { white-space: pre-wrap; }
         <location filename="lighter.cpp" line="358"/>
         <location filename="lighter.cpp" line="697"/>
         <source>Click for move</source>
-        <translation>Кликните для перемещения</translation>
+        <translation>Натисніть для переміщення</translation>
     </message>
 </context>
 <context>
@@ -1471,7 +1523,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="tofile.ui" line="26"/>
         <source>Save sheet to file</source>
-        <translation>Сохранить лист в файл</translation>
+        <translation>Зберегти аркуш в файл</translation>
     </message>
     <message>
         <location filename="tofile.ui" line="42"/>
@@ -1481,62 +1533,62 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="tofile.ui" line="54"/>
         <source>jpg</source>
-        <translation>jpg</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="67"/>
         <source>png</source>
-        <translation>png</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="80"/>
         <source>bmp</source>
-        <translation>bmp</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="94"/>
         <source>Quality</source>
-        <translation>Качество</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="110"/>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="tofile.ui" line="161"/>
         <source>X =</source>
-        <translation>X =</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="174"/>
         <source>Y =</source>
-        <translation>Y =</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="tofile.ui" line="206"/>
         <source>Automatically set the height</source>
-        <translation>Автоматически установить высоту</translation>
+        <translation>Автоматично встановити висоту</translation>
     </message>
     <message>
         <location filename="tofile.ui" line="209"/>
         <source>Auto</source>
-        <translation>Автоматически</translation>
+        <translation>Автоматично</translation>
     </message>
     <message>
         <location filename="tofile.ui" line="228"/>
         <source>Transparent background (only png)</source>
-        <translation>Прозрачный фон (только для png)</translation>
+        <translation>Прозорий фон (тільки png)</translation>
     </message>
     <message>
         <location filename="tofile.cpp" line="63"/>
         <source>Save to file</source>
-        <translation>Сохранить в файл</translation>
+        <translation>Зберегти в файл</translation>
     </message>
     <message>
         <location filename="tofile.cpp" line="64"/>
         <source>Images (*.png *.bmp *.jpg)</source>
-        <translation>Изображения (*.png *.bmp *.jpg)</translation>
+        <translation>Зображення (*.png *.bmp *.jpg)</translation>
     </message>
 </context>
 <context>
@@ -1544,21 +1596,21 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="userlayout.ui" line="14"/>
         <source>User layout</source>
-        <translation>Пользовательская компоновка</translation>
+        <translation>Користувацьке розташування</translation>
     </message>
     <message>
         <source>Landscape orientation</source>
-        <translation type="vanished">Ландшафтная ориентация</translation>
+        <translation type="vanished">Альбомна орієнтація</translation>
     </message>
     <message>
         <location filename="userlayout.ui" line="105"/>
         <source>In horizontal</source>
-        <translation>По горизонтале</translation>
+        <translation>По горизонталі</translation>
     </message>
     <message>
         <location filename="userlayout.ui" line="118"/>
         <source>In vertical</source>
-        <translation>По вертикале</translation>
+        <translation>По вертикалі</translation>
     </message>
 </context>
 </TS>

@@ -73,5 +73,10 @@
         <file alias="vap_2">resurs/vap_2.png</file>
         <file alias="spacefm">resurs/spacefm.png</file>
         <file alias="colors">resurs/colors.png</file>
+        <file alias="vap_uk">vap_uk.qm</file>
+        <file alias="lamp">resurs/lamp.png</file>
+        <file alias="vector">resurs/vector.png</file>
+        <file alias="bollY">resurs/bollY.png</file>
+        <file alias="tofile">resurs/tofile.png</file>
     </qresource>
 </RCC>

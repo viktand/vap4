@@ -36,7 +36,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -200,9 +200,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>10</y>
         <width>321</width>
-        <height>16</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -359,9 +359,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>94</y>
+        <y>80</y>
         <width>321</width>
-        <height>16</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -817,7 +817,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>220</y>
+        <y>230</y>
         <width>251</width>
         <height>23</height>
        </rect>
@@ -837,6 +837,11 @@
         <string>Russian</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Українська</string>
+       </property>
+      </item>
      </widget>
      <widget class="QLabel" name="label_26">
       <property name="geometry">
@@ -844,7 +849,7 @@
         <x>10</x>
         <y>200</y>
         <width>321</width>
-        <height>16</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -869,9 +874,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>370</y>
-      <width>269</width>
+      <width>351</width>
       <height>31</height>
      </rect>
     </property>

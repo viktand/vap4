@@ -7,6 +7,7 @@
 #include <QTextEdit>
 #include <QTranslator>
 #include <QKeyEvent>
+#include <QPageSize>
 
 // "сверхглобальные" переменные
 extern int  paper_w;    // ширина бумаги
@@ -97,7 +98,7 @@ private slots:
     void save_printer_sett();               // сохранить настройки принтера
     void rest_printer_sett();               // восстановить настройки принтера
     QString esc_to_utf(QString st);         // преобразовать escape последовательность в utf-строку
-    void show_paper_size();                 // показать размер бумаги в окошке на панеле радактирования
+    void sheetPress();                      // нажатие на свободное место на листе
     void save_view_sett();                  // сохранить некоторые настройки внешнего вида
     void rest_view_sett();                  // восстановить некоторые настройки внешнего вида
     void set_layout(int c);                 // Загрузить компоновку № с
@@ -134,7 +135,7 @@ private slots:
          QString text, QColor BackColor,
          QColor LitColor, QFont TextFont,
               bool trans, int alig);        // добавить картинку из текстового блока
-    bool  isvap(QString s);                 // true. если s заканчивается на ".vap"
+    bool  isvap(QString s);                 // true, если s заканчивается на ".vap"
     bool  saveSassion(QString fileName);    // сохранить текущую сессию
     bool  openSassion(QString fileName);    // открыть сессию
     void  set_ornt_list();                  // установить ориентацию листа (не менять, а установить как уже было)
@@ -150,7 +151,6 @@ private slots:
     void  setIconOrns(bool b);              // Установить иконки на кнопках ориентации бумаги true - портретная
     void  mouseWheel(int i, int index);     // Вращение колесика мыши - пролистывание страниц колесиком мыши
     void  img_size_ch(int step);            // Изменить размер текущей картинки на step точек по горизонтале
-    void  set_printer_pap_size(int i);      // Установить размер бумаги принтера для листа i
     void  load_my_pSizes();                 // Загрузить список предпочтительных размеров бумаги на ленту
     void  set_rott_btn();                   // создать кнопку вращения картинки
     void  set_delt_btn();                   // создать кнопку удаления картинки
@@ -169,6 +169,13 @@ private slots:
     void  setNewPix(QPixmap p);             // применить результат трансформации
     QString get_run(QString s);             // выполнить команду s и вернуть вывод от нее
     void  printAll();                       // вывести на печать
+    void  setPrinterPage(int i);            // создать виртуальную страницу в принтере, ну т.е. размер бумаги
+    QPageSize GetPageSize(int i);           // получить размер бумаги по настройкам листа i
+    void saveToFile(QString fName,
+                    QString form,
+                    int quality, QSize sz,
+                    bool t);                // сохранить текущий лист в файл
+    void resetCursor();                     // снятие указателя на нажатую картинку (сброс переменных в -1)
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();
@@ -215,6 +222,10 @@ private slots:
     void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
 
+
+    void on_pushButton_6_clicked();
+
+    void on_pushButton_7_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение
