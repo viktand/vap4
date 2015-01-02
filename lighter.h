@@ -74,30 +74,17 @@ private slots:
     void saveBoll();                                // сохранить текущий шар в массив
     void reputLampBoll(int x,int y);                // переустановить лампу шара
     void reputCenBoll(int x,int y);                 // переустановить направление к центру шара
-
-
     void on_pushButton_clicked();
-
     void on_horizontalSlider_valueChanged(int value);
-
     void on_pushButton_2_clicked();
-
     void on_pushButton_3_clicked();
-
     void on_pushButton_4_clicked();
-
     void on_tabWidget_currentChanged(int index);
-
     void on_horizontalSlider_2_valueChanged(int value);
-
     void on_horizontalSlider_3_valueChanged(int value);
-
     void on_pushButton_5_clicked();
-
     void on_horizontalSlider_4_valueChanged(int value);
-
     void on_horizontalSlider_5_valueChanged(int value);
-
     void on_pushButton_6_clicked();
 
 private:

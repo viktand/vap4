@@ -5,12 +5,14 @@
 #include <QVector>
 #include <math.h>
 
+#include <iostream>
+using namespace std;
+
 struct pixel{  //пиксель без ограничений по разбросу значений
     int h;     // тон
     int s;     // насыщенность
     int v;     // яркость
     int al;    // альфа
-    bool f;    // флаг "уже обработано"
 };
 
 struct ray{         // луч
@@ -80,7 +82,6 @@ lighter::lighter(QWidget *parent) :
     retFlag=true;
     ui->tabWidget->setCurrentIndex(0);
     retFlag=false;
-
 }
 
 lighter::~lighter()
@@ -152,8 +153,10 @@ void lighter::loadInVector()  // загрузить картинку в вект
 void lighter::load()
 {
     int h=0,s=0,v=0,a=0;
-    for(int x=0;x<tmPix->width();x++)
-        for(int y=0;y<tmPix->height();y++){
+    int x1=tmPix->width();
+    int y1=tmPix->height();
+    for(int x=0;x<x1;x++)
+        for(int y=0;y<y1;y++){
             rgb2=img->pixel(x,y);
             clr2.setRgba(rgb2);
             clr2.getHsv(&h,&s,&v,&a);
@@ -161,7 +164,6 @@ void lighter::load()
             tempPicture2[x][y].s=s;
             tempPicture2[x][y].v=v;
             tempPicture2[x][y].al=a;
-            tempPicture2[x][y].f=false;
         }
 }
 
