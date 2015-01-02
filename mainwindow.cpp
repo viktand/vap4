@@ -1658,7 +1658,7 @@ void MainWindow::set_z()
         {
             if(toprint[j].list==curlist && toprint[j].z==i)
                 toshow[toprint[j].prew].pct->raise(); // поднять выше всех -image
-            if(toprint[j].list==curlist && toprint[j].cp_z==i &&
+            if(toprint[j].list==curlist && toprint[j].cp_z==i && !toprint[j].isTextBlock &&
                    (toprint[j].show_caption || ui->checkBox_12->isChecked()) )
                         tocaption[toprint[j].cp_num].pct->raise(); // поднять выше всех - caption
 
@@ -2091,12 +2091,13 @@ QString MainWindow::esc_to_utf(QString st)
 
 void MainWindow::sheetPress() // нажатие на чистое место листа
 {
+
+    showPctBord(false);
     if(imgpress2>-1)
     {
         resetCursor();
         quick_buttons_off();
         if (rez!=0)rez->hide();
-        showPctBord(false);
     }
     ui->pushButton_32->hide();
     ui->checkBox_10->setVisible(true);
@@ -2506,10 +2507,11 @@ void MainWindow::cp_setPixmap(int index)
 
 void MainWindow::show_caption(int index) // показать подпись к картинке index
 {
+    if(toprint[toshow[index].buf].isTextBlock)return;
     int count;
     QRect rc;
     if (toprint[index].list!=curlist)return;
-        if(toprint[index].show_caption)
+        if(toprint[index].show_caption || ui->checkBox_12->isChecked())
         {   // создать подпись
           if(toprint[index].widthCap==0)cp_setGeometry(index);    // создать геометрию
           if(toprint[index].cp_num==-1)
@@ -2535,6 +2537,7 @@ void MainWindow::show_caption(int index) // показать подпись к �
           else count=toprint[index].cp_num;
           tocaption[count].pct->setScaledContents(true);
           rc=getCaptionRect(index);
+          list_scl=double(ui->list->widthMM())/double(curSheet.width);
           rc.setWidth(double(rc.width())*list_scl*font_scl);
           rc.setHeight(double(rc.height())*list_scl*font_scl);
           tocaption[count].pct->setGeometry(rc);
