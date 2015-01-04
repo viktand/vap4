@@ -1086,8 +1086,10 @@ void MainWindow::setPrinterPage(int i)
     pL.setMode(QPageLayout::FullPageMode);
     if(sheet[i].list_orn){
         pL.setOrientation(QPageLayout::Portrait);
+        printer->setOrientation(QPrinter::Portrait);
     }else{
         pL.setOrientation(QPageLayout::Landscape);
+        printer->setOrientation(QPrinter::Landscape);
     }
     printer->setPageLayout(pL);
 }
