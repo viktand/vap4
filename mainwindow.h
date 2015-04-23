@@ -148,7 +148,6 @@ private slots:
     void  prePint();                        // прогон листов перед печатью.
     void  setAutoOrn();                     // Автоматически установить оринетацию бумаги
     void  setInterface();                   // Установить вид интерфейса (лента/обычный)
-    void  setIconOrns(bool b);              // Установить иконки на кнопках ориентации бумаги true - портретная
     void  mouseWheel(int i, int index);     // Вращение колесика мыши - пролистывание страниц колесиком мыши
     void  img_size_ch(int step);            // Изменить размер текущей картинки на step точек по горизонтале
     void  load_my_pSizes();                 // Загрузить список предпочтительных размеров бумаги на ленту
@@ -176,6 +175,12 @@ private slots:
                     int quality, QSize sz,
                     bool t);                // сохранить текущий лист в файл
     void resetCursor();                     // снятие указателя на нажатую картинку (сброс переменных в -1)
+    void numCopUp();                        // Увеличить количество копий на печать
+    void numCopDwn();                       // Уменьшить количество копий на печать
+    void print1();                          // печать в высоком качестве
+    void print2();                          // печать низком качестве
+    void print3();                          // печать ч/б
+    void setOrnSheets(bool orn);            // установить конкретную ориентацию бумаги
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();
@@ -198,10 +203,7 @@ private slots:
     void on_pushButton_32_clicked();
     void on_pushButton_30_clicked();
     void on_pushButton_31_clicked();
-    void on_pushButton_29_clicked();
     void on_pushButton_35_clicked();
-    void on_pushButton_33_clicked();
-    void on_pushButton_34_clicked();
     void on_checkBox_7_clicked(bool checked);
     void on_checkBox_8_clicked(bool checked);
     void on_checkBox_10_clicked(bool checked);
@@ -218,15 +220,11 @@ private slots:
     void on_pushButton_21_clicked();
     void on_pushButton_22_clicked();
     void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
-    void on_pushButton_4_clicked();
     void on_pushButton_5_clicked();
-
-
     void on_pushButton_6_clicked();
-
     void on_pushButton_7_clicked();
-
+    void on_spinBox_valueChanged(int arg1);
+    void on_pushButton_3_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение
@@ -266,6 +264,6 @@ public slots:
     void start_load(QString filename);  // загрузка
 };
 
-
-
 #endif // MAINWINDOW_H
+
+

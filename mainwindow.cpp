@@ -12,6 +12,7 @@
 #include "repaint.h"
 #include "lighter.h"
 #include "tofile.h"
+#include "avbutton.h"
 
 #include <QDesktopWidget>
 #include <QPrinter>
@@ -123,6 +124,9 @@ bool exitFlag=false;    // флаг выхода из функции, когда
 bool fun=false;         // выдавать имена вызывемых функций в терминал
 bool pdf=false;         // печать в pdf
 int  imgFrame=-1;       // номер превьюшки, вокруг которой включена рамка. (-1) - нет такой.
+avButton *prnBt1;       // кнопка печати в высоком качестве
+avButton *prnBt2;       // кнопка печати в низком качестве
+avButton *prnBt3;       // кнопка печати в черно-белом варианте
 
 // поля бумаги
 int left_m;
@@ -160,6 +164,7 @@ bool noResizewindow=false; // Запрет на изменение размер�
 bool ctrl=false;        // нажата клавиша ctrl
 bool flag3=true;        // флаг, запрещающий реакцию на изменение размера бумаги из ленты
 QPoint wind_pos;        // координаты главного окна (после перемещения)
+int  pgCou=1;           // количество копий, выводимых на печать
 
 struct pict {                // загруженная картинка и все ее свойства
     QString   pict;          // путь к файлу
@@ -230,6 +235,8 @@ std::vector<prew> tocaption;    //массив подписей
 std::vector<sheets> sheet;      // массив описаний листов
 
 
+int c_load=0;                   // флаг загрузки донате
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)  // конструктор
@@ -251,7 +258,6 @@ MainWindow::MainWindow(QWidget *parent) :
     h_ofsett=0;
     pap_sor=0;
     font_scl=1;
-    ui->pushButton_13->hide();
     QRect rect = frameGeometry();
     rect.moveCenter(QDesktopWidget().availableGeometry().center());
     move(rect.topLeft());
@@ -289,6 +295,49 @@ MainWindow::MainWindow(QWidget *parent) :
     setty.endGroup();
     load_my_pSizes();
     flag3=false;
+    // кнопки печати
+    prnBt1=new avButton(ui->tab);
+    prnBt1->setGeometry(10,0,44,38);
+    prnBt1->setIcon(QIcon(QPixmap::fromImage(QImage(":/new/prefix1/vap"))));
+    prnBt1->setIconSize(QSize(32,32));
+    prnBt1->setToolTip(tr("Print"));
+    connect(prnBt1,SIGNAL(whellUp()),this,SLOT(numCopUp()));
+    connect(prnBt1,SIGNAL(whellDown()),this,SLOT(numCopDwn()));
+    connect(prnBt1,SIGNAL(clicked()),this,SLOT(print1()));
+    prnBt1->show();
+
+    prnBt2=new avButton(ui->tab);
+    prnBt2->setGeometry(60,0,44,38);
+    prnBt2->setIcon(QIcon(QPixmap::fromImage(QImage(":/new/prefix1/vap_2"))));
+    prnBt2->setIconSize(QSize(32,32));
+    prnBt2->setToolTip(tr("Draft"));
+    connect(prnBt2,SIGNAL(whellUp()),this,SLOT(numCopUp()));
+    connect(prnBt2,SIGNAL(whellDown()),this,SLOT(numCopDwn()));
+    connect(prnBt2,SIGNAL(clicked()),this,SLOT(print2()));
+    prnBt2->show();
+
+    prnBt3=new avButton(ui->tab);
+    prnBt3->setGeometry(110,0,44,38);
+    prnBt3->setIcon(QIcon(QPixmap::fromImage(QImage(":/new/prefix1/vap_black"))));
+    prnBt3->setIconSize(QSize(32,32));
+    prnBt3->setToolTip(tr("Black-and-white version"));
+    connect(prnBt3,SIGNAL(whellUp()),this,SLOT(numCopUp()));
+    connect(prnBt3,SIGNAL(whellDown()),this,SLOT(numCopDwn()));
+    connect(prnBt3,SIGNAL(clicked()),this,SLOT(print3()));
+    prnBt3->show();
+
+}
+
+void MainWindow::numCopUp()
+{
+    if(pgCou<99) pgCou++;
+    ui->spinBox->setValue(pgCou);
+}
+
+void MainWindow::numCopDwn()
+{
+    if(pgCou>1) pgCou--;
+    ui->spinBox->setValue(pgCou);
 }
 
 void MainWindow::hide_interf()
@@ -623,20 +672,6 @@ void MainWindow::get_marg() // расчитать поля бумаги - обл
     setty.endGroup();
 }
 
-void MainWindow::setIconOrns(bool b)
-{
-    if(b)
-    {
-        ui->pushButton_33->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_34->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    }
-    else
-    {
-        ui->pushButton_34->setIcon(ui->pushButton_13->icon());
-        ui->pushButton_33->setIcon(QIcon::fromTheme(":/new/prefix1/sheet"));
-    }
-}
-
 void MainWindow::end_rotation() // Завершение поворота листа при смене орентации
 {
     if(fun)cout << "end_rotation" << endl;
@@ -701,7 +736,6 @@ void MainWindow::redraw()
     y_prw=((wind_sz.height()-75)-h)/2+73;
     gor=w;
     ver=h;
-    setIconOrns(curSheet.list_orn);
 }
 
 void MainWindow::layout_scale()
@@ -930,12 +964,12 @@ void MainWindow::setAutoOrn() // Автоматически установить
     if(toprint[0].pix.height()>=toprint[0].pix.width())
     {
         // портретная ориентация
-        on_pushButton_33_clicked();
+        if(!sheet[0].list_orn) end_rotation();
     }
     else
     {
         // ландшафтная ориентация
-        on_pushButton_34_clicked();
+        if(sheet[0].list_orn) end_rotation();
     }
 
 }
@@ -1127,11 +1161,11 @@ void MainWindow::setPrinter()
         else printer->setColorMode(QPrinter::GrayScale);
 }
 
-void MainWindow::on_pushButton_29_clicked() //печать в высоком качестве
+void MainWindow::print1() //печать в высоком качестве
 {
     print_color=true;
     print_hi=true;
-    printAll();
+    for(int i=1;i<=pgCou;i++) printAll();
 }
 
 void MainWindow::printAll() // собственно печать
@@ -1386,8 +1420,8 @@ void MainWindow::set_setting(int r) // применить настройки
     if(fun)cout << "set_setting" << endl;
     if(rap)cout << "set new settings:"<< r << endl;
     if(r==0)return;
-    if(r==3){on_pushButton_33_clicked();return;}
-    if(r==4){on_pushButton_34_clicked();return;}
+    if(r==3){if(!curSheet.list_orn)end_rotation();return;}
+    if(r==4){if(curSheet.list_orn)end_rotation();return;}
     load_my_pSizes();
     if(r==1)return;
     save_printer_sett();
@@ -1397,8 +1431,8 @@ void MainWindow::set_setting(int r) // применить настройки
     curSheet.list_orn=(paper_h>paper_w);
     if (all_sizes)for(int i=0; i<int(sheet.size()); i++)sheet[i]=curSheet;
     else sheet[curlist-1]=curSheet;
-    if(curSheet.list_orn)on_pushButton_33_clicked(); // портретная ориентация
-    else      on_pushButton_34_clicked(); // ландшафтная ориентация
+//    if(curSheet.list_orn)on_pushButton_33_clicked(); // портретная ориентация
+//    else      on_pushButton_34_clicked(); // ландшафтная ориентация
     setty.beginGroup("Settings");
         pathFile=setty.value("path", false).toBool();
     setty.endGroup();   
@@ -1473,12 +1507,16 @@ void MainWindow::set_user_layout()
     img_on_list=ul_hor*ul_ver;
     w_cou=ul_hor;
     h_cou=ul_ver;
-    if (set_orn) on_pushButton_33_clicked();
-    else on_pushButton_34_clicked();
+    setOrnSheets (set_orn);
     btn_comp_press(11);
     recomp();
     ui->checkset_2->setGeometry(442,1,16,16);
     ui->label_17->setText(tr("Select: ")+QString::number(w_cou) + "x" + QString::number(h_cou));
+}
+
+void MainWindow::setOrnSheets(bool orn)
+{
+    if(curSheet.list_orn != orn) end_rotation();
 }
 
 void MainWindow::set_indic_pos()
@@ -1541,8 +1579,7 @@ void MainWindow::set_ornt_list()
     if(fun)cout << "set_orn_list" << endl;
     if(curSheet.list_orn==sheet[curlist-1].list_orn)return;
     make_list(); // создать новый лист
-    if(sheet[curlist-1].list_orn) on_pushButton_33_clicked();
-       else on_pushButton_34_clicked();
+    setOrnSheets(sheet[curlist-1].list_orn);
 }
 
 void MainWindow::show_pict() // показать картинки текущего листа
@@ -3305,18 +3342,10 @@ void MainWindow::on_pushButton_35_clicked() // настройка програм
     ps->reset_result();     // сбросить код возврата
 }
 
-void MainWindow::on_pushButton_33_clicked() // портретная ориентация - set
+void MainWindow::on_pushButton_3_clicked() // поменять ориентацию листа
 {
-    if(fun)cout << "on_pushButton_33_cliked" << endl;
-    if(sheet[curlist-1].list_orn) return;  // ориентация уже портретная
-    end_rotation();
-}
-
-void MainWindow::on_pushButton_34_clicked() // ландшафтная ориентация - set
-{
-    if(fun)cout << "on_pushButton_34_cliked -> set lands. orn." << endl;
-    if(!sheet[curlist-1].list_orn) return;  // ориентация уже ландшафтная
-    end_rotation();
+     if(fun)cout << "on_pushButton_3_cliked -> set orn." << endl;
+     end_rotation();
 }
 
 void MainWindow::slfunc1()
@@ -3539,18 +3568,18 @@ void MainWindow::setNewPix(QPixmap p)
     show_pict();
 }
 
-void MainWindow::on_pushButton_3_clicked() // печать ч/б качественно
+void MainWindow::print3() // печать ч/б
 {
     print_color=false;
     print_hi=true;
-    printAll();
+    for(int i=1;i<=pgCou;i++) printAll();
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::print2() // печать в низком качестве
 {
     print_color=true;
     print_hi=false;
-    printAll();
+    for(int i=1;i<=pgCou;i++) printAll();
 }
 
 void MainWindow::on_pushButton_5_clicked() // открыть окно коррекции цвета
@@ -3675,3 +3704,11 @@ void MainWindow::saveToFile(QString fName, QString form, int quality, QSize sz, 
    if(jpg.save(fName,form.toStdString().c_str(),quality))
        cout << "End saving to image file. It seems that successfully." << endl;
 }
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    // Изменение количества копий выводимых на печать
+    pgCou=arg1;
+}
+
+

@@ -87,26 +87,6 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_13">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>30</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="res.qrc">
-      <normaloff>:/new/prefix1/check</normaloff>:/new/prefix1/check</iconset>
-    </property>
-   </widget>
    <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
@@ -117,7 +97,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -452,32 +432,6 @@
      <attribute name="title">
       <string>Print</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_29">
-      <property name="geometry">
-       <rect>
-        <x>7</x>
-        <y>0</y>
-        <width>44</width>
-        <height>38</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Print</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/vap</normaloff>:/new/prefix1/vap</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
@@ -504,56 +458,46 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QSpinBox" name="spinBox">
       <property name="geometry">
        <rect>
-        <x>110</x>
-        <y>0</y>
-        <width>44</width>
-        <height>38</height>
+        <x>385</x>
+        <y>5</y>
+        <width>47</width>
+        <height>27</height>
        </rect>
       </property>
-      <property name="toolTip">
-       <string>Black-and-white version</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/vap_black</normaloff>:/new/prefix1/vap_black</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
+      <property name="minimum">
+       <number>1</number>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="Line" name="line_10">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>0</y>
-        <width>44</width>
-        <height>38</height>
+        <x>230</x>
+        <y>2</y>
+        <width>3</width>
+        <height>32</height>
        </rect>
       </property>
-      <property name="toolTip">
-       <string>Draft</string>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>10</y>
+        <width>141</width>
+        <height>17</height>
+       </rect>
       </property>
       <property name="text">
-       <string/>
+       <string>Number of copies</string>
       </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/vap_2</normaloff>:/new/prefix1/vap_2</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>32</width>
-        <height>32</height>
-       </size>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
@@ -963,36 +907,6 @@
      <attribute name="title">
       <string>Edit</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_33">
-      <property name="geometry">
-       <rect>
-        <x>1</x>
-        <y>1</y>
-        <width>21</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="res.qrc">
-        <normaloff>:/new/prefix1/check</normaloff>:/new/prefix1/check</iconset>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_34">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>5</y>
-        <width>31</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QCheckBox" name="checkBox_7">
       <property name="geometry">
        <rect>
@@ -1172,6 +1086,32 @@
       <property name="icon">
        <iconset resource="res.qrc">
         <normaloff>:/new/prefix1/clip</normaloff>:/new/prefix1/clip</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Change the page orientation</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/rotbtn</normaloff>:/new/prefix1/rotbtn</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1548,7 +1488,6 @@
     </property>
    </widget>
    <zorder>list</zorder>
-   <zorder>pushButton_13</zorder>
    <zorder>label_16</zorder>
    <zorder>sheet</zorder>
    <zorder>tabWidget_2</zorder>

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT      += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4)
 {
@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     qdeformation.cpp \
     repaint.cpp \
     lighter.cpp \
-    tofile.cpp
+    tofile.cpp \
+    avbutton.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     qdeformation.h \
     repaint.h \
     lighter.h \
-    tofile.h
+    tofile.h \
+    avbutton.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \

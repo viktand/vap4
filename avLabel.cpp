@@ -1,8 +1,5 @@
 #include "avLabel.h"
 
-//#include <iostream>
-//using namespace std;
-
 QPixmap *mem_pix;
 int bt=0;
 
@@ -11,10 +8,7 @@ QavLabel::QavLabel(QWidget *parent) : QLabel(parent)
     mem_pix=new QPixmap(1,1);
 }
 
-QavLabel::~QavLabel()
-{
-   //cout << "kill preview" << endl;
-}
+QavLabel::~QavLabel(){}
 
 void QavLabel::mouseReleaseEvent(QMouseEvent *e)
 {
