@@ -9,6 +9,11 @@
 #include <QKeyEvent>
 #include <QPageSize>
 
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+#include <QUrl>
+
 // "сверхглобальные" переменные
 extern int  paper_w;    // ширина бумаги
 extern int  paper_h;    // высота бумаги
@@ -32,6 +37,7 @@ extern bool trans;      // прозрачный фон надписи
 extern double font_scl; // масштаб шрифта в предпросмотре
 extern int sheet_size;  // индекс размера листа (для передачи параметра из окна настроек)
 extern bool all_sizes;  // true - все листы имеют одинаковый размер бумаги (по умолчанию)
+extern int vapIndex;    // индекс версии программы 0 = 3.8.2
 
 
 namespace Ui {
@@ -181,6 +187,9 @@ private slots:
     void print2();                          // печать низком качестве
     void print3();                          // печать ч/б
     void setOrnSheets(bool orn);            // установить конкретную ориентацию бумаги
+    void getVesion();                       // Проверить наличие новой версии vap и т.д.
+    void doDownload(QString urlLink);       // Загрузка по ссылке
+    void replyFinished (QNetworkReply *reply); // завершение загрузки странички из интернета.
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();

@@ -3,6 +3,7 @@
 
 #include "ui_pagesetup.h"
 #include <QCloseEvent>
+#include <QtNetwork/QNetworkReply>
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,7 @@ private slots:
     void load_combobox3(int r);      // переходник на load_combobox
     QString get_real_index(int pap);    // получить текст (название) текущего размера бумаги в списке
     int  get_index(QString s);       // получить индекс по названию в списке размеров
+    void replyFinished (QNetworkReply *reply); // завершение загрузки из интернета.
 
     void on_checkBox_clicked(bool checked);
     void on_comboBox_2_currentIndexChanged(const QString &arg1);
@@ -52,6 +54,10 @@ private slots:
     void on_checkBox_14_clicked(bool checked);
 
     void on_checkBox_2_clicked(bool checked);
+
+    void on_checkBox_9_clicked(bool checked);
+
+    void on_pushButton_5_clicked();
 
 public slots:
     void load_data();       // загрузить данные в форму

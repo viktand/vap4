@@ -9,10 +9,14 @@
 #include <QSettings>
 #include <vector>
 #include <QMessageBox>
+#include <refresh.h>
+
 
 #include <iostream>
 using namespace std;
 
+
+QNetworkAccessManager *manager1;
 bool clse=true;
 bool flag_ret=false;
 QSize mysz;
@@ -35,6 +39,7 @@ bool auto_orn=true;         // автоматический выбор орие�
 QString lngv;               // язык программы
 bool ribbon=true;           // вид интерфейса
 int result=0;               // код, возвращаемый при закрытии
+refresh *rf;                // форма проверки обновлений
 
 void PageSetup::load_combobox3(int r)
 {
@@ -150,8 +155,9 @@ QString PageSetup::get_run(QString s)
 
 PageSetup::~PageSetup()
 {
-    delete ui2;
     emit end_set(result);
+    delete ui2;
+
 }
 
 void PageSetup::reset_result()
@@ -421,3 +427,44 @@ void PageSetup::on_checkBox_2_clicked(bool checked)
     if(flag_ret)return;
     spacefm_set(checked);
 }
+
+void PageSetup::on_checkBox_9_clicked(bool checked) // Управление автоматической проверкой обновлений
+{
+    setts.beginGroup("Version");
+        setts.setValue("check", checked);
+    setts.endGroup();
+}
+
+void PageSetup::on_pushButton_5_clicked() // проверить обновление
+{
+    if(manager1==0){
+        manager1 = new QNetworkAccessManager(this);
+        connect(manager1, SIGNAL(finished(QNetworkReply*)),this, SLOT(replyFinished(QNetworkReply*)));
+    }
+    manager1->get(QNetworkRequest(QUrl("http://qvap.ru/version.html")));
+}
+
+void PageSetup::replyFinished(QNetworkReply *reply)
+{
+    if(!(reply->error()))
+        {
+            QString ver=QString::fromStdString(reply->readAll().toStdString());
+            int i=ver.indexOf(":");
+            int index=ver.left(i).toInt();
+            ver=ver.right(ver.length()-i-1);
+            if(vapIndex<index){
+                if(vapIndex!=index){
+                    if (rf==0){
+                        rf=new refresh(this);
+                    }
+                    rf->show();
+                }
+            } else {
+                QMessageBox msgBox;
+                msgBox.setText(tr("No updates."));
+                msgBox.exec();
+            }
+        }
+    reply->deleteLater();
+}
+

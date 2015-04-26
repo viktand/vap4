@@ -13,6 +13,7 @@
 #include "lighter.h"
 #include "tofile.h"
 #include "avbutton.h"
+#include "refresh.h"
 
 #include <QDesktopWidget>
 #include <QPrinter>
@@ -76,6 +77,8 @@ QavLabel *fon;
 QavLabel *rez;          // рамка обрезки
 Qdeformation *deform;
 toFile *sfile;          // форма ввода параметров для сохранения в файл
+refresh *rfsh;          // форма предложения обновления
+int  vapIndex;        // индекс версии программы 0 = 3.8.2
 
 //int oldAA=0; // раскомментировать, если задействована процедура управления прозрачностью (где-то на 3550 строке кода)
 
@@ -236,6 +239,7 @@ std::vector<sheets> sheet;      // массив описаний листов
 
 
 int c_load=0;                   // флаг загрузки донате
+QNetworkAccessManager *manager;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -244,6 +248,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if(fun)cout << "MainWindow (make window and widgets)" << endl;
     ui->setupUi(this);
     this->setAcceptDrops(true);
+    vapIndex=0;
     fon=new QavLabel(ui->sheet);
     connect(fon, SIGNAL(mouse_press(int,int,int)), this, SLOT(sheetPress()));
     connect(fon, SIGNAL(mouse_wheel(int, int)), this, SLOT(mouseWheel(int, int)));
@@ -325,6 +330,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(prnBt3,SIGNAL(whellDown()),this,SLOT(numCopDwn()));
     connect(prnBt3,SIGNAL(clicked()),this,SLOT(print3()));
     prnBt3->show();
+
+    getVesion();
 
 }
 
@@ -3332,7 +3339,7 @@ void MainWindow::on_pushButton_35_clicked() // настройка програм
         ps=new PageSetup();
         QFont font;
         font.setPointSize(fn_size);
-        ps->setFont(font);
+        //ps->setFont(font);
         connect(ps, SIGNAL(end_set(int)), this, SLOT(set_setting(int)));
         connect(ps, SIGNAL(set_all_em(bool)), this, SLOT(set_all_rot(bool)));
     }
@@ -3711,4 +3718,56 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
     pgCou=arg1;
 }
 
+// **********************************
+// обновления
+void MainWindow::getVesion()
+{
+    QDate dt=QDate::currentDate();
+    setty.beginGroup("Version");
+    dt=setty.value("dateCheck",QDate(1999,1,1)).toDate();
+    if(dt.daysTo(QDate::currentDate())>10 && (setty.value("checking", true).toBool())){
+        doDownload("http://qvap.ru/version.html");
+        setty.setValue("dateCheck",QDate::currentDate());
+    }
+    setty.endGroup();
+}
 
+void MainWindow::doDownload(QString urlLink)
+{
+    if(manager==0){
+        manager = new QNetworkAccessManager(this);
+        connect(manager, SIGNAL(finished(QNetworkReply*)),this, SLOT(replyFinished(QNetworkReply*)));
+    }
+    manager->get(QNetworkRequest(QUrl(urlLink)));
+}
+
+void MainWindow::replyFinished(QNetworkReply *reply)
+{
+    if(!(reply->error()))
+        {
+            QString ver=QString::fromStdString(reply->readAll().toStdString());
+            int i=ver.indexOf(":");
+            //if(i<0)return;
+            int index=ver.left(i).toInt();
+            ver=ver.right(ver.length()-i-1);
+            cout << "The latest version of the program: " << ver.toStdString() << " (index=" << index << ")" << endl;
+            if(vapIndex<index){
+                cout << "Probably it is necessary to update the program" << endl;
+                setty.beginGroup("Version");
+                int lIndex=setty.value("lIndex",0).toInt();
+                if(!setty.value("dontask", false).toBool() || lIndex<index){
+                    if (rfsh==0){
+                        rfsh=new refresh(this);
+                    }
+                    if (lIndex<index) {
+                        rfsh->clearCheck();
+                        setty.setValue("lIndex",index);
+                    }
+                    rfsh->show();
+
+                }
+                setty.endGroup();
+            }
+        }
+    reply->deleteLater();
+}

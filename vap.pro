@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT      += core gui
+QT      += network
 
 greaterThan(QT_MAJOR_VERSION, 4)
 {
@@ -33,7 +34,8 @@ SOURCES += main.cpp\
     repaint.cpp \
     lighter.cpp \
     tofile.cpp \
-    avbutton.cpp
+    avbutton.cpp \
+    refresh.cpp
 
 HEADERS  += mainwindow.h \
     pagesetup.h \
@@ -48,7 +50,8 @@ HEADERS  += mainwindow.h \
     repaint.h \
     lighter.h \
     tofile.h \
-    avbutton.h
+    avbutton.h \
+    refresh.h
 
 FORMS    += mainwindow.ui \
     pagesetup.ui \
@@ -60,7 +63,8 @@ FORMS    += mainwindow.ui \
     qdeformation.ui \
     repaint.ui \
     lighter.ui \
-    tofile.ui
+    tofile.ui \
+    refresh.ui
 
 RESOURCES += \
     res.qrc
