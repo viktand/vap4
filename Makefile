@@ -421,8 +421,6 @@ res.qrc:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Network.prl:
-qmake: FORCE
-	@$(QMAKE) -spec linux-g++-64 -o Makefile vap.pro
 
 qmake_all: FORCE
 
