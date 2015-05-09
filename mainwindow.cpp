@@ -39,6 +39,7 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QProcess>
+#include <QPrintDialog>
 
 #define PI 3.14159265
 
@@ -78,7 +79,7 @@ QavLabel *rez;          // рамка обрезки
 Qdeformation *deform;
 toFile *sfile;          // форма ввода параметров для сохранения в файл
 refresh *rfsh;          // форма предложения обновления
-int  vapIndex;        // индекс версии программы 0 = 3.8.2
+int  vapIndex=1;        // индекс версии программы 0 = 3.8.2
 
 //int oldAA=0; // раскомментировать, если задействована процедура управления прозрачностью (где-то на 3550 строке кода)
 
@@ -130,6 +131,7 @@ int  imgFrame=-1;       // номер превьюшки, вокруг кото�
 avButton *prnBt1;       // кнопка печати в высоком качестве
 avButton *prnBt2;       // кнопка печати в низком качестве
 avButton *prnBt3;       // кнопка печати в черно-белом варианте
+bool prnDialog=false;   // печать через диалог печати
 
 // поля бумаги
 int left_m;
@@ -248,7 +250,6 @@ MainWindow::MainWindow(QWidget *parent) :
     if(fun)cout << "MainWindow (make window and widgets)" << endl;
     ui->setupUi(this);
     this->setAcceptDrops(true);
-    vapIndex=0;
     fon=new QavLabel(ui->sheet);
     connect(fon, SIGNAL(mouse_press(int,int,int)), this, SLOT(sheetPress()));
     connect(fon, SIGNAL(mouse_wheel(int, int)), this, SLOT(mouseWheel(int, int)));
@@ -666,6 +667,7 @@ void MainWindow::get_marg() // расчитать поля бумаги - обл
     if(setty.value("without_m", false).toBool())
     {
         left_m=right_m=top_m=bottom_m=0;
+        ui->checkBox->setChecked(true);
     }
     else
     {
@@ -675,6 +677,8 @@ void MainWindow::get_marg() // расчитать поля бумаги - обл
         QRect pag=printer->pageRect();
         left_m=right_m=double((pap.width()-pag.width())/2)/(double(printer->resolution())/25.4);
         top_m=bottom_m=double((pap.height()-pag.height())/2)/(double(printer->resolution())/25.4);
+        ui->checkBox->setChecked(false);
+        printer->~QPrinter();
     }
     setty.endGroup();
 }
@@ -1175,9 +1179,17 @@ void MainWindow::print1() //печать в высоком качестве
     for(int i=1;i<=pgCou;i++) printAll();
 }
 
+void MainWindow::on_pushButton_4_clicked() // печать через диалог печати
+{
+    prnDialog=true;
+    printAll();
+    prnDialog=false;
+}
+
 void MainWindow::printAll() // собственно печать
 {
     if(fun)cout << "on_pushButton_29_cliked (printing)" << endl;
+    if(lists==0)return;
     prePint();          // прогон листов перед печатью
     QRect rc;           // пригодится ниже...
     QBrush br;          // кисть
@@ -1187,10 +1199,28 @@ void MainWindow::printAll() // собственно печать
     double dx, dy;      // Смещение области печати от края листа бумаги
     bool f;
     // общая настройка принтера
-    setPrinter();   
+    if (prnDialog) {
+        printer = new QPrinter(QPrinter::HighResolution);
+        QPrintDialog pdlg(printer,this);
+        if (pdlg.exec() != QDialog::Accepted) {
+            printer->~QPrinter(); // уничтожить экземпляр принтера
+            return;
+        }
+    }else{
+        setPrinter();
+    }
     for (int i=0; i<lists; i++)
     {
-        set_printer(i);             // дополнительно настроить принтер для очередного листа
+
+        if(prnDialog){
+            if(sheet[i].list_orn){
+                printer->setOrientation(QPrinter::Portrait);
+            }else{
+                printer->setOrientation(QPrinter::Landscape);
+            }
+        }else{
+            set_printer(i);             // дополнительно настроить принтер для очередного листа
+        }
         if(pdf && i!=0)printer->newPage();
         rc=printer->paperRect();    // размер бумаги
         if(i==0 || !pdf)f=pntr->begin(printer);
@@ -1205,10 +1235,11 @@ void MainWindow::printAll() // собственно печать
         cout << "pntr->viewport().height()="<< pntr->viewport().height() << endl;
         // Расчет смещения области печати от края листа
         qreal left=0, top=0, right=0, bottom=0, b2=0;
+        if (ui->checkBox->isChecked())printer->setFullPage(true);
         printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::DevicePixel);
         cout << "margins: " << left << ", " << top << ", " << right << ", " << bottom << endl;
         dx=left; dy=top;
-        // масштаб между предпросмотром и бумагой (в пикселах)
+        // масштаб между предпросмотром и бумагой (в пикселях)
         if(pdf)if(sheet[i].list_orn!=sheet[0].list_orn)swap(sheet[i].sheet_w,sheet[i].sheet_h);
         sclX=double(pntr->viewport().width())/sheet[i].sheet_w;
         sclY=double(pntr->viewport().height())/sheet[i].sheet_h;
@@ -2030,6 +2061,7 @@ void MainWindow::save_printer_sett()
         setty.setValue("height", paper_h);
         setty.setValue("caption", list_n);
         setty.setValue("font_scl", font_scl);
+        setty.setValue("mrg",ui->checkBox->isChecked());
     setty.endGroup();
     setty.beginGroup(p_name);
         setty.setValue("left_m", left_m);
@@ -2041,6 +2073,7 @@ void MainWindow::save_printer_sett()
         setty.setValue("offset", h_ofsett);
         setty.setValue("sourse", pap_sor);
         setty.setValue("font_scl", font_scl);
+        setty.setValue("mrg",ui->checkBox->isChecked());
     setty.endGroup();
 }
 
@@ -3771,3 +3804,17 @@ void MainWindow::replyFinished(QNetworkReply *reply)
         }
     reply->deleteLater();
 }
+
+// управление полями ***********************************************
+
+void MainWindow::on_checkBox_clicked(bool checked)
+{
+    save_printer_sett();
+    setty.beginGroup("Settings");
+    setty.setValue("without_m", checked);
+    setty.endGroup();
+    get_marg();
+    make_list();
+}
+
+

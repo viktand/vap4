@@ -203,53 +203,53 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="433"/>
-        <location filename="mainwindow.cpp" line="308"/>
+        <location filename="mainwindow.cpp" line="309"/>
         <source>Print</source>
         <translation>Друк</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1107"/>
+        <location filename="mainwindow.ui" line="1133"/>
         <source>Change the page orientation</source>
         <translation>Змінити орієнтацію аркуша</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1278"/>
+        <location filename="mainwindow.ui" line="1304"/>
         <source>Effects</source>
         <translation>Eфекти</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1293"/>
+        <location filename="mainwindow.ui" line="1319"/>
         <source>Color management</source>
         <translation>Управління кольором</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1322"/>
+        <location filename="mainwindow.ui" line="1348"/>
         <source>Transform the selected image</source>
         <translation>Перетворення вибраного зображення</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1126"/>
+        <location filename="mainwindow.ui" line="1152"/>
         <source>Exact</source>
         <translation>Точно</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1172"/>
+        <location filename="mainwindow.ui" line="1198"/>
         <source> Size 1%</source>
         <translation>Розмір 1%</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1269"/>
+        <location filename="mainwindow.ui" line="1295"/>
         <source>Position</source>
         <translation>Позиція</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1351"/>
+        <location filename="mainwindow.ui" line="1377"/>
         <source>Lighting effects</source>
         <translation>Ефекти освітлення</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1370"/>
-        <location filename="mainwindow.ui" line="1382"/>
+        <location filename="mainwindow.ui" line="1396"/>
+        <location filename="mainwindow.ui" line="1408"/>
         <source>Settings</source>
         <translation>Налаштування</translation>
     </message>
@@ -263,7 +263,7 @@
         <translation type="vanished">А4</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="506"/>
+        <location filename="mainwindow.ui" line="532"/>
         <source>Layout</source>
         <translation>Розташування</translation>
     </message>
@@ -272,12 +272,12 @@
         <translation type="vanished">Вибрано:</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="880"/>
+        <location filename="mainwindow.ui" line="906"/>
         <source>1x1</source>
         <translation>1х1</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="518"/>
+        <location filename="mainwindow.ui" line="544"/>
         <source>1 in center</source>
         <translation>1 в центрі</translation>
     </message>
@@ -292,12 +292,12 @@
         <translation>Друк в PDF-файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="328"/>
+        <location filename="mainwindow.cpp" line="329"/>
         <source>Black-and-white version</source>
         <translation>Чорно-біла версія</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="318"/>
+        <location filename="mainwindow.cpp" line="319"/>
         <source>Draft</source>
         <translation>Чорновик</translation>
     </message>
@@ -307,77 +307,87 @@
         <translation>Кількість копій</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="550"/>
+        <location filename="mainwindow.ui" line="513"/>
+        <source>Print using the system print dialog</source>
+        <translation>Друкувати за допомогою системний діалог друку</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="576"/>
         <source>1 top</source>
         <translation>1 зверху</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="579"/>
+        <location filename="mainwindow.ui" line="605"/>
         <source>1x2</source>
         <translation>1х2</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="608"/>
+        <location filename="mainwindow.ui" line="634"/>
         <source>1x3</source>
         <translation>1х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="640"/>
+        <location filename="mainwindow.ui" line="666"/>
         <source>2x2</source>
         <translation>2х2</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="669"/>
+        <location filename="mainwindow.ui" line="695"/>
         <source>2x3</source>
         <translation>2х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="698"/>
+        <location filename="mainwindow.ui" line="724"/>
         <source>2x4</source>
         <translation>2х4</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="727"/>
+        <location filename="mainwindow.ui" line="753"/>
         <source>3x3</source>
         <translation>3х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="756"/>
+        <location filename="mainwindow.ui" line="782"/>
         <source>3x4</source>
         <translation>3х4</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="785"/>
+        <location filename="mainwindow.ui" line="811"/>
         <source>4x5</source>
         <translation>4х5</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="814"/>
+        <location filename="mainwindow.ui" line="840"/>
         <source>All in one</source>
         <oldsource>All in oun</oldsource>
         <translation>Все в одному</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="843"/>
+        <location filename="mainwindow.ui" line="869"/>
         <source>Users layout</source>
         <translation>Користувацьке розташування</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="908"/>
+        <location filename="mainwindow.ui" line="934"/>
         <source>Edit</source>
         <translation>Редаг.</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="986"/>
+        <location filename="mainwindow.ui" line="1012"/>
         <source>Interval between pictures</source>
         <translation>Інтервал між зображеннями</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.ui" line="1500"/>
+        <source>No margins</source>
+        <translation>Без полів</translation>
     </message>
     <message>
         <source>10</source>
         <translation type="vanished">10</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1008"/>
+        <location filename="mainwindow.ui" line="1034"/>
         <source>Rotate a picture</source>
         <translation>Поворот зображення</translation>
     </message>
@@ -386,12 +396,12 @@
         <translation type="vanished">0</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="957"/>
+        <location filename="mainwindow.ui" line="983"/>
         <source>Fill</source>
         <translation>Заповнити</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1450"/>
+        <location filename="mainwindow.ui" line="1468"/>
         <source>Quick edit</source>
         <translation>Швидке редаг.</translation>
     </message>
@@ -400,12 +410,12 @@
         <translation type="vanished">Орієнтація</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="928"/>
+        <location filename="mainwindow.ui" line="954"/>
         <source>For all</source>
         <translation>Для всіх</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1466"/>
+        <location filename="mainwindow.ui" line="1484"/>
         <source>Keep ratio</source>
         <translation>Збер. пропорції</translation>
     </message>
@@ -430,7 +440,7 @@
         <translation type="vanished">Показувати поля</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="973"/>
+        <location filename="mainwindow.ui" line="999"/>
         <source>With captions</source>
         <translation>З підписами</translation>
     </message>
@@ -440,12 +450,12 @@
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="624"/>
+        <location filename="mainwindow.ui" line="650"/>
         <source>Left</source>
         <translation>Зліва</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1081"/>
+        <location filename="mainwindow.ui" line="1107"/>
         <source>Clip</source>
         <translation>Обрізати</translation>
     </message>
@@ -454,12 +464,12 @@
         <translation type="vanished">Без полів</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1421"/>
+        <location filename="mainwindow.ui" line="1434"/>
         <source>Only for the current session</source>
         <translation>Тільки для поточної сесії</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1434"/>
+        <location filename="mainwindow.ui" line="1452"/>
         <source>Paper size</source>
         <translation>Размір паперу</translation>
     </message>
@@ -468,7 +478,7 @@
         <translation type="vanished">В кольорі</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="1484"/>
+        <location filename="mainwindow.ui" line="1515"/>
         <source>Downloading files. It may take some time ...</source>
         <translation>Завнтаження файлів. Це може зайняти деякий час ...</translation>
     </message>
@@ -483,37 +493,37 @@
         <translation>Наступний аркуш</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="381"/>
+        <location filename="mainwindow.cpp" line="382"/>
         <source>Delete</source>
         <translation>Видалити</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3289"/>
+        <location filename="mainwindow.cpp" line="3322"/>
         <source>Open Directory</source>
         <translation>Відкрити теку</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3244"/>
+        <location filename="mainwindow.cpp" line="3277"/>
         <source>Select: All in oun</source>
         <translation>Вибрано: Все в одному</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1201"/>
+        <location filename="mainwindow.cpp" line="1231"/>
         <source>Printer not found! Check the settings and printer availability.</source>
         <translation>Принтер не знайдений! Перевірте налаштування і доступність принтера.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1458"/>
+        <location filename="mainwindow.cpp" line="1489"/>
         <source>Open File</source>
         <translation>Відкрити файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1459"/>
+        <location filename="mainwindow.cpp" line="1490"/>
         <source>Images (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)</source>
         <translation>Зображення (*.png *.xpm *.jpg *.jpeg *.bmp *.gif *.ico)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1521"/>
+        <location filename="mainwindow.cpp" line="1552"/>
         <source>Select: </source>
         <translation>Вибрано: </translation>
     </message>
@@ -526,17 +536,17 @@
         <translation type="obsolete"> з </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1686"/>
+        <location filename="mainwindow.cpp" line="1717"/>
         <source>Sheet </source>
         <translation>Аркуш </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1689"/>
+        <location filename="mainwindow.cpp" line="1720"/>
         <source> of </source>
         <translation> з </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3133"/>
+        <location filename="mainwindow.cpp" line="3166"/>
         <source>Select: 1 in center</source>
         <translation>Вибрано: 1 в центрі</translation>
     </message>
@@ -545,47 +555,47 @@
         <translation type="vanished">1 зверху</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3144"/>
+        <location filename="mainwindow.cpp" line="3177"/>
         <source>Select: 1 in top</source>
         <translation>Вибрано: 1 зверху</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3155"/>
+        <location filename="mainwindow.cpp" line="3188"/>
         <source>Select: 1x2</source>
         <translation>Вибрано: 1х2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3166"/>
+        <location filename="mainwindow.cpp" line="3199"/>
         <source>Select: 1x3</source>
         <translation>Вибрано: 1х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3177"/>
+        <location filename="mainwindow.cpp" line="3210"/>
         <source>Select: 2x2</source>
         <translation>Вибрано: 2х2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3188"/>
+        <location filename="mainwindow.cpp" line="3221"/>
         <source>Select: 2x3</source>
         <translation>Вибрано: 2х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3199"/>
+        <location filename="mainwindow.cpp" line="3232"/>
         <source>Select: 2x4</source>
         <translation>Вибрано: 2х4</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3210"/>
+        <location filename="mainwindow.cpp" line="3243"/>
         <source>Select: 3x3</source>
         <translation>Вибрано: 3х3</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3221"/>
+        <location filename="mainwindow.cpp" line="3254"/>
         <source>Select: 3x5</source>
         <translation>Вибрано: 3х5</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="3232"/>
+        <location filename="mainwindow.cpp" line="3265"/>
         <source>Select: 4x5</source>
         <translation>Вибрано: 4х5</translation>
     </message>
@@ -594,78 +604,78 @@
         <translation type="vanished">Ваш папір:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2389"/>
-        <location filename="mainwindow.cpp" line="2415"/>
+        <location filename="mainwindow.cpp" line="2422"/>
+        <location filename="mainwindow.cpp" line="2448"/>
         <source>&amp;Rotated clockwise by 90 degrees</source>
         <translation>Повернути за годинниковою стрілкою на 90 градусів</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2392"/>
-        <location filename="mainwindow.cpp" line="2418"/>
+        <location filename="mainwindow.cpp" line="2425"/>
+        <location filename="mainwindow.cpp" line="2451"/>
         <source>&amp;Delete this image</source>
         <translation>Видалити це зображення</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2395"/>
+        <location filename="mainwindow.cpp" line="2428"/>
         <source>&amp;Cut out a fragment image</source>
         <translation>Вирізати фргмент зображення</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2398"/>
+        <location filename="mainwindow.cpp" line="2431"/>
         <source>Caption &amp;editor</source>
         <translation>Редактор підписів</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2401"/>
+        <location filename="mainwindow.cpp" line="2434"/>
         <source>&amp;Simply turn on/off caption</source>
         <translation>Просто увм/вимк підписи</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2404"/>
-        <location filename="mainwindow.cpp" line="2424"/>
+        <location filename="mainwindow.cpp" line="2437"/>
+        <location filename="mainwindow.cpp" line="2457"/>
         <source>Move to the &amp;previous sheet</source>
         <translation>Перемістити на попередній аркуш</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2406"/>
-        <location filename="mainwindow.cpp" line="2426"/>
+        <location filename="mainwindow.cpp" line="2439"/>
+        <location filename="mainwindow.cpp" line="2459"/>
         <source>Move to the &amp;next sheet</source>
         <translation>Перемістити на наступний аркуш</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2408"/>
-        <location filename="mainwindow.cpp" line="2428"/>
+        <location filename="mainwindow.cpp" line="2441"/>
+        <location filename="mainwindow.cpp" line="2461"/>
         <source>Transform picture</source>
         <translation>Перетворення зображення</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2421"/>
+        <location filename="mainwindow.cpp" line="2454"/>
         <source>&amp;Edit this text block</source>
         <translation>Редагувати цей текстовий блок</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2807"/>
+        <location filename="mainwindow.cpp" line="2840"/>
         <source>Save in file...</source>
         <translation>Зберегти в файл...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2807"/>
-        <location filename="mainwindow.cpp" line="2968"/>
+        <location filename="mainwindow.cpp" line="2840"/>
+        <location filename="mainwindow.cpp" line="3001"/>
         <source>vap_sessions (*.vap)</source>
         <translation>vap_sessions (*.vap)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2968"/>
+        <location filename="mainwindow.cpp" line="3001"/>
         <source>Open file...</source>
         <translation>Відкрити файл...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1160"/>
+        <location filename="mainwindow.cpp" line="1164"/>
         <source>Print to PDF file...</source>
         <translation>Друк в PDF файл...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1160"/>
+        <location filename="mainwindow.cpp" line="1164"/>
         <source>pdf-file (*.pdf)</source>
         <translation>pdf файл (*.pdf)</translation>
     </message>
@@ -938,7 +948,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="mainwindow.cpp" line="1201"/>
+        <location filename="mainwindow.cpp" line="1231"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
@@ -1207,24 +1217,23 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;vap 3.8.1&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;vap 3.8.2&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Основано на Qt 5.4&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Автор Власов Андрей&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;viktand@bk.ru&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Сайт программы &lt;a href=&quot;http://www.qvap.ru&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;qvap.ru&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;23.04.2015&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;26.04.2015&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;vap 3.8.1&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Основано на Qt 5.3&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Основано на Qt 5.4&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Автор Власов Андрей&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;viktand@bk.ru&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Сайт программы &lt;a href=&quot;http://www.qvap.ru&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;qvap.ru&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#0000ff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;23.04.2015&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
@@ -1269,6 +1278,9 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;29.04.2015 - vap 3.8.2 - Добавлен механизм проверки обновлений из программы.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Добавлена возможность печати без полей.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;23.04.2015 - vap 3.8.1 - Добавлена функция задания количества экземпляров, выводимых на печать.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;В очередной раз (надеюсь окончательно) доработана функция переключения ориентации бумаги - теперь одной кнопкой.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлен deb-файл программы (хотя это прямо с ней и не связано).&lt;/p&gt;
@@ -1313,6 +1325,56 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;04.11.2013 - vap 3.0.1 - Добавлена возможность перетаскивания мышкой картинок в программу из окон открытых папок. Можно перетащить просто папку.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;03.11.2013 - vap 3.0 - первый выпуск программы в версии Qt &amp;amp; C++&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;26.04.2015 - vap 3.8.2 - Добавлен механизм проверки обновлений из программы.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;23.04.2015 - vap 3.8.1 - Добавлена функция задания количества экземпляров, выводимых на печать.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;В очередной раз (надеюсь окончательно) доработана функция переключения ориентации бумаги - теперь одной кнопкой.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлен deb-файл программы (хотя это прямо с ней и не связано).&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;01.01.2015 - vap 3.8 - Начиная с этой версии будут сборки только на Qt&amp;gt;=5.3 по причине отсутвия в более раних версиях новых классов для работы с принтером. Соответственно исправлена работа с нестандартными размерами бумаги (фото-размеры).&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Добалена функция создания эффектов освещения на изображениях.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Добавлена возможность сохранения листа со всеми картинками как файл-изображения в форматах jpg, png или bmp.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлены некоторые мелкие недочеты.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;05.12.2014 - vap 3.7 - Добавлена функция коррекции цветового профиля изображений и управление прозрачностью. Исправлены ошибки ориентации листов при независимой ориентации.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Добавлена поддержка файл-менеджера Space-FM.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;03.11.2014 - vap 3.6.1 - Отдельная вкладка на панеле управления для кнопок печати, поправлены небольшие ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;16.10.2014 - vap 3.6 - Добавлена функция трансформации изображений, отдельная кнопка для печати в PDF-файл. Интерфейс типа &amp;quot;лента&amp;quot; теперь единственный. Нет управления полями - поля минимальные по возможностям принтера. Исправлены ошибки сохранения/восстановления сеансов. На панель управления добавлена вкладка с кнопками для точного позиционирования изображений. Шрифт программы по умолчанию системный, но можно изменить по вкусу.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлены некоторые мелкие ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;28.04.2014 - vap 3.5 - Переработан алгоритм работы с принтером, изменен подход к выбору размера бумаги.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;17.02.2014 - vap 3.4 - Добавлен вариант интерфейса типа &amp;quot;лента&amp;quot;.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Включена возможность управления полями.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Добавлена возможность пролистывания страниц колесом мыши.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлены некоторые ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;07.02.2014 - vap 3.3.2 - Добавлена интеграция в PCMan-FM.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлены ошибки открытия файлов из контекстного меню некоторых ФМ или через драг/дроп.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;29.01.2014 - vap 3.3.1 - Исправлена ошибка печати без предварительного просмотра всех страниц.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;26.01.2014 - vap 3.3 - Добавлена русификация. Программа автоматически определяет локаль и включает русский интерфейс, если это уместно.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Исправлены некоторые ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;11.01.2014 - vap 3.2.2 - Добавлена интеграция с Thunar. Исправлены некоторые ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;04.01.2014 - vap 3.2.1 - Исправлены некоторые ошибки.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;03.01.2014 - vap 3.2 - Добавлена возможность создания и редактирования текстовых блоков, исправлены некоторые ошибки. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Запущен сайт программы (пока еще в зародышевом состоянии).&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;17.11.2013 - vap 3.1 - Добавлена возможность создания и редактирования подписей к каждой картинке. Функция работает через контекстное меню, вызываемое правым кликом по картинке.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;04.11.2013 - vap 3.0.1 - Добавлена возможность перетаскивания мышкой картинок в программу из окон открытых папок. Можно перетащить просто папку.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;03.11.2013 - vap 3.0 - первый выпуск программы в версии Qt &amp;amp; C++&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1331,12 +1393,12 @@ p, li { white-space: pre-wrap; }
         <translation>Що нового</translation>
     </message>
     <message>
-        <location filename="about.ui" line="250"/>
+        <location filename="about.ui" line="253"/>
         <source>Thanks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="about.ui" line="273"/>
+        <location filename="about.ui" line="276"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1348,7 +1410,7 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="about.ui" line="295"/>
+        <location filename="about.ui" line="298"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -1529,32 +1591,32 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="refresh.ui" line="26"/>
         <source>Update vap version</source>
-        <translation type="unfinished"></translation>
+        <translation>оновити версію програми vap</translation>
     </message>
     <message>
         <location filename="refresh.ui" line="41"/>
         <source>Check for updates can be disabled in the settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевірка оновлень може бути відключена в налаштуваннях</translation>
     </message>
     <message>
         <location filename="refresh.ui" line="57"/>
         <source>Do not remind me until the new version</source>
-        <translation type="unfinished"></translation>
+        <translation>Не нагадувати до появи наступної версії</translation>
     </message>
     <message>
         <location filename="refresh.ui" line="70"/>
         <source>It was found that a new version of vap</source>
-        <translation type="unfinished"></translation>
+        <translation>Була знайдена нова версія програми</translation>
     </message>
     <message>
         <location filename="refresh.ui" line="86"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <location filename="refresh.ui" line="99"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>

@@ -97,7 +97,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -461,7 +461,7 @@
      <widget class="QSpinBox" name="spinBox">
       <property name="geometry">
        <rect>
-        <x>385</x>
+        <x>590</x>
         <y>5</y>
         <width>47</width>
         <height>27</height>
@@ -487,10 +487,10 @@
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>10</y>
-        <width>141</width>
-        <height>17</height>
+        <x>410</x>
+        <y>9</y>
+        <width>171</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -498,6 +498,32 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>0</y>
+        <width>44</width>
+        <height>38</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Print using the system print dialog</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="res.qrc">
+        <normaloff>:/new/prefix1/vap_dial</normaloff>:/new/prefix1/vap_dial</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -1372,7 +1398,7 @@
      <widget class="QPushButton" name="pushButton_35">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>2</x>
         <y>0</y>
         <width>44</width>
         <height>38</height>
@@ -1395,24 +1421,11 @@
        </size>
       </property>
      </widget>
-     <widget class="Line" name="line_5">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>0</y>
-        <width>3</width>
-        <height>35</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-     </widget>
      <widget class="QComboBox" name="comboBox">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>10</y>
+        <x>470</x>
+        <y>15</y>
         <width>171</width>
         <height>23</height>
        </rect>
@@ -1424,25 +1437,30 @@
      <widget class="QLabel" name="label_15">
       <property name="geometry">
        <rect>
-        <x>270</x>
-        <y>10</y>
-        <width>141</width>
+        <x>470</x>
+        <y>-2</y>
+        <width>171</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Paper size</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
      <widget class="QCheckBox" name="checkBox_9">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>45</x>
         <y>0</y>
-        <width>151</width>
+        <width>171</width>
         <height>21</height>
        </rect>
       </property>
@@ -1456,9 +1474,9 @@
      <widget class="QCheckBox" name="checkBox_10">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>45</x>
         <y>20</y>
-        <width>161</width>
+        <width>181</width>
         <height>16</height>
        </rect>
       </property>
@@ -1467,6 +1485,19 @@
       </property>
       <property name="checked">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>0</y>
+        <width>161</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>No margins</string>
       </property>
      </widget>
     </widget>

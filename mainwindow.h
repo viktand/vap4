@@ -235,6 +235,10 @@ private slots:
     void on_spinBox_valueChanged(int arg1);
     void on_pushButton_3_clicked();
 
+    void on_checkBox_clicked(bool checked);
+
+    void on_pushButton_4_clicked();
+
 private:
     Ui::MainWindow *ui;                 // Рождение
 
