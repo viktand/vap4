@@ -40,6 +40,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QPrintDialog>
+//#include <QDebug>
 
 #define PI 3.14159265
 
@@ -1700,6 +1701,7 @@ void MainWindow::show_pict() // показать картинки текущег
                 toprint[i].show=true;
                 toprint[i].width=sz.width();
                 toprint[i].height=sz.height();
+                if(comp==0)on_pushButton_23_clicked(); // центровка
               }
         else
           {  // картинка уже была нарисована
@@ -3164,6 +3166,7 @@ void MainWindow::on_l1_2_clicked()
     recomp();
     ui->checkset_2->setGeometry(2,1,16,16);
     ui->label_17->setText(tr("Select: 1 in center"));
+    if(img_count>-1) on_pushButton_23_clicked(); // центровка
 }
 
 void MainWindow::on_l2_2_clicked()
@@ -3344,6 +3347,7 @@ void MainWindow::on_pushButton_30_clicked() // назад
         curSheet=sheet[curlist-1];
         show_pict();
     }
+    if(comp==0)on_pushButton_23_clicked();
 }
 
 void MainWindow::on_pushButton_31_clicked() // вперед
@@ -3362,6 +3366,7 @@ void MainWindow::on_pushButton_31_clicked() // вперед
         }
         show_pict();
      }
+    if(comp==0)on_pushButton_23_clicked();
 }
 
 void MainWindow::on_pushButton_35_clicked() // настройка программы
@@ -3821,9 +3826,17 @@ void MainWindow::on_checkBox_clicked(bool checked)
 // центровка выбранной картинки - в центр листа
 void MainWindow::on_pushButton_23_clicked()
 {
-        if(imgpress2<0)return;
+    //qDebug() <<  img_on_list;
+    //qDebug() << imgpress2;
+    //qDebug() << bufpress2;
+    if(imgpress2<0 &&  img_on_list!=1)return;
         quick_buttons_off();
-        QRect rc=toshow[imgpress2].pct->geometry();
+        QRect rc;
+        if( img_on_list==1) {
+            imgpress2=0;
+            bufpress2=curlist-1;
+        }
+        rc=toshow[imgpress2].pct->geometry();
         int x0=rc.left();
         int y0=rc.top();
         int x=(fon->geometry().width()-rc.width())/2;
