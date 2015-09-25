@@ -80,5 +80,6 @@
         <file alias="tofile">resurs/tofile.png</file>
         <file alias="rotbtn">resurs/rotbtn.png</file>
         <file alias="vap_dial">resurs/vap_dial.png</file>
+        <file alias="tocenter">resurs/tocenter.png</file>
     </qresource>
 </RCC>

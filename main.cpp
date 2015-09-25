@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
                 w.prm<<argv[i];
             }
         if(w.prm[1]=="--version"){
-                cout << "vap 3.8.3 Qt 5.4" << endl;
+                cout << "vap 3.8.4 Qt 5.4" << endl;
                 cout << "Exit after the request version" << endl;
                 go=false;
 

@@ -79,7 +79,7 @@ QavLabel *rez;          // рамка обрезки
 Qdeformation *deform;
 toFile *sfile;          // форма ввода параметров для сохранения в файл
 refresh *rfsh;          // форма предложения обновления
-int  vapIndex=1;        // индекс версии программы 0 = 3.8.2
+int  vapIndex=2;        // индекс версии программы 0 = 3.8.2
 
 //int oldAA=0; // раскомментировать, если задействована процедура управления прозрачностью (где-то на 3550 строке кода)
 
@@ -3818,3 +3818,29 @@ void MainWindow::on_checkBox_clicked(bool checked)
 }
 
 
+// центровка выбранной картинки - в центр листа
+void MainWindow::on_pushButton_23_clicked()
+{
+        if(imgpress2<0)return;
+        quick_buttons_off();
+        QRect rc=toshow[imgpress2].pct->geometry();
+        int x0=rc.left();
+        int y0=rc.top();
+        int x=(fon->geometry().width()-rc.width())/2;
+        int y=(fon->geometry().height()-rc.height())/2;
+        int h=rc.height();
+        int w=rc.width();
+        rc.setRect(x,y,w,h);
+        toshow[imgpress2].pct->setGeometry(rc);
+        if(toprint[bufpress2].show_caption)
+        {
+            rc=tocaption[toprint[bufpress2].cp_num].pct->geometry();
+            x=rc.left()+(x-x0);
+            y=rc.top()+(y-y0);
+            h=rc.height();
+            w=rc.width();
+            rc.setRect(x,y,w,h);
+            tocaption[toprint[bufpress2].cp_num].pct->setGeometry(rc);
+        }
+        setNewSizeOfPct();
+}
