@@ -108,25 +108,25 @@ PageSetup::PageSetup(QWidget *parent) :
     // список принтеров
     QString l;
     int j=0;
-    bool f1=false;
-    l.append(get_run("lpstat -v"));
+    l.append(get_run("lpstat -a"));
     for (int i=0; i<l.count(); i++)
     {
-       if (l.mid(i,6)=="device")
+       if (l.mid(i, 1)=="\n" || i==l.count()-1)
        {
-           f1=true;
-           j=i+11;
-       }
-       if (f1 && l.mid(i, 1)==":")
-       {
-           comboBox_2->addItem(l.mid(j, i-j));
-           f1=false;
+           QString st =l.mid(j, i-j);
+           st=st.mid(0,st.indexOf(" "));
+           comboBox_2->addItem(st);
+           j=i+1;
        }
     }
     // принтер по умолчанию
     l.clear();
     l.append(get_run("lpstat -d"));
-    label_8->setText(l.mid(28, l.length()-29));
+    for(int i=0;i<comboBox_2->count();i++){
+        if(l.indexOf(comboBox_2->itemText(i))>-1){
+            label_8->setText(comboBox_2->itemText(i));
+        }
+    }
     flag_ret=true;
     checkBox_3->setChecked(nautilus_check());
     checkBox_4->setChecked(dolphin_check());

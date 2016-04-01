@@ -153,6 +153,7 @@ private slots:
     QString GetPathFrom(QString pFile);     // получить путь к файлу по его полному имени (отбросить имя из пути), без слеша на конце
     void  prePint();                        // прогон листов перед печатью.
     void  setAutoOrn();                     // Автоматически установить оринетацию бумаги
+    void  setAutoOrnUp();                   // Автоматически установить оринетацию бумаги при листании вперед
     void  setInterface();                   // Установить вид интерфейса (лента/обычный)
     void  mouseWheel(int i, int index);     // Вращение колесика мыши - пролистывание страниц колесиком мыши
     void  img_size_ch(int step);            // Изменить размер текущей картинки на step точек по горизонтале
@@ -190,6 +191,7 @@ private slots:
     void getVesion();                       // Проверить наличие новой версии vap и т.д.
     void doDownload(QString urlLink);       // Загрузка по ссылке
     void replyFinished (QNetworkReply *reply); // завершение загрузки странички из интернета.
+    void RotationSheet();                   // поворот текущего листа при смене орентации
 
     // Здесь и далее слоты событий виджетов главной формы, сгенерированные автоматически
     void on_l1_2_clicked();
@@ -240,6 +242,8 @@ private slots:
     void on_pushButton_4_clicked();
 
     void on_pushButton_23_clicked();
+
+    void on_pushButton_40_clicked();
 
 private:
     Ui::MainWindow *ui;                 // Рождение

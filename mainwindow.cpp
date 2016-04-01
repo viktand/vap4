@@ -80,7 +80,7 @@ QavLabel *rez;          // рамка обрезки
 Qdeformation *deform;
 toFile *sfile;          // форма ввода параметров для сохранения в файл
 refresh *rfsh;          // форма предложения обновления
-int  vapIndex=2;        // индекс версии программы 0 = 3.8.2
+int  vapIndex=3;        // индекс версии программы 0 = 3.8.2
 
 //int oldAA=0; // раскомментировать, если задействована процедура управления прозрачностью (где-то на 3550 строке кода)
 
@@ -227,7 +227,7 @@ struct sheets {              // описание листа
     int     sheet_w;         // ширина области предпросмотра на экране
 };
 
-sheets   curSheet;           // описание текущего листа
+//sheets   sheet[curlist-1];           // описание текущего листа
 
 QavLabel *rott;              // "ручка" вращения
 QavLabel *resiz;             // "ручка" изменения размера
@@ -285,11 +285,14 @@ MainWindow::MainWindow(QWidget *parent) :
     rest_sind_size();       // восстановить размеры и положение окна программы
     rest_printer_sett();    // восстановить настройки принтера
     // стартовые параметры листа (по умолчанию)
-    curSheet.size=pap_name;    
-    curSheet.width=paper_w;
-    curSheet.height=paper_h;
-    curSheet.list_orn=true;
-    sheet.push_back(curSheet);
+    curlist=1;
+    lists=1;
+    sheet.push_back(sheets());
+    sheet[0].size=pap_name;
+    sheet[0].width=paper_w;
+    sheet[0].height=paper_h;
+    sheet[0].list_orn=true;
+
     get_marg();
     rest_view_sett();       // восстановить компоновку
     ui->pushButton_32->hide();
@@ -587,7 +590,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
         noResizewindow=false;
         return;
     }
-    list_scl=double(ui->list->widthMM())/double(curSheet.width);
+    list_scl=double(ui->list->widthMM())/double(sheet[curlist-1].width);
     gor_old=gor;
     wind_sz=e->size();
     make_list();
@@ -695,8 +698,6 @@ void MainWindow::end_rotation() // Завершение поворота лис�
     }
     swap(paper_h, paper_w);
     swap(gor,ver);
-    swap(curSheet.height,curSheet.width);
-    curSheet.list_orn=!curSheet.list_orn;
     make_list();
     btn_comp_press(comp);
     if (all_rot)
@@ -733,8 +734,9 @@ void MainWindow::redraw()
     // расчет окна предпросмотра
     if(fun)cout << "redraw" << endl;
     double x, y, w, h;                 //будущий рект окна
-    y=curSheet.height;
-    x=curSheet.width;
+    y=sheet[curlist-1].height;
+    x=sheet[curlist-1].width;
+    cout << "x=" << x << ", y=" << y << endl;
     int lft=150;
     lft=10;
     paper_ratio=x/y;
@@ -776,13 +778,13 @@ void MainWindow::get_pp() // получить количество точек н
     if(fun)cout << "get_pp" << endl;
     if(sheet[curlist-1].list_orn)
     {
-        ppx=double(ui->list->width())/double(curSheet.width);
-        ppy=double(ui->list->height())/double(curSheet.height);
+        ppx=double(ui->list->width())/double(sheet[curlist-1].width);
+        ppy=double(ui->list->height())/double(sheet[curlist-1].height);
     }
     else
     {
-        ppx=double(ui->list->width())/double(curSheet.height);
-        ppy=double(ui->list->height())/double(curSheet.width);
+        ppx=double(ui->list->width())/double(sheet[curlist-1].height);
+        ppy=double(ui->list->height())/double(sheet[curlist-1].width);
     }
 }
 
@@ -970,7 +972,7 @@ void MainWindow::end_load_picture(QImage image)
 }
 
 
-void MainWindow::setAutoOrn() // Автоматически установить ориентацию бумаги
+void MainWindow::setAutoOrn() // Автоматически установить ориентацию бумаги в момент загрузки
 {    
     if(fun)cout << "setAutoOrn" << endl;
     if(toprint[0].pix.height()>=toprint[0].pix.width())
@@ -1011,8 +1013,8 @@ void MainWindow::on_checkBox_7_clicked(bool checked) // общая ориент�
     if(ps!=0) ps->set_all();
     if (checked)
     {
-        for(int i=0; i<=buf; i++)  if (sheet[toprint[i].list].list_orn != curSheet.list_orn) toprint[i].show=false;
-        for(int i=0; i<lists; i++) sheet[i].list_orn=curSheet.list_orn;
+        for(int i=0; i<=buf; i++)  if (sheet[toprint[i].list].list_orn != sheet[curlist-1].list_orn) toprint[i].show=false;
+        for(int i=0; i<lists; i++) sheet[i].list_orn=sheet[curlist-1].list_orn;
     }
 }
 
@@ -1110,14 +1112,14 @@ void MainWindow::prePint()
         for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
         curlist=i;
         if (int(sheet.size())<lists) sheet.push_back(sheet.back());
-        curSheet=sheet[i-1];
+        sheet[curlist-1]=sheet[i-1];
         show_pict();
         sheet[i-1].sheet_w=ui->sheet->width();
         sheet[i-1].sheet_h=ui->sheet->height();
     }
     for(int p=0; p<=buf; p++) toprint[p].cp_num=-1;
     curlist=j;
-    curSheet=sheet[j-1];
+    sheet[curlist-1]=sheet[j-1];
     show_pict();
 }
 
@@ -1128,7 +1130,7 @@ void MainWindow::setPrinterPage(int i)
   // Начиная с этой версии (3.8) будет поддержка только Qt>=5.3, т.к. более старшие
   // не поддерживают классы QPageSize и QPageLayout
     QPageLayout pL;
-    pL.setPageSize(GetPageSize(0));
+    pL.setPageSize(GetPageSize(0));  // <- здесь размер задается
     pL.setMode(QPageLayout::FullPageMode);
     if(sheet[i].list_orn){
         pL.setOrientation(QPageLayout::Portrait);
@@ -1138,6 +1140,8 @@ void MainWindow::setPrinterPage(int i)
         printer->setOrientation(QPrinter::Landscape);
     }
     printer->setPageLayout(pL);
+    printer->setPageSize(GetPageSize(0));
+    pL.fullRect();
 }
 
 void MainWindow::setPrinter()
@@ -1459,18 +1463,18 @@ void MainWindow::set_setting(int r) // применить настройки
     if(fun)cout << "set_setting" << endl;
     if(rap)cout << "set new settings:"<< r << endl;
     if(r==0)return;
-    if(r==3){if(!curSheet.list_orn)end_rotation();return;}
-    if(r==4){if(curSheet.list_orn)end_rotation();return;}
+    if(r==3){if(!sheet[curlist-1].list_orn)end_rotation();return;}
+    if(r==4){if(sheet[curlist-1].list_orn)end_rotation();return;}
     load_my_pSizes();
     if(r==1)return;
     save_printer_sett();
-    curSheet.size=sheet_size;
-    curSheet.height=paper_h;
-    curSheet.width=paper_w;
-    curSheet.list_orn=(paper_h>paper_w);
-    if (all_sizes)for(int i=0; i<int(sheet.size()); i++)sheet[i]=curSheet;
-    else sheet[curlist-1]=curSheet;
-//    if(curSheet.list_orn)on_pushButton_33_clicked(); // портретная ориентация
+    sheet[curlist-1].size=sheet_size;
+    sheet[curlist-1].height=paper_h;
+    sheet[curlist-1].width=paper_w;
+    sheet[curlist-1].list_orn=(paper_h>paper_w);
+    if (all_sizes)for(int i=0; i<int(sheet.size()); i++)sheet[i]=sheet[curlist-1];
+    else sheet[curlist-1]=sheet[curlist-1];
+//    if(sheet[curlist-1].list_orn)on_pushButton_33_clicked(); // портретная ориентация
 //    else      on_pushButton_34_clicked(); // ландшафтная ориентация
     setty.beginGroup("Settings");
         pathFile=setty.value("path", false).toBool();
@@ -1555,7 +1559,7 @@ void MainWindow::set_user_layout()
 
 void MainWindow::setOrnSheets(bool orn)
 {
-    if(curSheet.list_orn != orn) end_rotation();
+    if(sheet[curlist-1].list_orn != orn) end_rotation();
 }
 
 void MainWindow::set_indic_pos()
@@ -1616,7 +1620,7 @@ void MainWindow::set_ornt_list()
 // повернуть лист (при пролистывании)
 {
     if(fun)cout << "set_orn_list" << endl;
-    if(curSheet.list_orn==sheet[curlist-1].list_orn)return;
+    if(sheet[curlist-1].list_orn==sheet[curlist-1].list_orn)return;
     make_list(); // создать новый лист
     setOrnSheets(sheet[curlist-1].list_orn);
 }
@@ -1707,7 +1711,8 @@ void MainWindow::show_pict() // показать картинки текущег
           {  // картинка уже была нарисована
               x=toprint[i].left;
               y=toprint[i].top;
-              toshow[img_count].pct->setGeometry(x, y,toprint[i].width, toprint[i].height);
+              toshow[img_count].pct->setGeometry(toprint[i].left, toprint[i].top,
+                                                 toprint[i].width, toprint[i].height);
               toprint[i].compress=double(toprint[i].pix.width())/double(toprint[i].width);
           }
           show_caption(i);
@@ -1723,7 +1728,7 @@ void MainWindow::show_pict() // показать картинки текущег
     c = QString::number(lists);
     s.append(c);
     ui->label_2->setText(s);
-    if (rap) cout << "pictures was shown" << endl;
+    if (rap) cout << "pictures was shown, sheet " << curlist << endl;
     runShow=false;
 }
 
@@ -1764,6 +1769,7 @@ void MainWindow::recomp()
     //curlist=1;
     show_pict();
     save_view_sett();
+    imgFrame=-1;
 }
 
 void MainWindow::pct_press_rott() // нажатие на ручку вращения
@@ -2618,7 +2624,7 @@ void MainWindow::show_caption(int index) // показать подпись к �
           else count=toprint[index].cp_num;
           tocaption[count].pct->setScaledContents(true);
           rc=getCaptionRect(index);
-          list_scl=double(ui->list->widthMM())/double(curSheet.width);
+          list_scl=double(ui->list->widthMM())/double(sheet[curlist-1].width);
           rc.setWidth(double(rc.width())*list_scl*font_scl);
           rc.setHeight(double(rc.height())*list_scl*font_scl);
           tocaption[count].pct->setGeometry(rc);
@@ -2951,7 +2957,7 @@ bool MainWindow::saveSassion(QString fileName)
             }
         if (int(sheet.size())<lists)
             for(int i=sheet.size(); i<lists; i++)
-                sheet.push_back(curSheet);
+                sheet.push_back(sheet[curlist-1]);
         for (int i=0; i<=lists-1; i++)
         {
             out << sheet[i].list_orn;
@@ -3146,7 +3152,7 @@ bool MainWindow::openSassion(QString fileName)
             in>>sheet[i].width;
         }
         file.close();
-        curSheet=sheet[0];
+        sheet[curlist-1]=sheet[0];
         ind_stop();
         img_count=-1;
         show_pict();
@@ -3344,10 +3350,10 @@ void MainWindow::on_pushButton_30_clicked() // назад
     {
         for(int i=0; i<=buf; i++) toprint[i].cp_num=-1; // сброс связи каринок с превьюшками на экране
         curlist--;
-        curSheet=sheet[curlist-1];
+        sheet[curlist-1]=sheet[curlist-1];
         show_pict();
     }
-    if(comp==0)on_pushButton_23_clicked();
+    //if(comp==0)on_pushButton_23_clicked();
 }
 
 void MainWindow::on_pushButton_31_clicked() // вперед
@@ -3357,16 +3363,60 @@ void MainWindow::on_pushButton_31_clicked() // вперед
     {
         for(int i=0; i<=buf; i++) toprint[i].cp_num=-1; // сброс связи каринок с превьюшками на экране
         curlist++;
-        if (int(sheet.size())<lists)
+        if(fun)cout << "on_pushButton_31_cliked 2" << endl;
+        if (int(sheet.size())<curlist)
         {   // если лист открывается впервые, то добавить его в вектор и дать ему свойства предыдущего листа
+            if(fun)cout << "on_pushButton_31_cliked 2 curlist="<< curlist << endl;
             sheet.resize(curlist);
-            sheet[curlist-1]=curSheet;
-        }else{
-            curSheet=sheet[curlist-1];
+            if(fun)cout << "on_pushButton_31_cliked 3; curlist= " << curlist << ", lists= " << lists << endl;
+            sheet[curlist-1]=sheet[0];
+            setAutoOrnUp();
         }
+        if(fun)cout << "on_pushButton_31_cliked 4" << endl;
+        cout << "x=" << sheet[curlist-1].width << endl;
+        cout << "x[]=" << sheet[curlist-1].width << endl;
         show_pict();
      }
-    if(comp==0)on_pushButton_23_clicked();
+    //if(comp==0)on_pushButton_23_clicked();
+}
+
+void MainWindow::setAutoOrnUp() // Автоматически установить ориентацию бумаги при листании вперед
+{
+    if(fun)cout << "setAutoOrnUp" << endl;
+    for(int i=0;i<int(toprint.size())-1;i++){
+        if(toprint[i].list == curlist){
+            if(toprint[i].pix.height()>=toprint[i].pix.width())
+            {
+                // портретная ориентация
+                if(!sheet[curlist-1].list_orn) RotationSheet();
+            }
+            else
+            {
+                // ландшафтная ориентация
+                if(sheet[curlist-1].list_orn) RotationSheet();
+            }
+            return;
+        }
+    }
+}
+
+void MainWindow::RotationSheet() // поворот текущего листа при смене орентации
+{
+    if(fun)cout << "endRotationSheet" << endl;
+    swap(sheet[curlist-1].height,sheet[curlist-1].width);
+    sheet[curlist-1].list_orn=!sheet[curlist-1].list_orn;
+    swap(paper_h, paper_w);
+    swap(gor,ver);
+    make_list();
+    btn_comp_press(comp);
+    if (all_rot)
+    {
+        if(!runShow)recomp();
+    }
+        else
+    {
+        if(!runShow)recomp_curlist();
+    }
 }
 
 void MainWindow::on_pushButton_35_clicked() // настройка программы
@@ -3472,7 +3522,7 @@ void MainWindow::on_comboBox_currentIndexChanged(const QString &arg1)
     list_n=s;
     sheet[0]=p;
     for(int i=0; i<lists; i++) sheet[i]=p;
-    curSheet=p;
+    sheet[curlist-1]=p;
     make_list();
     recomp();
 }
@@ -3564,7 +3614,9 @@ void MainWindow::moveTo(int x, int y)
 void MainWindow::showPctBord(bool b)
 {
     if(b){
-        if(imgFrame>-1)toshow[imgFrame].pct->setFrameStyle(QFrame::NoFrame);
+        if(imgFrame>-1){
+                toshow[imgFrame].pct->setFrameStyle(QFrame::NoFrame);
+        }
         QPalette p=toshow[imgpress2].pct->palette();
         QColor cl;
         cl.setRgb(255,100,0);
@@ -3574,7 +3626,9 @@ void MainWindow::showPctBord(bool b)
         toshow[imgpress2].pct->setLineWidth(1);
         imgFrame=imgpress2;
     }else{
-        if(imgFrame>-1)toshow[imgFrame].pct->setFrameStyle(QFrame::NoFrame);
+        if(imgFrame>-1){
+            toshow[imgFrame].pct->setFrameStyle(QFrame::NoFrame);
+        }
         imgFrame=-1;
     }
 }
@@ -3856,4 +3910,31 @@ void MainWindow::on_pushButton_23_clicked()
             tocaption[toprint[bufpress2].cp_num].pct->setGeometry(rc);
         }
         setNewSizeOfPct();
+}
+
+void MainWindow::on_pushButton_40_clicked()
+{
+    // удалить текущую страницу
+    if(sheet.size()==1){
+        QMessageBox::warning(NULL,QObject::tr("Error"),tr("You can not remove a single sheet!"));
+        return;
+    }
+    for(int i=0;i<int(toprint.size());i++){  // удалить картинки с удаляемого листа
+        if(toprint[i].list==curlist){
+         bufpress2=i;
+         pct_press_delete();
+         if(i>0)i--;
+        }
+    }
+    for(int i=0;i<int(toprint.size());i++){ // подвинуть листы "влево", т.е. занять пустой лист, освободить последний
+        if(toprint[i].list>curlist) toprint[i].list--;
+    }
+
+    // удалить последний лист
+    for(int i=curlist-1;i<int(sheet.size())-1;i++){
+        sheet[i]=sheet[i+1];
+    }
+    sheet.pop_back();
+    lists--;
+    show_pict();
 }
